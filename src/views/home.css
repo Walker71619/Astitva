@@ -1,0 +1,54 @@
+/* home.css */
+
+.home-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: url('../images/bg.jpg') no-repeat center center;
+  background-size: cover;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 8vw;
+}
+
+.text-section {
+  color: #87CEFA; /* light sky blue */
+  text-shadow:
+    0 0 10px #87CEFA,
+    0 0 20px #87CEFA,
+    0 0 30px #00BFFF;
+  animation: pulseGlow 3s infinite ease-in-out;
+  max-width: 600px;
+}
+
+.title {
+  font-size: 5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  margin-top: 10px;
+  color: #B0E0E6;
+}
+
+/* Glow pulse animation */
+@keyframes pulseGlow {
+  0%, 100% {
+    text-shadow:
+      0 0 10px #87CEFA,
+      0 0 20px #87CEFA,
+      0 0 30px #00BFFF;
+  }
+  50% {
+    text-shadow:
+      0 0 20px #ADD8E6,
+      0 0 30px #ADD8E6,
+      0 0 40px #1E90FF;
+  }
+}
