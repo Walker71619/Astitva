@@ -1,27 +1,33 @@
-/* home.css */
-
 .home-container {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: url('../images/bg.jpg') no-repeat center center;
-  background-size: cover;
-  overflow: hidden;
   margin: 0;
   padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding-left: 8vw;
+  overflow: hidden;
+
+  /* Background layers using multiple backgrounds */
+  background-image:
+    url('../images/bg2.jpg'); /* first image - lake and mountains */
+
+  background-repeat: no-repeat, no-repeat;
+  background-position: center top, center bottom;
+  background-size: cover, cover;
+
+  /* Optional: add subtle overlay to blend images softly */
+  background-blend-mode: screen;
+  /* 'screen' lightens the images for glow effect */
 }
 
 .text-section {
-  color: #87CEFA; /* light sky blue */
+  position: absolute;
+  top: 40%;
+  left: 8%;
+  color: #FFF9E3; /* pale moonlight yellow */
   text-shadow:
-    0 0 10px #87CEFA,
-    0 0 20px #87CEFA,
-    0 0 30px #00BFFF;
-  animation: pulseGlow 3s infinite ease-in-out;
+    0 0 6px rgba(255, 249, 227, 0.7),
+    0 0 12px rgba(255, 221, 160, 0.5);
+  animation: pulseGlow 4.5s infinite ease-in-out;
   max-width: 600px;
 }
 
@@ -29,26 +35,27 @@
   font-size: 5rem;
   font-weight: bold;
   margin: 0;
+  font-family: 'Georgia', serif;
 }
 
 .subtitle {
   font-size: 1.5rem;
   margin-top: 10px;
-  color: #B0E0E6;
+  color: #FFEDB7;
+  font-family: 'Georgia', serif;
 }
 
-/* Glow pulse animation */
 @keyframes pulseGlow {
   0%, 100% {
     text-shadow:
-      0 0 10px #87CEFA,
-      0 0 20px #87CEFA,
-      0 0 30px #00BFFF;
+      0 0 6px rgba(255, 249, 227, 0.7),
+      0 0 12px rgba(255, 221, 160, 0.5);
+    color: #FFF9E3;
   }
   50% {
     text-shadow:
-      0 0 20px #ADD8E6,
-      0 0 30px #ADD8E6,
-      0 0 40px #1E90FF;
+      0 0 8px rgba(255, 249, 227, 0.5),
+      0 0 16px rgba(255, 221, 160, 0.35);
+    color: #FFF5B8;
   }
 }
