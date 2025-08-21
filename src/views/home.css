@@ -1,61 +1,41 @@
 .home-container {
   position: relative;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-
-  /* Background layers using multiple backgrounds */
-  background-image:
-    url('../images/bg2.jpg'); /* first image - lake and mountains */
-
-  background-repeat: no-repeat, no-repeat;
-  background-position: center top, center bottom;
-  background-size: cover, cover;
-
-  /* Optional: add subtle overlay to blend images softly */
-  background-blend-mode: screen;
-  /* 'screen' lightens the images for glow effect */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* text on left */
+  padding-left: 5%;           /* some left margin */
 }
 
 .text-section {
-  position: absolute;
-  top: 40%;
-  left: 8%;
-  color: #FFF9E3; /* pale moonlight yellow */
-  text-shadow:
-    0 0 6px rgba(255, 249, 227, 0.7),
-    0 0 12px rgba(255, 221, 160, 0.5);
-  animation: pulseGlow 4.5s infinite ease-in-out;
-  max-width: 600px;
+  color: white;
+  max-width: 500px;
+  animation: glowPulse 2s infinite alternate;
 }
 
 .title {
-  font-size: 5rem;
+  font-size: 4rem;
   font-weight: bold;
   margin: 0;
-  font-family: 'Georgia', serif;
 }
 
 .subtitle {
-  font-size: 1.5rem;
-  margin-top: 10px;
-  color: #FFEDB7;
-  font-family: 'Georgia', serif;
+  font-size: 3.5rem;
+  margin-top: 0.5rem;
 }
 
-@keyframes pulseGlow {
-  0%, 100% {
-    text-shadow:
-      0 0 6px rgba(255, 249, 227, 0.7),
-      0 0 12px rgba(255, 221, 160, 0.5);
-    color: #FFF9E3;
+/* Moonlight pulsing glow effect */
+@keyframes glowPulse {
+  0% {
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #cce6ff, 0 0 30px #99ccff;
   }
   50% {
-    text-shadow:
-      0 0 8px rgba(255, 249, 227, 0.5),
-      0 0 16px rgba(255, 221, 160, 0.35);
-    color: #FFF5B8;
+    text-shadow: 0 0 20px #ffffff, 0 0 40px #cce6ff, 0 0 60px #99ccff;
+  }
+  100% {
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #cce6ff, 0 0 30px #99ccff;
   }
 }
