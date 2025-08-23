@@ -6,8 +6,34 @@ import Bg2    from "../images/Bg2.png";
 import Moon   from "../images/Moon.png";
 import Tree   from "../images/Tree.png";
 import Flower from "../images/Flower.png";    
+import Lantern from "../images/Lantern.png";
 
 function Home() {
+  // create 12 lanterns with random positions/sizes
+  const lanterns = Array.from({ length: 12 }).map((_, i) => {
+    const left = Math.random() * 80 + 5;   // between 5vw and 85vw
+    const top = Math.random() * 50 + 10;   // between 10vh and 60vh
+    const size = Math.random() * 15 + 20;    // between 4vw and 10vw
+    const delay = Math.random() * 12;      // random animation delay
+    const duration = Math.random() * 10 + 18; // 18–28s float cycle
+
+    return (
+      <img
+        key={i}
+        src={Lantern}
+        alt="Lantern"
+        className="lantern"
+        style={{
+          left: `${left}vw`,
+          top: `${top}vh`,
+          width: `${size}vw`,
+          animationDelay: `${delay}s`,
+          animationDuration: `${duration}s`,
+        }}
+      />
+    );
+  });
+
   return (
     <div className="scene">
       {/* Base background fills screen */}
@@ -25,13 +51,16 @@ function Home() {
         <p className="subtitle">Your Life Blueprint</p>
       </div>
 
-      {/* Foreground tree on the right (brought forward) */}
+      {/* Foreground tree */}
       <img src={Tree} className="layer tree" alt="Tree" />
 
-      {/* Optional decorative flower (example placement) */}
+      {/* Decorative flower */}
       <img src={Flower} className="layer flower" alt="Flower" />
 
-      {/* Subtle edge fade to blend bottom/edges */}
+      {/* Floating lanterns */}
+      {lanterns}
+
+      {/* Edge fade */}
       <div className="edge-fade" />
     </div>
   );
