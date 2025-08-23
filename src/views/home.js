@@ -1,12 +1,11 @@
 import React from "react";
 import "./home.css";
 
-// assets (case-sensitive)
-import BgMain from "../images/Bg_main.png";   // sky + grass + main mountains
-import Bg2    from "../images/Bg2.png";       // far ridge + bush (no path)
+import BgMain from "../images/Bg_main.png";  
+import Bg2    from "../images/Bg2.png";       
 import Moon   from "../images/Moon.png";
 import Tree   from "../images/Tree.png";
-import Flower from "../images/Flower.png";    // optional: small accent/demo
+import Flower from "../images/Flower.png";    
 
 function Home() {
   return (
@@ -20,7 +19,7 @@ function Home() {
       {/* Big moon on the left, behind text */}
       <img src={Moon} className="layer moon" alt="Moon" />
 
-      {/* Title block on the left */}
+      {/* Title block */}
       <div className="text-section">
         <h1 className="title">ASTITVA</h1>
         <p className="subtitle">Your Life Blueprint</p>

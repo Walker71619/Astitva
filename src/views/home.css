@@ -3,23 +3,22 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: #051726; /* deep night fallback */
+  background: #051726; /
 }
 
-/* --- shared layer rules --- */
 .layer {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  pointer-events: none; /* decorative layers don't block clicks */
+  pointer-events: none; 
 }
 
-/* base sky/field/mountains */
+
 .base { z-index: 1; }
 
-/* far ridge + bush strip */
+
 .bg2 {
   z-index: 2;
   transform: translateY(0) scale(1.02);
@@ -28,8 +27,8 @@
 
 .moon {
   z-index: 3;
-  width: 36vw;          /* increased from 30vw */
-  max-width: 640px;     /* bigger cap */
+  width: 36vw;         
+  max-width: 640px;     
   height: auto;
   top: 8vh;
   left: 8vw;
@@ -43,7 +42,7 @@
 
 .text-section {
   position: absolute;
-  top: 34vh;   /* moved lower (was 22vh) */
+  top: 34vh;   
   left: 7vw;
   z-index: 4;
   color: #ffffff;
@@ -70,11 +69,11 @@
 
 .tree {
   z-index: 5;
-  width: 88vw;              /* increased from 48vw */
-  max-width: 1600px;        /* increased max size */
+  width: 88vw;              
+  max-width: 1600px;        
   height: auto;
-  right: 2vw;               /* adjusted so it doesn’t overflow too much */
-  bottom: -3vh;             /* keeps base grounded */
+  right: 2vw;              
+  bottom: -3vh;            
   left: auto;
   top: auto;
   object-fit: contain;
@@ -85,29 +84,29 @@
   animation: treeSway 10s ease-in-out infinite alternate;
 }
 
-/* example flower (you can hide or reposition later) */
+
 .flower {
   z-index: 6;
   width: 6vw;
   max-width: 120px;
   height: auto;
-  right: 22vw;        /* place over right-side canopy */
+  right: 22vw;     
   bottom: 34vh;
   transform: rotate(-10deg);
   filter: drop-shadow(0 0 10px rgba(200,230,255,.6));
   animation: float 12s ease-in-out infinite reverse;
 }
 
-/* edge fade to blend bottom and soften sides */
+
 .edge-fade {
   position: absolute;
   inset: 0;
   z-index: 7;
   pointer-events: none;
   background:
-    radial-gradient(120% 60% at 50% 105%, rgba(5,23,38,0.85), rgba(5,23,38,0) 55%) /* bottom fade */,
-    radial-gradient(60% 100% at -5% 50%, rgba(5,23,38,0.55), transparent 60%)      /* left */,
-    radial-gradient(60% 100% at 105% 50%, rgba(5,23,38,0.55), transparent 60%);     /* right */
+    radial-gradient(120% 60% at 50% 105%, rgba(5,23,38,0.85), rgba(5,23,38,0) 55%),
+    radial-gradient(60% 100% at -5% 50%, rgba(5,23,38,0.55), transparent 60%),
+    radial-gradient(60% 100% at 105% 50%, rgba(5,23,38,0.55), transparent 60%);     
   mix-blend-mode: multiply;
 }
 
