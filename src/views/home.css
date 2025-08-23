@@ -1,40 +1,141 @@
-.home-container {
+.scene {
   position: relative;
   width: 100%;
   height: 100vh;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding-left: 5%;          
-
-.text-section {
-  color: white;
-  max-width: 500px;
-  animation: glowPulse 2s infinite alternate;
+  overflow: hidden;
+  background: #051726; /
 }
 
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none; 
+}
+
+/* base sky/field/mountains */
+.base { z-index: 1; }
+
+/* far ridge + bush strip */
+.bg2 {
+  z-index: 2;
+  transform: translateY(0) scale(1.02);
+  animation: driftY 22s ease-in-out infinite alternate;
+}
+
+.moon {
+  z-index: 3;
+  width: 36vw;          /* increased from 30vw */
+  max-width: 640px;     /* bigger cap */
+  height: auto;
+  top: 8vh;
+  left: 8vw;
+  transform: none;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0 12px rgba(255, 245, 200, 0.65))
+    drop-shadow(0 0 28px rgba(190, 220, 255, 0.35));
+  animation: float 16s ease-in-out infinite;
+}
+
+.text-section {
+  position: absolute;
+  top: 34vh;   /* moved lower (was 22vh) */
+  left: 7vw;
+  z-index: 4;
+  color: #ffffff;
+  max-width: 34rem;
+  text-shadow:
+    0 0 8px rgba(255,255,255,.8),
+    0 0 18px rgba(204,230,255,.6),
+    0 0 36px rgba(153,204,255,.35);
+  animation: glowPulse 2.6s ease-in-out infinite alternate;
+}
+
+
 .title {
-  font-size: 4rem;
-  font-weight: bold;
-  margin: 0;
+  margin: 0 0 .4rem 0;
+  font-size: clamp(2.6rem, 6vw, 5.2rem);
+  font-weight: 700;
+  line-height: 1;
 }
 
 .subtitle {
-  font-size: 3.5rem;
-  margin-top: 0.5rem;
+  margin: 0;
+  font-size: clamp(1.2rem, 2.6vw, 2.6rem);
 }
 
+.tree {
+  z-index: 5;
+  width: 88vw;              /* increased from 48vw */
+  max-width: 1600px;        /* increased max size */
+  height: auto;
+  right: 2vw;               /* adjusted so it doesn’t overflow too much */
+  bottom: -3vh;             /* keeps base grounded */
+  left: auto;
+  top: auto;
+  object-fit: contain;
+  transform: none;
+  filter:
+    drop-shadow(0 12px 28px rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 28px rgba(60, 150, 180, 0.25));
+  animation: treeSway 10s ease-in-out infinite alternate;
+}
 
+/* example flower (you can hide or reposition later) */
+.flower {
+  z-index: 6;
+  width: 6vw;
+  max-width: 120px;
+  height: auto;
+  right: 22vw;        /* place over right-side canopy */
+  bottom: 34vh;
+  transform: rotate(-10deg);
+  filter: drop-shadow(0 0 10px rgba(200,230,255,.6));
+  animation: float 12s ease-in-out infinite reverse;
+}
+
+/* edge fade to blend bottom and soften sides */
+.edge-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 60% at 50% 105%, rgba(5,23,38,0.85), rgba(5,23,38,0) 55%) /* bottom fade */,
+    radial-gradient(60% 100% at -5% 50%, rgba(5,23,38,0.55), transparent 60%)      /* left */,
+    radial-gradient(60% 100% at 105% 50%, rgba(5,23,38,0.55), transparent 60%);     /* right */
+  mix-blend-mode: multiply;
+}
+
+/* --- animations --- */
 @keyframes glowPulse {
-  0% {
-    text-shadow: 0 0 10px #ffffff, 0 0 20px #cce6ff, 0 0 30px #99ccff;
-  }
-  50% {
-    text-shadow: 0 0 20px #ffffff, 0 0 40px #cce6ff, 0 0 60px #99ccff;
-  }
-  100% {
-    text-shadow: 0 0 10px #ffffff, 0 0 20px #cce6ff, 0 0 30px #99ccff;
-  }
+  0%   { text-shadow: 0 0 8px rgba(255,255,255,.8), 0 0 18px rgba(204,230,255,.6), 0 0 36px rgba(153,204,255,.35); }
+  100% { text-shadow: 0 0 12px rgba(255,255,255,1), 0 0 28px rgba(204,230,255,.85), 0 0 52px rgba(153,204,255,.5); }
+}
+
+@keyframes float {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes driftY {
+  0%   { transform: translateY(0)  scale(1.02); }
+  100% { transform: translateY(6px) scale(1.02); }
+}
+
+@keyframes treeSway {
+  0%   { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-3px) rotate(-0.3deg); }
+}
+
+/* responsive tweaks */
+@media (max-width: 900px) {
+  .moon { width: 40vw; left: 6vw; top: 6vh; }
+  .tree { width: 64vw; right: -4vw; bottom: -1vh; }
+  .flower { right: 34vw; bottom: 32vh; width: 9vw; }
+  .text-section { top: 18vh; left: 6vw; }
 }
