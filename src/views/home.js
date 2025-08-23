@@ -9,13 +9,13 @@ import Flower from "../images/Flower.png";
 import Lantern from "../images/Lantern.png";
 
 function Home() {
-  // create 12 lanterns with random positions/sizes
+  // lanterns with random positions/sizes
   const lanterns = Array.from({ length: 12 }).map((_, i) => {
-    const left = Math.random() * 80 + 5;   // between 5vw and 85vw
-    const top = Math.random() * 50 + 10;   // between 10vh and 60vh
-    const size = Math.random() * 15 + 20;    // between 4vw and 10vw
-    const delay = Math.random() * 12;      // random animation delay
-    const duration = Math.random() * 10 + 18; // 18–28s float cycle
+    const left = Math.random() * 80 + 5;  
+    const top = Math.random() * 50 + 10;   
+    const size = Math.random() * 15 + 20;    
+    const delay = Math.random() * 12;      
+    const duration = Math.random() * 10 + 18; 
 
     return (
       <img
