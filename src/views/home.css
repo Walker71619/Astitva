@@ -6,9 +6,8 @@
   background-position: center;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* text on left */
-  padding-left: 5%;           /* some left margin */
-}
+  justify-content: flex-start;
+  padding-left: 5%;          
 
 .text-section {
   color: white;
@@ -27,7 +26,7 @@
   margin-top: 0.5rem;
 }
 
-/* Moonlight pulsing glow effect */
+
 @keyframes glowPulse {
   0% {
     text-shadow: 0 0 10px #ffffff, 0 0 20px #cce6ff, 0 0 30px #99ccff;
