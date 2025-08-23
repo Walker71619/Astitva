@@ -72,8 +72,8 @@
   width: 88vw;              
   max-width: 1600px;        
   height: auto;
-  right: 2vw;               /* adjusted so it doesn’t overflow too much */
-  bottom: -3vh;             /* keeps base grounded */
+  right: 2vw;              
+  bottom: -3vh;            
   left: auto;
   top: auto;
   object-fit: contain;
@@ -84,29 +84,29 @@
   animation: treeSway 10s ease-in-out infinite alternate;
 }
 
-/* example flower (you can hide or reposition later) */
+
 .flower {
   z-index: 6;
   width: 6vw;
   max-width: 120px;
   height: auto;
-  right: 22vw;        /* place over right-side canopy */
+  right: 22vw;     
   bottom: 34vh;
   transform: rotate(-10deg);
   filter: drop-shadow(0 0 10px rgba(200,230,255,.6));
   animation: float 12s ease-in-out infinite reverse;
 }
 
-/* edge fade to blend bottom and soften sides */
+
 .edge-fade {
   position: absolute;
   inset: 0;
   z-index: 7;
   pointer-events: none;
   background:
-    radial-gradient(120% 60% at 50% 105%, rgba(5,23,38,0.85), rgba(5,23,38,0) 55%) /* bottom fade */,
-    radial-gradient(60% 100% at -5% 50%, rgba(5,23,38,0.55), transparent 60%)      /* left */,
-    radial-gradient(60% 100% at 105% 50%, rgba(5,23,38,0.55), transparent 60%);     /* right */
+    radial-gradient(120% 60% at 50% 105%, rgba(5,23,38,0.85), rgba(5,23,38,0) 55%),
+    radial-gradient(60% 100% at -5% 50%, rgba(5,23,38,0.55), transparent 60%),
+    radial-gradient(60% 100% at 105% 50%, rgba(5,23,38,0.55), transparent 60%);     
   mix-blend-mode: multiply;
 }
 
