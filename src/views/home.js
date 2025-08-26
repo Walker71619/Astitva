@@ -78,26 +78,26 @@ function Home() {
 
   return (
     <div className={`scene ${active ? "active" : ""}`} onClick={toggleScene}>
-      {/* Base background (sky + ground) */}
+      
       <img src={BgMain} className="layer base" alt="" />
 
-      {/* Mountains split into halves from the same image */}
+      
       <img src={Bg2} className="layer bg2 bg2-left" alt="" />
       <img src={Bg2} className="layer bg2 bg2-right" alt="" />
 
-      {/* Moon (slides slightly on activate) */}
+      
       <img src={Moon} className="layer moon" alt="Moon" />
 
       {/* Foreground tree — starts right-most at ground, correct size */}
       <img src={Tree} className="layer tree" alt="Tree" />
 
-      {/* Floating lanterns (bigger) */}
+      
       {lanterns}
 
-      {/* 🦋 Butterflies */}
+      
       <div className="butterflies">{butterflies}</div>
 
-      {/* Pink glowing balls */}
+      
       <div className="glows">{glows}</div>
 
       {/* Title block — starts left-most */}
@@ -106,7 +106,7 @@ function Home() {
         <p className="subtitle">Your Life Blueprint</p>
       </div>
 
-      {/* Edge fade (kept) */}
+     
       <div className="edge-fade" />
     </div>
   );
