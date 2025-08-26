@@ -5,10 +5,8 @@ import BgMain from "../images/Bg_main.png";
 import Bg2    from "../images/Bg2.png";       
 import Moon   from "../images/Moon.png";
 import Tree   from "../images/Tree.png";
-// import Flower from "../images/Flower.png";   
 import Lantern from "../images/Lantern.png";
 
-// 🦋 butterfly images
 import Butterfly1 from "../images/Butterfly1.png";
 import Butterfly2 from "../images/Butterfly2.png";
 import Butterfly3 from "../images/Butterfly3.png";
