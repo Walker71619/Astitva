@@ -1,21 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import "./home.css";
 
 import BgMain from "../images/Bg_main.png";  
 import Bg2    from "../images/Bg2.png";       
 import Moon   from "../images/Moon.png";
 import Tree   from "../images/Tree.png";
-import Flower from "../images/Flower.png";    
+// import Flower from "../images/Flower.png";   
 import Lantern from "../images/Lantern.png";
 
+// 🦋 butterfly images
+import Butterfly1 from "../images/Butterfly1.png";
+import Butterfly2 from "../images/Butterfly2.png";
+import Butterfly3 from "../images/Butterfly3.png";
+
 function Home() {
-  // lanterns with random positions/sizes
+  const [active, setActive] = useState(false);
+
+  const toggleScene = () => setActive(a => !a);
+
+  // Lanterns (kept, slightly bigger by default)
   const lanterns = Array.from({ length: 12 }).map((_, i) => {
-    const left = Math.random() * 80 + 5;  
-    const top = Math.random() * 50 + 10;   
-    const size = Math.random() * 15 + 20;    
-    const delay = Math.random() * 12;      
-    const duration = Math.random() * 10 + 18; 
+    const left = Math.random() * 80 + 5;     
+    const top = Math.random() * 50 + 10;     
+    const size = Math.random() * 4 + 6;       // 6–10 vw (bigger than before)
+    const delay = Math.random() * 12;
+    const duration = Math.random() * 10 + 18;
 
     return (
       <img
@@ -34,36 +43,76 @@ function Home() {
     );
   });
 
+  // 🦋 butterflies (kept as in your project)
+  const butterflyImgs = [Butterfly1, Butterfly2, Butterfly3];
+  const butterflies = Array.from({ length: 10 }).map((_, i) => {
+    const left = Math.random() * 80 + 10;
+    const top = Math.random() * 60 + 20;
+    const size = 32; // cursor-sized
+    const delay = Math.random() * 10;
+    const duration = Math.random() * 15 + 12;
+    const img = butterflyImgs[i % butterflyImgs.length];
+
+    return (
+      <div
+        key={`butterfly-${i}`}
+        className="butterfly-wrapper"
+        style={{
+          left: `${left}vw`,
+          top: `${top}vh`,
+          animationDelay: `${delay}s`,
+          animationDuration: `${duration}s`,
+        }}
+      >
+        <img src={img} alt="Butterfly" className="butterfly" style={{ width: `${size}px` }} />
+      </div>
+    );
+  });
+
+  const glowXs = [10, 24, 38, 52, 66, 80]; // in vw
+  const glows = glowXs.map((x, i) => (
+    <div
+      key={`glow-${i}`}
+      className="glow"
+      style={{ left: `${x}vw`, top: `${50 + (i % 2 === 0 ? 0 : -6)}vh` }}
+    />
+  ));
+
   return (
-    <div className="scene">
-      {/* Base background fills screen */}
+    <div className={`scene ${active ? "active" : ""}`} onClick={toggleScene}>
+      {/* Base background (sky + ground) */}
       <img src={BgMain} className="layer base" alt="" />
 
-      {/* Distant ridge/bush (slight drift) */}
-      <img src={Bg2} className="layer bg2" alt="" />
+      {/* Mountains split into halves from the same image */}
+      <img src={Bg2} className="layer bg2 bg2-left" alt="" />
+      <img src={Bg2} className="layer bg2 bg2-right" alt="" />
 
-      {/* Big moon on the left, behind text */}
+      {/* Moon (slides slightly on activate) */}
       <img src={Moon} className="layer moon" alt="Moon" />
 
-      {/* Title block */}
+      {/* Foreground tree — starts right-most at ground, correct size */}
+      <img src={Tree} className="layer tree" alt="Tree" />
+
+      {/* Floating lanterns (bigger) */}
+      {lanterns}
+
+      {/* 🦋 Butterflies */}
+      <div className="butterflies">{butterflies}</div>
+
+      {/* Pink glowing balls */}
+      <div className="glows">{glows}</div>
+
+      {/* Title block — starts left-most */}
       <div className="text-section">
         <h1 className="title">ASTITVA</h1>
         <p className="subtitle">Your Life Blueprint</p>
       </div>
 
-      {/* Foreground tree */}
-      <img src={Tree} className="layer tree" alt="Tree" />
-
-      {/* Decorative flower */}
-      <img src={Flower} className="layer flower" alt="Flower" />
-
-      {/* Floating lanterns */}
-      {lanterns}
-
-      {/* Edge fade */}
+      {/* Edge fade (kept) */}
       <div className="edge-fade" />
     </div>
   );
 }
 
 export default Home;
+
