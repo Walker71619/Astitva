@@ -16,11 +16,11 @@ function Home() {
 
   const toggleScene = () => setActive(a => !a);
 
-  // Lanterns (kept, slightly bigger by default)
+
   const lanterns = Array.from({ length: 12 }).map((_, i) => {
     const left = Math.random() * 80 + 5;     
     const top = Math.random() * 50 + 10;     
-    const size = Math.random() * 4 + 6;       // 6–10 vw (bigger than before)
+    const size = Math.random() * 4 + 6;     
     const delay = Math.random() * 12;
     const duration = Math.random() * 10 + 18;
 
@@ -41,12 +41,12 @@ function Home() {
     );
   });
 
-  // 🦋 butterflies (kept as in your project)
+
   const butterflyImgs = [Butterfly1, Butterfly2, Butterfly3];
   const butterflies = Array.from({ length: 10 }).map((_, i) => {
     const left = Math.random() * 80 + 10;
     const top = Math.random() * 60 + 20;
-    const size = 32; // cursor-sized
+    const size = 32;
     const delay = Math.random() * 10;
     const duration = Math.random() * 15 + 12;
     const img = butterflyImgs[i % butterflyImgs.length];
@@ -67,7 +67,7 @@ function Home() {
     );
   });
 
-  const glowXs = [10, 24, 38, 52, 66, 80]; // in vw
+  const glowXs = [10, 24, 38, 52, 66, 80]; 
   const glows = glowXs.map((x, i) => (
     <div
       key={`glow-${i}`}
