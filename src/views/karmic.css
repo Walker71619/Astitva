@@ -1,0 +1,90 @@
+.karmic-page {
+  background-color: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* aligns top */
+}
+
+/* Tribe Container */
+.karmic-page .tribe-container {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  padding: 2rem 0;
+  scroll-snap-type: x mandatory;
+}
+
+/* Scrollbar */
+.karmic-page .tribe-container::-webkit-scrollbar {
+  height: 8px;
+}
+.karmic-page .tribe-container::-webkit-scrollbar-thumb {
+  background: #3af;
+  border-radius: 10px;
+}
+
+/* Tribe Card */
+.karmic-page .tribe-card {
+  position: relative;
+  width: 90vw;       /* responsive width */
+  max-width: 450px;  /* max size */
+  aspect-ratio: 4/7; /* keeps card long */
+  border-radius: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 15px rgba(0, 200, 255, 0.3);
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+  background-size: cover;
+  background-position: center;
+}
+
+.karmic-page .tribe-card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 0 25px rgba(0, 200, 255, 0.6);
+}
+
+/* Overlay for text */
+.karmic-page .tribe-content {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+  border-radius: 15px;
+  width: 100%;
+  color: #fff;
+}
+
+/* Tribe Text */
+.karmic-page .tribe-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #3af;
+}
+
+.karmic-page .tribe-card p {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #ccc;
+}
+
+/* Tags */
+.karmic-page .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.karmic-page .tag {
+  border: 1px solid #3af;
+  border-radius: 20px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+  color: #3af;
+  background: rgba(0, 200, 255, 0.2);
+}
