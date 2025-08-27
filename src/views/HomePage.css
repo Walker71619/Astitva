@@ -100,22 +100,24 @@
   white-space: nowrap;
   animation: subtleGlow 6s ease-in-out infinite alternate;
 }
-
 /* Categories Section */
 .categories {
-  background: #051726;
+  background: #0b0b1f; /* same deep moonlight */
   padding: 6rem 2rem;
   text-align: center;
+  border-top: 1px solid rgba(255,255,255,.08);
 }
 
 .categories-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #fff;
+  color: #99ccff;
   margin-bottom: 3rem;
-  text-shadow: 0 0 12px rgba(153,204,255,.6);
+  text-shadow: 0 0 12px rgba(153,204,255,.5),
+               0 0 25px rgba(100,180,255,.3);
 }
 
+/* Category Grid */
 .category-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -126,38 +128,39 @@
 
 /* Category Cards */
 .category-card {
-  background: linear-gradient(135deg, rgba(153,204,255,.15), rgba(255,160,220,.1));
-  border: 2px solid rgba(255,255,255,.15);
+  background: rgba(15, 30, 60, 0.6); /* translucent bluish panel */
+  border: 2px solid rgba(153,204,255,.15);
   border-radius: 1.5rem;
   padding: 3rem 2rem;
-  color: #fff;
+  color: #d6eaff;
   text-decoration: none;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-  box-shadow: 0 8px 20px rgba(0,0,0,.4);
-  backdrop-filter: blur(6px);
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,.5);
+  backdrop-filter: blur(10px);
   cursor: pointer;
   position: relative;
   overflow: hidden;
 }
 
-/* Hover Effects */
+/* Hover Glow */
 .category-card::before {
   content: "";
   position: absolute;
   inset: -50%;
-  background: radial-gradient(circle, rgba(255,200,240,.3), transparent 70%);
+  background: radial-gradient(circle, rgba(100,180,255,.25), transparent 70%);
   transform: scale(0);
   transition: transform 0.6s ease;
   z-index: 0;
 }
 
 .category-card:hover::before {
-  transform: scale(1.5);
+  transform: scale(1.4);
 }
 
 .category-card:hover {
   transform: translateY(-10px) rotateX(4deg) rotateY(-4deg);
-  box-shadow: 0 16px 40px rgba(153,204,255,.5);
+  border-color: rgba(153,204,255,.5);
+  box-shadow: 0 16px 40px rgba(100,180,255,.5);
 }
 
 .category-card h3,
@@ -169,11 +172,14 @@
 .category-card h3 {
   font-size: 1.8rem;
   margin-bottom: 1rem;
+  color: #aeddff;
+  text-shadow: 0 0 8px rgba(153,204,255,.5);
 }
 
 .category-card p {
   font-size: 1rem;
-  opacity: 0.85;
+  opacity: 0.9;
+  color: #cfe8ff;
 }
 
 
