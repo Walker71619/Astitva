@@ -1,0 +1,107 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000; /* fallback so no white ever shows */
+}
+
+.dharma-page {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  color: #0f114b;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.dharma-header h1 {
+  font-size: 3rem;
+  text-shadow: 0 0 15px rgba(248, 247, 248, 0.9);
+  margin-bottom: 0.5rem;
+}
+
+.dharma-header p {
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
+  opacity: 0.85;
+}
+
+/* Sword Container */
+.sword-container {
+  position: absolute;
+  bottom: 2%; /* closer to ground */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 0; /* no bottom padding */
+}
+
+/* Each sword box */
+.sword-box {
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  flex: 0 0 auto; /* prevents shrinking */
+}
+
+.sword-box:hover {
+  transform: scale(1.05);
+}
+
+/* Giant Sword Images */
+.sword-img {
+  width:200px;   /* giant swords */
+  max-width: 30vw; /* responsive fallback for smaller screens */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 25px rgba(0, 200, 255, 0.7));
+}
+
+/* Lift titles/descriptions slightly */
+.sword-box h2,
+.sword-box p {
+  margin-top: 1.2rem;
+  color: #e0f7ff;
+  text-shadow: 0 0 10px rgba(0, 200, 255, 0.7);
+  font-family: "Cinzel Decorative", serif;
+}
+
+/* Active aura effect */
+.sword-box.active .sword-img {
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 40px rgba(0, 225, 255, 1))
+          drop-shadow(0 0 80px rgba(0, 225, 255, 0.9))
+          drop-shadow(0 0 120px rgba(0, 225, 255, 0.7));
+  animation: auraPulse 2s infinite ease-in-out;
+}
+
+/* Strong continuous aura pulse */
+@keyframes auraPulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 40px rgb(49, 78, 197))
+            drop-shadow(0 0 80px rgba(30, 43, 125, 0.9))
+            drop-shadow(0 0 120px rgba(37, 14, 137, 0.7));
+  }
+  50% {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 40px rgb(49, 78, 197))
+            drop-shadow(0 0 80px rgba(30, 43, 125, 0.9))
+            drop-shadow(0 0 120px rgba(37, 14, 137, 0.7));
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 40px rgba(0, 225, 255, 1))
+            drop-shadow(0 0 80px rgba(0, 225, 255, 0.9))
+            drop-shadow(0 0 120px rgba(0, 225, 255, 0.7));
+  }
+}
