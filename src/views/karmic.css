@@ -30,9 +30,9 @@
 /* Tribe Card */
 .karmic-page .tribe-card {
   position: relative;
-  width: 90vw;       /* responsive width */
-  max-width: 450px;  /* max size */
-  aspect-ratio: 4/7; /* keeps card long */
+  width: 90vw;      
+  max-width: 350px;  
+  aspect-ratio: 4/7; 
   border-radius: 20px;
   overflow: hidden;
   flex-shrink: 0;
