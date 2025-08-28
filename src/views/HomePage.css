@@ -1,0 +1,293 @@
+/* Homepage Wrapper */
+.homepage {
+    position: relative;
+    overflow-x: hidden;
+    background: #0b0b1f;
+    font-family: 'Montserrat', sans-serif;
+    color: #e0e0e0;
+}
+
+.hero-wrapper {
+    height: 400vh;
+    position: relative;
+}
+
+.hero-sticky {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.hero-release {
+    position: relative;
+    height: 100vh;
+    z-index: 0;
+}
+
+/* Background */
+.bg-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    filter: brightness(0.88);
+}
+
+/* Moon */
+.moon {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    width: 30vw;
+    max-width: 450px;
+    height: auto;
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.6));
+    transition: all 0.3s ease;
+}
+
+/* Base Wrapper */
+.base-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+}
+
+.base {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Tree Wrapper */
+.tree-wrapper {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-30%);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.tree {
+    position: relative;
+    width: auto;
+    height: 70vh;
+    object-fit: contain;
+}
+
+
+/* Hero Mask (Text Layer) */
+.hero-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: black;
+    z-index: 20;
+    overflow: hidden;
+}
+
+.hero-mask h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 12rem;
+    font-weight: 700;
+    color: transparent;
+    background: url("../images/gradient.jpg") no-repeat center center;
+    background-size: cover;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: maskMove 4s infinite alternate linear;
+    letter-spacing: 0.1em;
+}
+
+@keyframes maskMove {
+    0% {
+        background-position: 0 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+.categories {
+    position: relative;
+    padding: 4rem 2rem;
+    background: linear-gradient(to bottom, #0b0b1f, #1c1c3a);
+    overflow: hidden;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.category-card {
+    background: rgba(15, 30, 60, 0.6);
+    border: 2px solid rgba(153, 204, 255, .15);
+    border-radius: 1.5rem;
+    padding: 3rem 2rem;
+    color: #d6eaff;
+    text-decoration: none;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .5);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card::before {
+    content: "";
+    position: absolute;
+    inset: -50%;
+    background: radial-gradient(circle, rgba(100, 180, 255, .35), transparent 70%);
+    transform: scale(0);
+    transition: transform 0.6s ease, opacity 0.4s ease;
+    z-index: 0;
+    opacity: 0.7;
+}
+
+.category-card:hover::before {
+    transform: scale(1.5);
+    opacity: 1;
+}
+
+.category-card h3,
+.category-card p {
+    position: relative;
+    z-index: 1;
+}
+
+.category-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #aeddff;
+    text-shadow: 0 0 8px rgba(153, 204, 255, .5);
+}
+
+.category-card p {
+    font-size: 1rem;
+    opacity: 0.9;
+    color: #cfe8ff;
+}
+
+.floating-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: rgba(162, 240, 255, 0.5);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    z-index: 0;
+}
+
+/* ================== Responsive ================== */
+
+/* Tablet (≤768px) */
+@media (max-width: 768px) {
+    .moon {
+        width: 40vw;
+        max-width: 300px;
+        top: 10%;
+    }
+
+    .tree-wrapper {
+        padding: 0%;
+    }
+    .tree {
+        height: 50vh;
+        top: 0%;
+    }
+
+    .base-wrapper .base {
+        width: 100%;
+        height: auto;
+    }
+
+    .hero-mask h1 {
+        font-size: 8rem;
+        letter-spacing: 0.05em;
+    }
+
+    .categories {
+        padding: 4rem 1.5rem;
+    }
+
+    .categories-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+}
+
+/* Mobile (≤468px) */
+@media (max-width: 468px) {
+    .moon {
+        width: 55vw;
+        max-width: 220px;
+        top: 12%;
+    }
+
+    .tree-wrapper {
+        padding: 0%;
+        top: 50%;
+        left: 20%;
+    }
+    .tree {
+        height: 40vh;
+    }
+
+    .base-wrapper .base {
+        width: 100%;
+        height: auto;
+    }
+
+    .hero-mask h1 {
+        font-size: 10vw;
+        letter-spacing: 0.02em;
+    }
+
+    .categories {
+        padding: 3rem 1rem;
+    }
+
+    .categories-title {
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .category-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .category-card h3 {
+        font-size: 1.4rem;
+    }
+
+    .category-card p {
+        font-size: 0.9rem;
+    }
+}
