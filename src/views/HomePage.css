@@ -27,7 +27,7 @@
     z-index: 0;
 }
 
-
+/* Background */
 .bg-layer {
     position: absolute;
     top: 0;
@@ -39,11 +39,9 @@
     filter: brightness(0.88);
 }
 
-
 /* Moon */
 .moon {
     position: absolute;
-    /* was fixed */
     top: 8%;
     left: 50%;
     transform: translateX(-50%);
@@ -55,40 +53,43 @@
     transition: all 0.3s ease;
 }
 
-/* Ground Group: base + tree */
-.ground-group {
+/* Base Wrapper */
+.base-wrapper {
     position: absolute;
-    /* was fixed */
     bottom: 0;
     left: 0;
     width: 100%;
+    pointer-events: none;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.base {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Tree Wrapper */
+.tree-wrapper {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-30%);
     pointer-events: none;
     z-index: 3;
 }
 
-/* Base */
-.base {
-    width: 100%;
-    height: auto;
-    z-index: 1;
-    object-fit: cover;
-}
-
-/* Tree */
 .tree {
-  position: absolute;
-  left: 50%;
-  top: -70%;
-  transform: translate(-50%, -50%);
-  z-index: 3; 
-  width: auto;
-  height: 70vh; 
+    position: relative;
+    width: auto;
+    height: 70vh;
+    object-fit: contain;
 }
 
 
+/* Hero Mask (Text Layer) */
 .hero-mask {
     position: absolute;
     top: 0;
@@ -104,17 +105,17 @@
 }
 
 .hero-mask h1 {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: 12rem;
-  font-weight: 700;
-  color: transparent;
-  background: url("../images/gradient.jpg") no-repeat center center;
-  background-size: cover;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: maskMove 4s infinite alternate linear;
-  letter-spacing: 0.1em; 
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 12rem;
+    font-weight: 700;
+    color: transparent;
+    background: url("../images/gradient.jpg") no-repeat center center;
+    background-size: cover;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: maskMove 4s infinite alternate linear;
+    letter-spacing: 0.1em;
 }
 
 @keyframes maskMove {
@@ -130,7 +131,6 @@
 /* Categories Section */
 .categories {
     background: #0b0b1f;
-    /* same deep moonlight */
     padding: 6rem 2rem;
     text-align: center;
     margin-top: 0;
@@ -158,7 +158,6 @@
 /* Category Cards */
 .category-card {
     background: rgba(15, 30, 60, 0.6);
-    /* translucent bluish panel */
     border: 2px solid rgba(153, 204, 255, .15);
     border-radius: 1.5rem;
     padding: 3rem 2rem;
@@ -211,24 +210,89 @@
     opacity: 0.9;
     color: #cfe8ff;
 }
+/* ================== Responsive ================== */
 
-
-
-/* Responsive */
+/* Tablet (≤768px) */
 @media (max-width: 768px) {
-    .astitva-text {
-        font-size: 12vw;
-        top: 25%;
-    }
-
-    .tree {
-        width: 60vw;
-        max-width: 400px;
-        bottom: 180px;
-    }
-
     .moon {
         width: 40vw;
         max-width: 300px;
+        top: 10%;
+    }
+
+    .tree-wrapper {
+        padding: 0%;
+    }
+    .tree {
+        height: 50vh;
+        top: 0%;
+    }
+
+    .base-wrapper .base {
+        width: 100%;
+        height: auto;
+    }
+
+    .hero-mask h1 {
+        font-size: 8rem;
+        letter-spacing: 0.05em;
+    }
+
+    .categories {
+        padding: 4rem 1.5rem;
+    }
+
+    .categories-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+}
+
+/* Mobile (≤468px) */
+@media (max-width: 468px) {
+    .moon {
+        width: 55vw;
+        max-width: 220px;
+        top: 12%;
+    }
+
+    .tree-wrapper {
+        padding: 0%;
+        top: 50%;
+        left: 20%;
+    }
+    .tree {
+        height: 40vh;
+    }
+
+    .base-wrapper .base {
+        width: 100%;
+        height: auto;
+    }
+
+    .hero-mask h1 {
+        font-size: 10vw;
+        letter-spacing: 0.02em;
+    }
+
+    .categories {
+        padding: 3rem 1rem;
+    }
+
+    .categories-title {
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .category-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .category-card h3 {
+        font-size: 1.4rem;
+    }
+
+    .category-card p {
+        font-size: 0.9rem;
     }
 }

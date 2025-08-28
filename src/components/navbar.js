@@ -17,6 +17,7 @@ export default function Navbar() {
         <li><a href="#future-you">Future You</a></li>
       </ul>
 
+      {/* Fantasy Hamburger */}
       <div className={`hamburger ${menuOpen ? "open" : ""}`} onClick={toggleMenu}>
         <span></span>
         <span></span>

@@ -20,7 +20,6 @@ export default function HomePage() {
     /** Stage 0: Moon (majestic presence) */
     const moonScale = useTransform(scrollYProgress, [0, 0.5], [2, 1.2]);
     const moonY = useTransform(scrollYProgress, [0, 0.85], ["0%", "120%"]);
-    // ab tree+base ke descend ke sath hi niche jayega
     const moonX = "-50%";
 
     /** Stage 1: BG zoom (deep depth) */
@@ -32,7 +31,7 @@ export default function HomePage() {
 
     /** Stage 3: Base zoom + descend */
     const baseScale = useTransform(scrollYProgress, [0.5, 0.85], [1, 1.8]);
-    const baseY = useTransform(scrollYProgress, [0.5, 0.85], [0, 180]);
+    const baseY = useTransform(scrollYProgress, [0.5, 0.85], [0, 50]);
 
     /** Stage 4: Text fade */
     const textScale = useTransform(scrollYProgress, [0, 0.2], [1, 1.3]);
@@ -49,7 +48,6 @@ export default function HomePage() {
     return (
         <div className="homepage">
             <Navbar />
-
             {/* Hero cinematic scroll */}
             <section className="hero-wrapper" ref={heroRef}>
                 <div
@@ -74,15 +72,28 @@ export default function HomePage() {
                         style={{ scale: moonScale, y: moonY, x: moonX }}
                     />
 
-                    {/* Ground Group */}
-                    <motion.div className="ground-group" style={{ scale: baseScale, y: baseY }}>
+                    {/* Tree */}
+                    <motion.div
+                        className="tree-wrapper"
+                        style={{ scale: treeScale, y: treeY }}
+                    >
                         <motion.img
                             src={tree}
                             alt="tree"
                             className="tree"
-                            style={{ scale: treeScale, y: treeY }}
                         />
-                        <img src={base} alt="base" className="base" />
+                    </motion.div>
+
+                    {/* Base */}
+                    <motion.div
+                        className="base-wrapper"
+                        style={{ scale: baseScale, y: baseY }}
+                    >
+                        <motion.img
+                            src={base}
+                            alt="base"
+                            className="base"
+                        />
                     </motion.div>
 
                     {/* Masked Fullscreen Text */}
