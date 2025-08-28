@@ -127,35 +127,23 @@
         background-position: 100% 50%;
     }
 }
-
-/* Categories Section */
 .categories {
-    background: #0b0b1f;
-    padding: 6rem 2rem;
-    text-align: center;
-    margin-top: 0;
-    border-top: 1px solid rgba(255, 255, 255, .08);
+    position: relative;
+    padding: 4rem 2rem;
+    background: linear-gradient(to bottom, #0b0b1f, #1c1c3a);
+    overflow: hidden;
 }
 
-.categories-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #99ccff;
-    margin-bottom: 3rem;
-    text-shadow: 0 0 12px rgba(153, 204, 255, .5),
-        0 0 25px rgba(100, 180, 255, .3);
-}
-
-/* Category Grid */
 .category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
     max-width: 1100px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
-/* Category Cards */
 .category-card {
     background: rgba(15, 30, 60, 0.6);
     border: 2px solid rgba(153, 204, 255, .15);
@@ -171,25 +159,20 @@
     overflow: hidden;
 }
 
-/* Hover Glow */
 .category-card::before {
     content: "";
     position: absolute;
     inset: -50%;
-    background: radial-gradient(circle, rgba(100, 180, 255, .25), transparent 70%);
+    background: radial-gradient(circle, rgba(100, 180, 255, .35), transparent 70%);
     transform: scale(0);
-    transition: transform 0.6s ease;
+    transition: transform 0.6s ease, opacity 0.4s ease;
     z-index: 0;
+    opacity: 0.7;
 }
 
 .category-card:hover::before {
-    transform: scale(1.4);
-}
-
-.category-card:hover {
-    transform: translateY(-10px) rotateX(4deg) rotateY(-4deg);
-    border-color: rgba(153, 204, 255, .5);
-    box-shadow: 0 16px 40px rgba(100, 180, 255, .5);
+    transform: scale(1.5);
+    opacity: 1;
 }
 
 .category-card h3,
@@ -210,6 +193,18 @@
     opacity: 0.9;
     color: #cfe8ff;
 }
+
+.floating-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: rgba(162, 240, 255, 0.5);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    z-index: 0;
+}
+
 /* ================== Responsive ================== */
 
 /* Tablet (≤768px) */
