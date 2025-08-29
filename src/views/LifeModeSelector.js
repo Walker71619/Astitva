@@ -10,7 +10,6 @@ import HealImg from "../images/heal.png";
 import DisciImg from "../images/disci.png";
 import DiscoImg from "../images/disco.png";
 
-// Gate thumbnails (vertical / patli)
 import i from "../images/i.png";
 import i2 from "../images/i2.png";
 import i3 from "../images/i1.png";
@@ -19,8 +18,8 @@ const gates = [
   {
     id: "heal",
     gateImg: Gate1,
-    thumb: i, // vertical for inside gate
-    modalImg: HealImg, // original for modal
+    thumb: i, 
+    modalImg: HealImg, 
     title: "Phoenix Path",
     arc: "Emotional healing arc",
     desc: "Step into the Phoenix Path and embrace the power of transformation. This journey nurtures your inner self and helps you release past wounds. Each challenge becomes an opportunity to grow and find balance. You will awaken resilience and courage within, lighting your way forward. Emotional clarity and renewal are the gifts of this path."
