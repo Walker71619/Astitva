@@ -23,7 +23,7 @@ const gates = [
     modalImg: HealImg, // original for modal
     title: "Phoenix Path",
     arc: "Emotional healing arc",
-    desc: "Step into the Phoenix Path and embrace the power of transformation. This journey nurtures your inner self and helps you release past wounds. Each challenge becomes an opportunity to grow and find balance. You will awaken resilience and courage within, lighting your way forward. Emotional clarity and renewal are the gifts of this path. Rise like the Phoenix and discover the strength that comes from healing."
+    desc: "Step into the Phoenix Path and embrace the power of transformation. This journey nurtures your inner self and helps you release past wounds. Each challenge becomes an opportunity to grow and find balance. You will awaken resilience and courage within, lighting your way forward. Emotional clarity and renewal are the gifts of this path."
   },
   {
     id: "disci",
