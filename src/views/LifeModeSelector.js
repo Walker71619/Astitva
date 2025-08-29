@@ -5,35 +5,43 @@ import Gate2 from "../images/gate2.png";
 import Gate3 from "../images/gate3.png";
 import CosmicBG from "../images/moon-bg.jpg";
 
-// Thumbnails / full images
+// Modal / card images
 import HealImg from "../images/heal.png";
 import DisciImg from "../images/disci.png";
 import DiscoImg from "../images/disco.png";
+
+// Gate thumbnails (vertical / patli)
+import i from "../images/i.png";
+import i2 from "../images/i2.png";
+import i3 from "../images/i1.png";
 
 const gates = [
   {
     id: "heal",
     gateImg: Gate1,
-    thumb: HealImg,
+    thumb: i, // vertical for inside gate
+    modalImg: HealImg, // original for modal
     title: "Phoenix Path",
     arc: "Emotional healing arc",
-    desc: "The Phoenix has always been a timeless symbol of rebirth, rising gracefully from the ashes of its past. In the same way, the Phoenix Path represents a deep emotional healing arc—a journey of inner transformation..."
+    desc: "The Phoenix has always been a timeless symbol of rebirth..."
   },
   {
     id: "disci",
     gateImg: Gate2,
-    thumb: DisciImg,
+    thumb: i2,
+    modalImg: DisciImg,
     title: "Titan’s March",
     arc: "Warrior/discipline arc",
-    desc: "If the Phoenix teaches us to heal, the Titan teaches us to endure. The Titan’s March embodies the warrior’s discipline—an unyielding commitment to growth, perseverance, and strength..."
+    desc: "The Titan’s March embodies the warrior’s discipline..."
   },
   {
     id: "disco",
     gateImg: Gate3,
-    thumb: DiscoImg,
+    thumb: i3,
+    modalImg: DiscoImg,
     title: "Astral Voyage",
     arc: "Discovery/expansion arc",
-    desc: "While the Phoenix rises and the Titan marches, the Astral Voyager drifts into the unknown. This arc symbolizes discovery, exploration, and expansion..."
+    desc: "The Astral Voyage symbolizes discovery, exploration..."
   },
 ];
 
@@ -55,7 +63,7 @@ function LifeModeSelector() {
     >
       <header className="life-header">
         <h1>Life Mode Selector</h1>
-        <p>Unlock the doors to growth, healing, and dreams</p>
+        <p>Choose your path and discover your journey</p>
       </header>
 
       <section className="gate-container">
@@ -77,7 +85,6 @@ function LifeModeSelector() {
             <img src={gate.gateImg} alt={gate.title} className="gate-img" />
             <img src={gate.thumb} alt="thumb" className="thumb-inside" />
 
-            {/* Title + Arc Text Below Gate */}
             <div className="gate-text">
               <h2>{gate.title}</h2>
               <p className="gate-arc">{gate.arc}</p>
@@ -86,7 +93,6 @@ function LifeModeSelector() {
         ))}
       </section>
 
-      {/* Modal */}
       {selectedGate && (
         <div className="modal-overlay" onClick={() => setSelectedGate(null)}>
           <div
@@ -96,7 +102,7 @@ function LifeModeSelector() {
             <h2>{selectedGate.title}</h2>
             <p>{selectedGate.desc}</p>
             <img
-              src={selectedGate.thumb}
+              src={selectedGate.modalImg}
               alt={selectedGate.title}
               className="modal-img"
             />
@@ -109,5 +115,7 @@ function LifeModeSelector() {
 }
 
 export default LifeModeSelector;
+
+
 
 
