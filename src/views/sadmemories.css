@@ -1,0 +1,181 @@
+.sad-page {
+  min-height: 100vh;
+  color: white;
+  text-align: center;
+  padding: 40px;
+  overflow: hidden;
+  position: relative;
+}
+
+.sad-title {
+  font-size: 3rem;
+  text-shadow: 0 0 20px #ff99cc, 0 0 40px #ff66aa;
+  margin-bottom: 20px;
+}
+
+.open-form-btn {
+  background: #ff66aa;
+  color: white;
+  font-size: 1.2rem;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 0 20px #ff99cc;
+  transition: 0.3s;
+}
+.open-form-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px #ff66aa;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 30, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fantasy Diary Form */
+.modal-form {
+  background: #1e1e4f;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 30px #ff99cc, inset 0 0 40px rgba(255, 150, 200, 0.3);
+  width: 400px;
+  max-width: 90%;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+.modal-form h2 {
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+  color: #ffccdd;
+  text-shadow: 0 0 15px #ff99cc;
+}
+
+.modal-form textarea {
+  width: 100%;
+  height: 120px;
+  padding: 15px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: #2a2a60;
+  color: white;
+  box-shadow: inset 0 0 10px rgba(255, 100, 180, 0.5);
+  resize: none;
+}
+
+.add-btn {
+  margin-top: 15px;
+  background: #ff66aa;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 15px #ff99cc;
+}
+.add-btn:hover {
+  background: #ff3385;
+  transform: scale(1.05);
+}
+
+/* Floating Cards */
+.memory-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 20px;
+}
+
+.floating-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+  width: 220px;
+  height: 150px;
+  color: #ffccdd;
+  box-shadow: 0 0 25px rgba(255, 100, 150, 0.6);
+  animation: floaty 6s infinite ease-in-out;
+  backdrop-filter: blur(5px);
+}
+
+@keyframes floaty {
+  0% { transform: translateY(0px) rotate(-2deg); }
+  50% { transform: translateY(-15px) rotate(2deg); }
+  100% { transform: translateY(0px) rotate(-2deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.sad-card {
+  width: 300px;
+  min-height: 200px;
+  background: rgba(30, 30, 60, 0.8); /* dark glass */
+  border-radius: 18px;
+  padding: 20px;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 25px rgba(255, 0, 150, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* hover effect */
+.sad-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 0 40px rgba(255, 0, 150, 0.7);
+}
+
+/* title */
+.sad-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+  color: #ff79c6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* description */
+.sad-card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #ddd;
+  margin-bottom: 10px;
+}
+
+/* date tag */
+.sad-date {
+  font-size: 0.8rem;
+  color: #aaa;
+  position: absolute;
+  top: 12px;
+  right: 18px;
+}
+
+/* emoji/mood indicator */
+.sad-mood {
+  font-size: 1.5rem;
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+}

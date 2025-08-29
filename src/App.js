@@ -4,6 +4,10 @@ import Home from "./views/HomePage";
 import KarmicAI from "./views/KarmicAI";
 import DharmaScheduler from "./views/DharmaScheduler";
 import LifeModeSelector from "./views/LifeModeSelector";
+import LifeBlueprint from "./views/lifeblueprint";
+import SadMemories from "./views/sadmemories";
+import HappyMemories from "./views/happymemories";
+import AchievementMemories from "./views/achievementmemories";
 
 
 
@@ -22,6 +26,12 @@ function App() {
 
         {/* Life Mode Selector */}
         <Route path="/life-mode" element={<LifeModeSelector />} />
+
+        {/* Life Blueprint */}
+        <Route path="/life-blueprint" element={<LifeBlueprint />} />
+        <Route path="/sad-memories" element={<SadMemories />} />
+        <Route path="/happy-memories" element={<HappyMemories />} />
+        <Route path="/achievement-memories" element={<AchievementMemories />} />
 
       </Routes>
     </Router>

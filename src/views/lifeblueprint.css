@@ -1,0 +1,97 @@
+/* ===== Scene Background ===== */
+.blueprint-scene {
+  min-height: 100vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;   /* heading always top */
+  align-items: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== Title ===== */
+.blueprint-title {
+  font-size: 3.8rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 20px #ffe066, 0 0 40px #ffeb99;
+  margin-bottom: 50px;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+/* ===== Cards Layout ===== */
+.blueprint-cards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 100px;        /* अधिक gap ताकि बड़े card अच्छे लगें */
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+/* ===== Individual Card ===== */
+.memory-card {
+  position: relative;
+  width: 380px;     /* bigger width */
+  height: 500px;    /* bigger height */
+  border-radius: 22px;
+  background: rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  box-shadow: 0 0 28px rgba(255, 255, 255, 0.25);
+  text-align: center;
+}
+
+.memory-card img {
+  width: 100%;
+  height: 78%;
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+.memory-card h2 {
+  margin: 18px 0;
+  font-size: 1.7rem;   /* bigger text */
+  color: #fff;
+  text-shadow: 0 0 14px rgba(255, 255, 200, 0.95);
+}
+
+/* Hover effect */
+.memory-card:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 38px rgba(255, 255, 200, 0.65);
+}
+
+/* Active (clicked) effect */
+.memory-card.active {
+  transform: scale(1.12);  /* थोड़ा zoom, बहुत नहीं */
+  box-shadow: 
+    0 0 55px rgba(255, 240, 200, 0.9),
+    0 0 95px rgba(255, 200, 80, 0.85),
+    0 0 130px rgba(255, 160, 60, 0.75);
+}
+
+/* Glow Behind the Card */
+.glow-back {
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(255,255,180,0.5) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+.memory-card.active .glow-back {
+  opacity: 1;
+}

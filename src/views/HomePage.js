@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Navbar from "../components/navbar";
+import { Link } from "react-router-dom"; 
 import Footer from "../components/footer";
 
 
