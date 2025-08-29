@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Navbar from "../components/navbar";
+import Footer from "../components/footer";
+
 
 // hero images
 import moon from "../images/moon2.png";
@@ -107,6 +109,9 @@ export default function HomePage() {
                     ))}
                 </div>
             </section>
+             {/* Footer */}
+      <Footer />
+
         </div>
     );
 }
