@@ -255,6 +255,14 @@
   transform: scale(0);
   transition: transform 0.6s ease;
   z-index: 0;
+
+  /* match chamfer corners */
+  clip-path: polygon(
+    5% 0%, 95% 0%, 
+    100% 5%, 100% 95%, 
+    95% 100%, 5% 100%, 
+    0% 95%, 0% 5%
+  );
 }
 
 .category-card:hover::before {
@@ -264,6 +272,13 @@
 .category-card:hover {
   transform: translateY(-10px) rotateX(4deg) rotateY(-4deg);
   box-shadow: 0 16px 40px rgba(153,204,255,.5);
+  /* keep chamfer on hover */
+  clip-path: polygon(
+    5% 0%, 95% 0%, 
+    100% 5%, 100% 95%, 
+    95% 100%, 5% 100%, 
+    0% 95%, 0% 5%
+  );
 }
 
 .category-card h3,
