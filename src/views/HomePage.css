@@ -108,6 +108,8 @@
     font-family: 'Cinzel Decorative', serif;
     font-size: 12rem;
     font-weight: 700;
+    width: 100%;
+    text-align: center;
     color: transparent;
     background: url("../images/gradient.jpg") no-repeat center center;
     background-size: cover;
@@ -142,28 +144,34 @@
     padding: 2rem;
     justify-items: center;
 }
+
 .categories-title {
-  font-family: 'Uncial Antiqua', serif; 
-  text-align: center;
-  font-size: 3.5rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 6px;
-  margin-bottom: 3rem;
+    font-family: 'Uncial Antiqua', serif;
+    text-align: center;
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    margin-bottom: 3rem;
 
-  /* Mystic Purple → Neon Pink gradient */
-  background: linear-gradient(90deg, #a020f0, #ff00cc);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+    /* Mystic Purple → Neon Pink gradient */
+    background: linear-gradient(90deg, #a020f0, #ff00cc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 
-  /* 3D stone / engraved illusion */
-  text-shadow: 
-    2px 2px 3px rgba(0,0,0,0.7),      /* deep inner shadow */
-    -2px -2px 3px rgba(255,255,255,0.1), /* light highlight */
-    0 0 12px rgba(160, 32, 240, 0.6),   /* purple glow */
-    0 0 20px rgba(255, 0, 204, 0.5);    /* pink glow */
-    
-  transform: perspective(600px) rotateX(10deg); /* thoda 3D tilt */
+    /* 3D stone / engraved illusion */
+    text-shadow:
+        2px 2px 3px rgba(0, 0, 0, 0.7),
+        /* deep inner shadow */
+        -2px -2px 3px rgba(255, 255, 255, 0.1),
+        /* light highlight */
+        0 0 12px rgba(160, 32, 240, 0.6),
+        /* purple glow */
+        0 0 20px rgba(255, 0, 204, 0.5);
+    /* pink glow */
+
+    transform: perspective(600px) rotateX(10deg);
+    /* thoda 3D tilt */
 }
 
 .badge-icon {
