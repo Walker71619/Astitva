@@ -23,7 +23,7 @@ const gates = [
     modalImg: HealImg, // original for modal
     title: "Phoenix Path",
     arc: "Emotional healing arc",
-    desc: "The Phoenix has always been a timeless symbol of rebirth..."
+    desc: "Step into the Phoenix Path and embrace the power of transformation. This journey nurtures your inner self and helps you release past wounds. Each challenge becomes an opportunity to grow and find balance. You will awaken resilience and courage within, lighting your way forward. Emotional clarity and renewal are the gifts of this path. Rise like the Phoenix and discover the strength that comes from healing."
   },
   {
     id: "disci",
@@ -32,7 +32,7 @@ const gates = [
     modalImg: DisciImg,
     title: "Titan’s March",
     arc: "Warrior/discipline arc",
-    desc: "The Titan’s March embodies the warrior’s discipline..."
+    desc: "The Titan’s March is a path forged in strength and discipline. It challenges you to confront obstacles with unwavering courage. Each step sharpens your focus and tests your determination. You will cultivate patience, perseverance, and inner power. The journey builds both your mind and spirit like a true warrior. March forward and awaken the Titan within you."
   },
   {
     id: "disco",
@@ -41,7 +41,7 @@ const gates = [
     modalImg: DiscoImg,
     title: "Astral Voyage",
     arc: "Discovery/expansion arc",
-    desc: "The Astral Voyage symbolizes discovery, exploration..."
+    desc: "Embark on the Astral Voyage and explore the mysteries beyond. This path encourages curiosity and broadens your perspective. You will encounter new ideas and experiences that expand your mind. Challenges become lessons that inspire growth and adaptability. Discover the hidden horizons within yourself and the universe. Each step is a journey toward self-awareness and cosmic wonder."
   },
 ];
 
