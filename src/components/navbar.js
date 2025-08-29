@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./navbar.css";
+import astitvaLogo from "../images/astitvaLogo.png";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -7,7 +8,9 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="logo">ASTITVA</div>
+      <div className="logo">
+        <img src={astitvaLogo} alt="Astitva Logo" className="logo-img" />
+      </div>
 
       <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
         <li><a href="#life-tree">Life Tree</a></li>
