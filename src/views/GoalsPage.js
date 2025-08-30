@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Bg4 from "../images/bg-4.png"; 
-import patr from "../images/patr.jpg"; 
+import Bg4 from "../images/bg-4.png"; // main page bg
+import patr from "../images/patr.jpg"; // parchment image for progress modal
 import "./GoalsPage.css";
 
 function GoalsPage() {
@@ -10,8 +10,8 @@ function GoalsPage() {
   ]);
 
   // form/modal states
-  const [showModal, setShowModal] = useState(false); 
-  const [showProgress, setShowProgress] = useState(false); 
+  const [showModal, setShowModal] = useState(false); // roadmap form
+  const [showProgress, setShowProgress] = useState(false); // parchment progress
   const [selectedGoal, setSelectedGoal] = useState(null);
 
   // roadmap form data (local until saved into a goal)
@@ -328,42 +328,8 @@ function GoalsPage() {
     </div>
   );
 }
-{/* Progress Scroll Modal */}
-{showProgress && (
-  <div className="scroll-overlay">
-    <div className="scroll-wrapper unfold-animation">   {/* 👈 yaha class add ki */}
-      <div className="scroll-rod top"></div>
-
-      <div className="scroll-content">
-        <h2>📜 Progress of {selectedGoal?.title}</h2>
-        <p>
-          {completed} / {total} tasks done ({percent}%)
-        </p>
-
-        <div className="ink-progress">
-          <div className="ink-fill" style={{ width: `${percent}%` }}></div>
-        </div>
-
-        {roadmap.subgoals.map((sg, i) => (
-          <p key={i}>
-            {roadmap.checklist[i] ? "✔️" : "⭕"} {sg || `Subgoal ${i + 1}`}
-          </p>
-        ))}
-
-        <button
-          className="close-scroll"
-          onClick={() => setShowProgress(false)}
-        >
-          Close
-        </button>
-      </div>
-
-      <div className="scroll-rod bottom"></div>
-    </div>
-  </div>
-)}
-
 
 export default GoalsPage;
+
 
 
