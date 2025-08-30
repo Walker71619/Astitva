@@ -28,7 +28,7 @@ export default function Footer() {
             <li><a href="/">Home</a></li>
             <li><a href="/dharma-scheduler">Dharma Scheduler</a></li>
             <li><a href="/mirror-ai">Mirror AI</a></li>
-            <li><a href="/life-blueprint">Life Blueprint</a></li>
+            <li><a href="/blueprint">Life Blueprint</a></li>
             <li><a href="/life-mode">Life Mode Selector</a></li>
           </ul>
         </div>

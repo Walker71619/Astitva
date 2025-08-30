@@ -129,7 +129,7 @@ function Home() {
             <p>Discover your karmic path through AI insights.</p>
           </a>
 
-          <a href="/life-blueprint" className="category-card">
+          <a href="/blueprint" className="category-card">
             <h3>Life Blueprint</h3>
             <p>Design the roadmap of your life with guidance.</p>
           </a>

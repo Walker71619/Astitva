@@ -66,7 +66,7 @@ export default function HomePage() {
     const cards = [
         { href: "/dharma-scheduler", title: "Dharma Scheduler", desc: "Plan and align your daily actions with your true path.", img: dharmaImg, badge: <img src={oneIcon} alt="1" className="badge-icon" />, theme: "blue" },
         { href: "/karmic-ai", title: "Karmic AI", desc: "Discover your karmic path through AI insights.", img: karmicImg, badge: <img src={twoIcon} alt="2" className="badge-icon" />, theme: "green" },
-        { href: "/life-blueprint", title: "Life Blueprint", desc: "Design the roadmap of your life with guidance.", img: blueprintImg, badge: <img src={threeIcon} alt="3" className="badge-icon" />, theme: "gold" },
+        { href: "/blueprint", title: "Life Blueprint", desc: "Design the roadmap of your life with guidance.", img: blueprintImg, badge: <img src={threeIcon} alt="3" className="badge-icon" />, theme: "gold" },
         { href: "/life-mode", title: "Life Mode Selector", desc: "Switch between Warrior, Healing, and Dreamer modes.", img: modesImg, badge: <img src={fourIcon} alt="4" className="badge-icon" />, theme: "crimson" },
         { href: "/mirror-ai", title: "Mirror AI", desc: "Reflect your true self with AI-driven clarity.", img: mirrorImg, badge: <img src={fiveIcon} alt="5" className="badge-icon" />, theme: "violet" }
     ];
@@ -110,8 +110,8 @@ export default function HomePage() {
                     ))}
                 </div>
             </section>
-             {/* Footer */}
-      <Footer />
+            {/* Footer */}
+            <Footer />
 
         </div>
     );
