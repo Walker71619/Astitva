@@ -24,7 +24,7 @@ const gates = [
   modalImg: HealImg,
   title: "Phoenix Path",
   arc: "Emotional healing arc",
-  desc: "Step into the Phoenix Path and embrace the power of transformation. This journey nurtures your inner self and helps you release past wounds. Each challenge becomes an opportunity to grow and find balance. You will awaken resilience and courage within, lighting your way forward. Emotional clarity and renewal are the gifts of this path."
+  desc: "Step into the Phoenix Path and embrace the power of transformation. This journey nurtures your inner self and helps you release past wounds. Each challenge becomes an opportunity to grow and find balance. "
 },
 
   {
@@ -34,7 +34,7 @@ const gates = [
     modalImg: DisciImg,
     title: "Titan’s March",
     arc: "Warrior/discipline arc",
-    desc: "The Titan’s March is a path forged in strength and discipline. It challenges you to confront obstacles with unwavering courage. Each step sharpens your focus and tests your determination. You will cultivate patience, perseverance, and inner power. The journey builds both your mind and spirit like a true warrior. March forward and awaken the Titan within you."
+    desc: "The Titan’s March is a path forged in strength and discipline. It challenges you to confront obstacles with unwavering courage. Each step sharpens your focus and tests your determination. You will cultivate patience, perseverance, and inner power."
   },
   {
     id: "disco",
@@ -43,7 +43,7 @@ const gates = [
     modalImg: DiscoImg,
     title: "Astral Voyage",
     arc: "Discovery/expansion arc",
-    desc: "Embark on the Astral Voyage and explore the mysteries beyond. This path encourages curiosity and broadens your perspective. You will encounter new ideas and experiences that expand your mind. Challenges become lessons that inspire growth and adaptability. Discover the hidden horizons within yourself and the universe. Each step is a journey toward self-awareness and cosmic wonder."
+    desc: "Embark on the Astral Voyage and explore the mysteries beyond. This path encourages curiosity and broadens your perspective. You will encounter new ideas and experiences that expand your mind. "
   },
 ];
 
