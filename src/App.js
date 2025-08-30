@@ -8,8 +8,7 @@ import LifeBlueprint from "./views/lifeblueprint";
 import SadMemories from "./views/sadmemories";
 import HappyMemories from "./views/happymemories";
 import AchievementMemories from "./views/achievementmemories";
-
-
+import GoalsPage from "./views/GoalsPage";  
 
 function App() {
   return (
@@ -33,9 +32,12 @@ function App() {
         <Route path="/happy-memories" element={<HappyMemories />} />
         <Route path="/achievement-memories" element={<AchievementMemories />} />
 
+        {/* Goals Page */}
+        <Route path="/goals" element={<GoalsPage />} />  
       </Routes>
     </Router>
   );
 }
 
 export default App;
+
