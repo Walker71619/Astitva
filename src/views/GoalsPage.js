@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Bg4 from "../images/bg-4.png"; // main page bg
-import patr from "../images/patr.jpg"; // parchment image for progress modal
+import Bg4 from "../images/bg-4.png"; 
+import patr from "../images/patr.jpg"; 
 import "./GoalsPage.css";
 
 function GoalsPage() {
@@ -10,8 +10,8 @@ function GoalsPage() {
   ]);
 
   // form/modal states
-  const [showModal, setShowModal] = useState(false); // roadmap form
-  const [showProgress, setShowProgress] = useState(false); // parchment progress
+  const [showModal, setShowModal] = useState(false); 
+  const [showProgress, setShowProgress] = useState(false); 
   const [selectedGoal, setSelectedGoal] = useState(null);
 
   // roadmap form data (local until saved into a goal)
