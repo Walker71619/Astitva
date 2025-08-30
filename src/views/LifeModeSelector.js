@@ -34,7 +34,6 @@ const gates = [
     modalImg: DisciImg,
     title: "Titan’s March",
     arc: "Warrior/discipline arc",
-<<<<<<< Updated upstream
     desc: "The Titan’s March is a path forged in strength and discipline. It challenges you to confront obstacles with unwavering courage. Each step sharpens your focus and tests your determination. You will cultivate patience, perseverance, and inner power. The journey builds both your mind and spirit like a true warrior. March forward and awaken the Titan within you."
     desc: "The Titan’s March is a path forged in strength and discipline. It challenges you to confront obstacles with unwavering courage. "
 
