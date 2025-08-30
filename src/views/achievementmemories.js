@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./achievementmemories.css";
-import AchievementBg from "../images/acheivementbg.jpg";
+import AchievementBg from "../images/achievementbg.jpg";
 
 function AchievementMemories() {
   const [memories, setMemories] = useState([]);
