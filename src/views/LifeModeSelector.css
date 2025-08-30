@@ -90,11 +90,8 @@ html, body {
   position: absolute;
   top: 45%;
   left: 50%;
-<<<<<<< Updated upstream
   width: 120px; 
-=======
   width: 120px;
->>>>>>> Stashed changes
   height: 240px;
   object-fit: cover;
   border-radius: 12px;
