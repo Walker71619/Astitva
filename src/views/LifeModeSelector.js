@@ -35,8 +35,6 @@ const gates = [
     title: "Titan’s March",
     arc: "Warrior/discipline arc",
     desc: "The Titan’s March is a path forged in strength and discipline. It challenges you to confront obstacles with unwavering courage. Each step sharpens your focus and tests your determination. You will cultivate patience, perseverance, and inner power. The journey builds both your mind and spirit like a true warrior. March forward and awaken the Titan within you."
-    desc: "The Titan’s March is a path forged in strength and discipline. It challenges you to confront obstacles with unwavering courage. "
-
   },
   {
     id: "disco",
@@ -46,8 +44,6 @@ const gates = [
     title: "Astral Voyage",
     arc: "Discovery/expansion arc",
     desc: "Embark on the Astral Voyage and explore the mysteries beyond. This path encourages curiosity and broadens your perspective. You will encounter new ideas and experiences that expand your mind. Challenges become lessons that inspire growth and adaptability. Discover the hidden horizons within yourself and the universe. Each step is a journey toward self-awareness and cosmic wonder."
-  },
-    desc: "Embark on the Astral Voyage and explore the mysteries beyond. This path encourages curiosity and broadens your perspective. "}
 ];
 
 function LifeModeSelector() {
