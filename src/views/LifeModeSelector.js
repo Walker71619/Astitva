@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // for navigation to GoalsPage
+import { useNavigate } from "react-router-dom"; 
 import "./LifeModeSelector.css";
 import Gate1 from "../images/gate1.png";
 import Gate2 from "../images/gate2.png";
 import Gate3 from "../images/gate3.png";
 import CosmicBG from "../images/moon-bg.jpg";
-import Bg4 from "../images/bg-4.png"; // optional import if needed elsewhere
+import Bg4 from "../images/bg-4.png"; 
 
 // Modal / card images
 import HealImg from "../images/heal.png";
@@ -36,9 +36,8 @@ const gates = [
     arc: "Warrior/discipline arc",
 <<<<<<< Updated upstream
     desc: "The Titan’s March is a path forged in strength and discipline. It challenges you to confront obstacles with unwavering courage. Each step sharpens your focus and tests your determination. You will cultivate patience, perseverance, and inner power. The journey builds both your mind and spirit like a true warrior. March forward and awaken the Titan within you."
-=======
     desc: "The Titan’s March is a path forged in strength and discipline. It challenges you to confront obstacles with unwavering courage. "
->>>>>>> Stashed changes
+
   },
   {
     id: "disco",
@@ -47,12 +46,9 @@ const gates = [
     modalImg: DiscoImg,
     title: "Astral Voyage",
     arc: "Discovery/expansion arc",
-<<<<<<< Updated upstream
     desc: "Embark on the Astral Voyage and explore the mysteries beyond. This path encourages curiosity and broadens your perspective. You will encounter new ideas and experiences that expand your mind. Challenges become lessons that inspire growth and adaptability. Discover the hidden horizons within yourself and the universe. Each step is a journey toward self-awareness and cosmic wonder."
   },
-=======
     desc: "Embark on the Astral Voyage and explore the mysteries beyond. This path encourages curiosity and broadens your perspective. "}
->>>>>>> Stashed changes
 ];
 
 function LifeModeSelector() {
