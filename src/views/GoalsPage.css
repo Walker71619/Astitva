@@ -425,29 +425,3 @@ body{
   .scroll-wrapper{ padding:28px 18px }
   .big-percent{ font-size:2.2rem }
 }
-/* Patr unfold animation */
-.unfold-animation {
-  animation: unfoldScroll 1.8s ease forwards;
-  transform-origin: top center;
-  transform: scaleY(0);
-  opacity: 0;
-}
-
-@keyframes unfoldScroll {
-  0% {
-    transform: scaleY(0);
-    opacity: 0;
-    filter: blur(8px);
-  }
-  50% {
-    transform: scaleY(0.5);
-    opacity: 0.7;
-    filter: blur(3px);
-  }
-  100% {
-    transform: scaleY(1);
-    opacity: 1;
-    filter: blur(0);
-  }
-}
-
