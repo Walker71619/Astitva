@@ -44,6 +44,7 @@ const gates = [
     title: "Astral Voyage",
     arc: "Discovery/expansion arc",
     desc: "Embark on the Astral Voyage and explore the mysteries beyond. This path encourages curiosity and broadens your perspective. You will encounter new ideas and experiences that expand your mind. Challenges become lessons that inspire growth and adaptability. Discover the hidden horizons within yourself and the universe. Each step is a journey toward self-awareness and cosmic wonder."
+  },
 ];
 
 function LifeModeSelector() {
