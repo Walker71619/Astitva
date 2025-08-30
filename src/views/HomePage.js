@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Navbar from "../components/navbar";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import Footer from "../components/footer";
 
 
@@ -23,17 +23,23 @@ import threeIcon from "../images/number-3-svgrepo-com.svg";
 import fourIcon from "../images/number-4-svgrepo-com.svg";
 import fiveIcon from "../images/number-5-svgrepo-com.svg";
 import FantasyCard from "../components/FantasyCard";
+import ExpandingFeatures from "../components/feature";
 import "./HomePage.css";
 
 export default function HomePage() {
     const heroRef = useRef(null);
     const [released, setReleased] = useState(false);
-
+    const sectionRef = useRef(null);
     // Hero scroll tracking
     const { scrollYProgress } = useScroll({
         target: heroRef,
         offset: ["start start", "end end"]
     });
+
+
+    // Parallax aura movement
+    const auraY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+    const auraOpacity = useTransform(scrollYProgress, [0, 0.5], [0.2, 0.5]);
 
     /** Stage 0: Moon */
     const moonScale = useTransform(scrollYProgress, [0, 0.5], [2, 1.2]);
@@ -66,7 +72,7 @@ export default function HomePage() {
     const cards = [
         { href: "/dharma-scheduler", title: "Dharma Scheduler", desc: "Plan and align your daily actions with your true path.", img: dharmaImg, badge: <img src={oneIcon} alt="1" className="badge-icon" />, theme: "blue" },
         { href: "/karmic-ai", title: "Karmic AI", desc: "Discover your karmic path through AI insights.", img: karmicImg, badge: <img src={twoIcon} alt="2" className="badge-icon" />, theme: "green" },
-        { href: "/blueprint", title: "Life Blueprint", desc: "Design the roadmap of your life with guidance.", img: blueprintImg, badge: <img src={threeIcon} alt="3" className="badge-icon" />, theme: "gold" },
+        { href: "/life-blueprint", title: "Life Blueprint", desc: "Design the roadmap of your life with guidance.", img: blueprintImg, badge: <img src={threeIcon} alt="3" className="badge-icon" />, theme: "gold" },
         { href: "/life-mode", title: "Life Mode Selector", desc: "Switch between Warrior, Healing, and Dreamer modes.", img: modesImg, badge: <img src={fourIcon} alt="4" className="badge-icon" />, theme: "crimson" },
         { href: "/mirror-ai", title: "Mirror AI", desc: "Reflect your true self with AI-driven clarity.", img: mirrorImg, badge: <img src={fiveIcon} alt="5" className="badge-icon" />, theme: "violet" }
     ];
@@ -91,11 +97,11 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Fantasy Categories */}
             <section className="categories">
                 <h2 className="categories-title">Explore</h2>
 
-                <div className="category-grid">
+                {/* Desktop Grid (only desktop) */}
+                <div className="category-grid desktop-only">
                     {cards.map((card, i) => (
                         <FantasyCard
                             key={i}
@@ -109,6 +115,54 @@ export default function HomePage() {
                         />
                     ))}
                 </div>
+            </section>
+            <ExpandingFeatures />
+            <section className="about-astitva" ref={sectionRef}>
+                {/* Floating aura background */}
+                <motion.div
+                    className="about-aura"
+                    style={{ y: auraY, opacity: auraOpacity }}
+                />
+
+                {/* Content container */}
+                <motion.div
+                    className="about-content"
+                    initial={{ opacity: 0, y: 60 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    viewport={{ once: true }}
+                >
+                    <motion.h2
+                        className="about-title"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                    >
+                        ✧ About Astitva ✧
+                    </motion.h2>
+
+                    <motion.p
+                        className="about-text"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ duration: 1, delay: 0.5 }}
+                    >
+                        Astitva is a living cosmos ~ a realm woven from myth and code.
+                        Every scroll is a step into destiny, every click a spark that shapes
+                        the path only you were meant to walk.
+                    </motion.p>
+
+                    <motion.p
+                        className="about-text1"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ duration: 1, delay: 0.8 }}
+                    >
+                        Each click, each scroll is a step deeper into your own story ~
+                        unlocking insights, shaping choices, and revealing the legend
+                        you’re meant to become.
+                    </motion.p>
+                </motion.div>
             </section>
             {/* Footer */}
             <Footer />
