@@ -67,11 +67,8 @@ html, body {
 .gate-img {
   display: block;
   margin: 0 auto;
-<<<<<<< Updated upstream
   width: 460px;  
-=======
   width: 460px;
->>>>>>> Stashed changes
   height: 460px;
   object-fit: cover;
   border-radius: 15px;
