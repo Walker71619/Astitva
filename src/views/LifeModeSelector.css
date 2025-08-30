@@ -1,3 +1,4 @@
+/* ---------------- Page Base ---------------- */
 html, body {
   margin: 0;
   padding: 0;
@@ -19,11 +20,11 @@ html, body {
 
 /* ---------------- Header ---------------- */
 .life-header {
-  margin-top: 60px; /* moved further up */
+  margin-top: 60px;
 }
 
 .life-header h1 {
-  font-size: 3.5rem; 
+  font-size: 3.5rem;
   text-shadow: 0 0 25px rgba(255, 180, 100, 1),
                0 0 45px rgba(255, 80, 0, 0.9);
   margin-bottom: 0.5rem;
@@ -36,7 +37,6 @@ html, body {
   text-shadow: 0 0 12px rgba(255, 150, 50, 0.7);
 }
 
-
 /* ---------------- Gate Container ---------------- */
 .gate-container {
   position: absolute;
@@ -45,7 +45,7 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 4rem; /* reduced gap for better alignment */
+  gap: 4rem;
 }
 
 /* ---------------- Gate Box ---------------- */
@@ -67,26 +67,34 @@ html, body {
 .gate-img {
   display: block;
   margin: 0 auto;
+<<<<<<< Updated upstream
   width: 460px;  
+=======
+  width: 460px;
+>>>>>>> Stashed changes
   height: 460px;
   object-fit: cover;
   border-radius: 15px;
   filter: drop-shadow(0 0 25px rgba(255,140,0,0.8));
   transition: transform 0.4s ease, filter 0.4s ease;
 }
-/* ---------------- Middle Gate Smaller ---------------- */
-.gate-container .gate-box:nth-child(2) .gate-img {
-  width: 300px;  /* smaller width for middle gate */
-  height: 400px; /* smaller height for middle gate */
-}
 
+/* Middle Gate Smaller */
+.gate-container .gate-box:nth-child(2) .gate-img {
+  width: 300px;
+  height: 400px;
+}
 
 /* ---------------- Vertical Thumbnails inside gate ---------------- */
 .thumb-inside {
   position: absolute;
   top: 45%;
   left: 50%;
+<<<<<<< Updated upstream
   width: 120px; 
+=======
+  width: 120px;
+>>>>>>> Stashed changes
   height: 240px;
   object-fit: cover;
   border-radius: 12px;
@@ -103,21 +111,21 @@ html, body {
               0 0 60px rgba(255,180,50,0.9);
 }
 
-/* ---------------- Gate Text Below ---------------- */
+/* ---------------- Gate Text ---------------- */
 .gate-text {
   margin-top: 10px;
 }
 
 .gate-text h2 {
   font-size: 1.3rem;
-  color:#66ffff; /* updated color */
+  color:#66ffff;
   margin: 0.2rem 0;
   text-shadow: 0 0 6px rgba(255,180,100,0.8);
 }
 
 .gate-text .gate-arc {
   font-size: 1rem;
-  color: #99ffff; /* updated color */
+  color: #99ffff;
   opacity: 0.85;
   margin: 0;
   text-shadow: 0 0 5px rgba(255,150,50,0.6);
@@ -190,4 +198,74 @@ html, body {
                  0 0 80px rgba(255,150,50,0.6); }
   to { box-shadow: 0 0 80px rgba(255,200,100,1),
                0 0 120px rgba(255,100,0,0.9); }
+}
+
+/* ---------------- Add Goals Section ---------------- */
+.add-goals-heading {
+  font-size: 2rem;
+  color: #111;
+  background: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  margin: 1.5rem 0 1rem 0;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+.add-goals-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.add-goals-section input {
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 2px solid #ff6600;
+  width: 80%;
+  max-width: 350px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.add-goals-section input::placeholder {
+  color: #ddd;
+}
+
+.add-goals-section button {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(90deg, #ff6600, #ff3300);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255,100,0,0.7);
+  transition: 0.3s;
+}
+
+.add-goals-section button:hover {
+  background: linear-gradient(90deg, #ff8533, #ff471a);
+  box-shadow: 0 0 20px #ff6600,
+              0 0 40px #ff3300;
+}
+
+.add-goals-section ul {
+  list-style: none;
+  padding: 0;
+  width: 80%;
+  max-width: 350px;
+  margin-top: 1rem;
+}
+
+.add-goals-section li {
+  background: rgba(255,255,255,0.08);
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  text-align: left;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255,140,0,0.5);
 }
