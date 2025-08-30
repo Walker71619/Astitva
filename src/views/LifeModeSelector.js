@@ -17,23 +17,16 @@ import i2 from "../images/i2.png";
 import i3 from "../images/i1.png";
 
 const gates = [
-  {
-    id: "heal",
-    gateImg: Gate1,
-<<<<<<< Updated upstream
-    thumb: i, 
-    modalImg: HealImg, 
-    title: "Phoenix Path",
-    arc: "Emotional healing arc",
-    desc: "Step into the Phoenix Path and embrace the power of transformation. This journey nurtures your inner self and helps you release past wounds. Each challenge becomes an opportunity to grow and find balance. You will awaken resilience and courage within, lighting your way forward. Emotional clarity and renewal are the gifts of this path."
-=======
-    thumb: i,
-    modalImg: HealImg,
-    title: "Phoenix Path",
-    arc: "Emotional healing arc",
-    desc: "Step into the Phoenix Path and embrace the power of transformation. This journey nurtures your inner self and helps you release past wounds. "
->>>>>>> Stashed changes
-  },
+ {
+  id: "heal",
+  gateImg: Gate1,
+  thumb: i,
+  modalImg: HealImg,
+  title: "Phoenix Path",
+  arc: "Emotional healing arc",
+  desc: "Step into the Phoenix Path and embrace the power of transformation. This journey nurtures your inner self and helps you release past wounds. Each challenge becomes an opportunity to grow and find balance. You will awaken resilience and courage within, lighting your way forward. Emotional clarity and renewal are the gifts of this path."
+},
+
   {
     id: "disci",
     gateImg: Gate2,
