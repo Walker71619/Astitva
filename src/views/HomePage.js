@@ -30,28 +30,36 @@ export default function HomePage() {
     const [locked, setLocked] = useState(true);
     const progress = useMotionValue(0);
     useEffect(() => {
+        let rafId = null;
         const handleWheel = (e) => {
             const heroTop = heroRef.current?.getBoundingClientRect().top || 0;
             const heroBottom = heroRef.current?.getBoundingClientRect().bottom || 0;
             const inHeroView = heroTop < window.innerHeight && heroBottom > 0;
 
             let current = progress.get();
-            // 🔥 Different speed for up vs down scroll
-            const factor = e.deltaY > 0 ? 0.0015 : 0.0008;
-            let next = current + e.deltaY * factor;
+
+            // ✅ Clamp delta to avoid huge jumps (glitch fix)
+            let delta = Math.max(-100, Math.min(100, e.deltaY));
+
+            // ✅ Different speed for smooth scroll + frame sync
+            const factor = delta > 0 ? 0.0012 : 0.0009;
+            let next = current + delta * factor;
             next = Math.min(Math.max(next, 0), 1);
 
             if ((inHeroView || locked) && (current > 0 && current < 1)) {
                 e.preventDefault();
-                progress.set(next);
+                cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(() => progress.set(next));
             }
-            else if ((inHeroView || locked) && locked && e.deltaY > 0) {
+            else if ((inHeroView || locked) && locked && delta > 0) {
                 e.preventDefault();
-                progress.set(next);
+                cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(() => progress.set(next));
             }
-            else if ((inHeroView || locked) && !locked && e.deltaY < 0 && next < 1) {
+            else if ((inHeroView || locked) && !locked && delta < 0 && next < 1) {
                 e.preventDefault();
-                progress.set(next);
+                cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(() => progress.set(next));
             }
 
             if (next >= 1 && locked) setLocked(false);
@@ -65,7 +73,10 @@ export default function HomePage() {
         };
 
         window.addEventListener("wheel", handleWheel, { passive: false });
-        return () => window.removeEventListener("wheel", handleWheel);
+        return () => {
+            window.removeEventListener("wheel", handleWheel);
+            cancelAnimationFrame(rafId);
+        };
     }, [locked, progress]);
 
     // Motion transforms
