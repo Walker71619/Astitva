@@ -34,6 +34,10 @@ function App() {
         <Route path="/happy-memories" element={<HappyMemories />} />
         <Route path="/achievement-memories" element={<AchievementMemories />} />
 
+        {/* Mirror AI */}
+        <Route path="/mirror-ai" element={<MirrorAi />} />
+
+
         {/* Goals Page */}
         <Route path="/goals" element={<GoalsPage />} />
       </Routes>
