@@ -24,6 +24,7 @@ import fiveIcon from "../images/number-5-svgrepo-com.svg";
 import FantasyCard from "../components/FantasyCard";
 import ExpandingFeatures from "../components/feature";
 import "./HomePage.css";
+import DragonScroll from "../components/DragonScroll";
 
 export default function HomePage() {
     const heroRef = useRef(null);
@@ -37,11 +38,8 @@ export default function HomePage() {
             const inHeroView = heroTop < window.innerHeight && heroBottom > 0;
 
             let current = progress.get();
-
-            // ✅ Clamp delta to avoid huge jumps (glitch fix)
             let delta = Math.max(-100, Math.min(100, e.deltaY));
 
-            // ✅ Different speed for smooth scroll + frame sync
             const factor = delta > 0 ? 0.0012 : 0.0009;
             let next = current + delta * factor;
             next = Math.min(Math.max(next, 0), 1);
@@ -131,6 +129,10 @@ export default function HomePage() {
 
             {/* Spacer so that content doesn't overlap when hero is fixed */}
             {locked && <div style={{ height: "100vh" }} />}
+             <section className="h-screen relative">
+        {/* Hero content here */}
+        <DragonScroll />
+      </section>
 
             {/* Main Content */}
             <section className="categories">
@@ -143,19 +145,6 @@ export default function HomePage() {
             </section>
 
             <ExpandingFeatures />
-
-            <section className="about-astitva">
-                <motion.div className="about-aura" style={{ y: auraY, opacity: auraOpacity }} />
-                <motion.div
-                    className="about-content"
-                    initial={{ opacity: 0, y: 60 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1.2, ease: "easeOut" }}
-                    viewport={{ once: true }}
-                >
-                    {/* About text same as before */}
-                </motion.div>
-            </section>
 
             <Footer />
         </div>

@@ -12,9 +12,15 @@ import AchievementMemories from "./views/achievementmemories";
 import GoalsPage from "./views/GoalsPage"; 
 import MirrorAi from "./views/MirrorAi";
 
+// Dragon cursor component
+import DragonCursor from "./components/DragonScroll"; 
+
 function App() {
   return (
     <Router>
+      {/* Dragon cursor is global */}
+      <DragonCursor />
+
       <Routes>
         {/* Home */}
         <Route path="/" element={<Home />} />
@@ -37,7 +43,6 @@ function App() {
         {/* Mirror AI */}
         <Route path="/mirror-ai" element={<MirrorAi />} />
 
-
         {/* Goals Page */}
         <Route path="/goals" element={<GoalsPage />} />
       </Routes>
@@ -46,4 +51,3 @@ function App() {
 }
 
 export default App;
-
