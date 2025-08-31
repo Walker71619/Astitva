@@ -132,9 +132,10 @@
   border-radius: 12px;
   position: relative;
   z-index: 2;
-}/* Hail effect text - fantasy stone style */
+}
+/* Hail effect text - fantasy stone style */
 .fc-title {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: bold;
   text-align: center;
   letter-spacing: 1px;
@@ -259,7 +260,7 @@
   position: relative;
   top: -28px;
   z-index: 5;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 400;
   letter-spacing: 1px;
   text-align: center;
