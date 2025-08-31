@@ -93,17 +93,18 @@
     max-width: 1200px;
     margin: 0 auto;
 }
-/* Wizard walking only on bottom border */
+/* Wizard walking*/
 .border-wizard {
     position: absolute;
     width: 156px;
     height: 156px;
     z-index: 99;
     pointer-events: none;
-    top: calc(100% - 78px); 
+
+    top: calc(100% - 78px);
     left: 0;
 
-    animation: walkBottomBorder 20s linear infinite alternate;
+    animation: walkBottomBorder 20s linear infinite;
 }
 
 @keyframes walkBottomBorder {
@@ -111,15 +112,20 @@
         left: 0;
         transform: scaleX(1);
     }
-    50% {
+    45% {
         left: calc(100% - 156px);
         transform: scaleX(1);
     }
-    50.01% {
-        transform: scaleX(-1); 
+    50% {
+        left: calc(100% - 156px);
+        transform: scaleX(-1);
+    }
+    95% {
+        left: 0;
+        transform: scaleX(-1);
     }
     100% {
-        left: 0; /* walk back left */
-        transform: scaleX(-1);
+        left: 0;
+        transform: scaleX(1);
     }
 }
