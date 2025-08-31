@@ -9,7 +9,8 @@ import LifeBlueprint from "./views/lifeblueprint";
 import SadMemories from "./views/sadmemories";
 import HappyMemories from "./views/happymemories";
 import AchievementMemories from "./views/achievementmemories";
-import GoalsPage from "./views/GoalsPage";   
+import GoalsPage from "./views/GoalsPage"; 
+import MirrorAi from "./views/MirrorAi";
 
 function App() {
   return (
