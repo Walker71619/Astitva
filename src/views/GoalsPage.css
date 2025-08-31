@@ -1,7 +1,4 @@
-/* =========================
-   GoalsPage.css — Full Styles
-   (Parchment progress modal uses patr.jpg provided in /src/images)
-   ========================= */
+
 
 /* ---------- variables ---------- */
 :root{
@@ -17,8 +14,6 @@
 }
 
 /* ---------- base ---------- */
-*{box-sizing:border-box}
-html,body{height:100%; margin:0; padding:0}
 body{
   font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   background: var(--bg-dark);
