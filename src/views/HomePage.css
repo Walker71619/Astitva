@@ -8,11 +8,12 @@
 }
 
 .hero-wrapper {
-    height: 400vh;
+    height: 100vh;
     position: relative;
 }
 
 .hero-sticky {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -336,4 +337,14 @@
 
   opacity: 0.85;
   transform: translateY(5px);
+}
+.page-content.hidden-content {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.page-content.visible-content {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.5s ease-in-out;
 }
