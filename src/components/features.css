@@ -93,55 +93,33 @@
     max-width: 1200px;
     margin: 0 auto;
 }
-/* Wizard walking around feature-wrapper border */
+/* Wizard walking only on bottom border */
 .border-wizard {
     position: absolute;
-    width: 156px; 
+    width: 156px;
     height: 156px;
     z-index: 99;
     pointer-events: none;
-    top: -228px; 
+    top: calc(100% - 78px); 
     left: 0;
 
-    animation: walkAroundBorder 30s linear infinite;
+    animation: walkBottomBorder 20s linear infinite alternate;
 }
 
-@keyframes walkAroundBorder {
+@keyframes walkBottomBorder {
     0% {
-        top: -48px;
         left: 0;
         transform: scaleX(1);
     }
-    20% {
-        top: -48px;
-        left: calc(100% - 96px); 
-        transform: scaleX(1);
-    }
-
-    /* Flip + slide down on right side */
-    25% {
-        top: calc(100% - 48px); 
-        left: calc(100% - 96px);
-        transform: scaleX(-1);
-    }
-
-    /* Bottom border walk (inside) */
     50% {
-        top: calc(100% - 48px);
-        left: 0;
-        transform: scaleX(-1);
-    }
-
-    /* Flip + go back up on left side */
-    55% {
-        top: -48px;
-        left: 0;
+        left: calc(100% - 156px);
         transform: scaleX(1);
     }
-
+    50.01% {
+        transform: scaleX(-1); 
+    }
     100% {
-        top: -48px;
-        left: 0;
-        transform: scaleX(1);
+        left: 0; /* walk back left */
+        transform: scaleX(-1);
     }
 }
