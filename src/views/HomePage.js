@@ -116,7 +116,9 @@ export default function HomePage() {
                     ))}
                 </div>
             </section>
+
             <ExpandingFeatures />
+            
             <section className="about-astitva" ref={sectionRef}>
                 {/* Floating aura background */}
                 <motion.div

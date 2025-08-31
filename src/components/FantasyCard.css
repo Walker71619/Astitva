@@ -132,9 +132,7 @@
   border-radius: 12px;
   position: relative;
   z-index: 2;
-}
-
-/* Hail effect text */
+}/* Hail effect text - fantasy stone style */
 .fc-title {
   font-size: 1.25rem;
   font-weight: bold;
@@ -142,36 +140,31 @@
   letter-spacing: 1px;
   z-index: 5;
 
-  /* Ice gradient */
+  /* Frosted ice gradient (muted, no glow) */
   background: linear-gradient(45deg,
-      #b3e5fc,
-      #e0f7fa,
-      #81d4fa,
-      #ffffff,
-      #b3e5fc);
-  background-size: 300% 300%;
+      #c8e6f5 0%,
+      #eaf7fa 25%,
+      #b8d7e8 50%,
+      #e0f4f9 75%,
+      #c8e6f5 100%);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
-  /* Frosty glow */
-  text-shadow: 0 0 6px #81d4fa, 0 0 12px #e0f7fa, 0 0 18px #ffffff;
+  /* Carved look via subtle inset shadow */
+  text-shadow: 
+    1px 1px 0 rgba(255,255,255,0.3),
+    -1px -1px 1px rgba(0,0,0,0.35),
+    2px 2px 3px rgba(0,0,0,0.25);
 
-  /* Shimmer animation */
-  animation: hailAnim 6s ease-in-out infinite;
+  /* Gentle shimmer, no glow */
+  animation: hailEngrave 8s ease-in-out infinite;
 }
 
-@keyframes hailAnim {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+@keyframes hailEngrave {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
 }
 
 
@@ -260,194 +253,212 @@
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
+
 .fc-desc {
   font-family: 'Alice', serif;
   position: relative;
   top: -28px;
   z-index: 5;
-  font-size: 1rem;   
-  font-weight: 400;     
+  font-size: 1rem;
+  font-weight: 400;
   letter-spacing: 1px;
   text-align: center;
   transition: all 0.3s ease-in-out;
 }
 
-/* Blue - ethereal ice aura */
+/* Blue - ethereal stone */
 .fc-desc[data-theme="blue"] {
   color: #a4d9ff;
-  text-shadow: 0 0 8px rgba(164,217,255,0.9), 0 0 14px rgba(120,190,255,0.7), 0 0 24px rgba(200,240,255,0.5);
+  text-shadow:
+    1px 1px 0 #6b8ca3,
+    2px 2px 0 #3d4c59,
+    3px 3px 4px rgba(0, 0, 0, 0.4);
+  filter: contrast(1.1) brightness(0.95);
 }
 
-/* Green - druidic aura */
+/* Green - druidic stone */
 .fc-desc[data-theme="green"] {
   color: #b8ffcb;
-  text-shadow: 0 0 8px rgba(184,255,203,0.9), 0 0 14px rgba(120,255,180,0.7), 0 0 24px rgba(210,255,225,0.5);
+  text-shadow:
+    1px 1px 0 #7ca38c,
+    2px 2px 0 #3f5949,
+    3px 3px 4px rgba(0, 0, 0, 0.4);
+  filter: contrast(1.1) brightness(0.95);
 }
 
-/* Gold - divine aura */
+/* Gold - divine stone */
 .fc-desc[data-theme="gold"] {
   color: #ffe9a9;
-  text-shadow: 0 0 8px rgba(255,233,169,0.9), 0 0 14px rgba(255,210,120,0.7), 0 0 24px rgba(255,245,200,0.5);
+  text-shadow:
+    1px 1px 0 #a3946b,
+    2px 2px 0 #5a4f3d,
+    3px 3px 4px rgba(0, 0, 0, 0.45);
+  filter: contrast(1.15) brightness(1);
 }
 
-/* Crimson - cursed aura */
+/* Crimson - cursed stone */
 .fc-desc[data-theme="crimson"] {
   color: #ffb3b3;
-  text-shadow: 0 0 8px rgba(255,179,179,0.9), 0 0 14px rgba(255,120,120,0.7), 0 0 24px rgba(255,200,200,0.5);
+  text-shadow:
+    1px 1px 0 #a36b6b,
+    2px 2px 0 #593d3d,
+    3px 3px 4px rgba(0, 0, 0, 0.45);
+  filter: contrast(1.1) brightness(0.92);
 }
 
-/* Violet - arcane aura */
+/* Violet - mystic stone */
 .fc-desc[data-theme="violet"] {
-  color: #deb6ff;
-  text-shadow: 0 0 8px rgba(222,182,255,0.9), 0 0 14px rgba(190,140,255,0.7), 0 0 24px rgba(235,210,255,0.5);
+  color: #e0b3ff;
+  text-shadow: 1px 1px 0 #7d6ba3,
+  2px 2px 0 #3d3259,
+  3px 3px 4px rgba(0, 0, 0, 0)
 }
 
+    /* Stats */
+    .fc-stats {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      font-size: 0.9rem;
+      margin-top: auto;
+      color: white;
+      text-shadow: 0 0 4px var(--glow);
+      z-index: 2;
+    }
 
-/* Stats */
-.fc-stats {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  font-size: 0.9rem;
-  margin-top: auto;
-  color: white;
-  text-shadow: 0 0 4px var(--glow);
-  z-index: 2;
-}
+    /* Hover effects */
+    .fantasy-card:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 0 35px var(--glow), 0 0 70px var(--glow);
+    }
 
-/* Hover effects */
-.fantasy-card:hover {
-  transform: translateY(-10px) scale(1.05);
-  box-shadow: 0 0 35px var(--glow), 0 0 70px var(--glow);
-}
+    .fantasy-card:hover .fire-border-img {
+      transform: translate(-50%, -50%) scale(1.1);
+      opacity: 1;
+    }
 
-.fantasy-card:hover .fire-border-img {
-  transform: translate(-50%, -50%) scale(1.1);
-  opacity: 1;
-}
+    .fantasy-card:hover .fc-border {
+      opacity: 0.8;
+    }
 
-.fantasy-card:hover .fc-border {
-  opacity: 0.8;
-}
+    .fantasy-card:hover .fc-glare {
+      opacity: 0.6;
+    }
 
-.fantasy-card:hover .fc-glare {
-  opacity: 0.6;
-}
+    /* Responsive */
+    @media (max-width: 480px) {
+      .fantasy-card {
+        width: 180px;
+        height: 260px;
+        padding: 1rem;
+      }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .fantasy-card {
-    width: 180px;
-    height: 260px;
-    padding: 1rem;
-  }
+      .fc-title {
+        font-size: 1rem;
+      }
 
-  .fc-title {
-    font-size: 1rem;
-  }
+      .fc-desc {
+        font-size: 0.75rem;
+      }
 
-  .fc-desc {
-    font-size: 0.75rem;
-  }
+      .fc-badge {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+      }
+    }
 
-  .fc-badge {
-    width: 36px;
-    height: 36px;
-    font-size: 1rem;
-  }
-}
-
-/* ===============================
+    /* ===============================
    Fire Border Variants
 ================================= */
 
-/* Refined Blue Fire */
-.blue-border {
-  position: absolute;
-  top: 52%;
-  left: 48%;
-  transform: translate(-50%, -50%) scale(1.25);
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  z-index: 6;
-  opacity: 0.85;
-  filter: drop-shadow(0 0 18px rgba(0, 180, 255, 0.95));
-  transition: transform 0.4s ease, opacity 0.3s ease;
-}
+    /* Refined Blue Fire */
+    .blue-border {
+      position: absolute;
+      top: 52%;
+      left: 48%;
+      transform: translate(-50%, -50%) scale(1.25);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      z-index: 6;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 18px rgba(0, 180, 255, 0.95));
+      transition: transform 0.4s ease, opacity 0.3s ease;
+    }
 
 
-/* Special Blue Fire (5th card) */
-.blue-border-special {
-  position: absolute;
-  top: 51%;
-  left: 48%;
-  transform: translate(-50%, -50%) scale(1.25);
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  z-index: 3;
-  opacity: 0.85;
-  filter: drop-shadow(0 0 25px deepskyblue) brightness(1.2);
-  transition: transform 0.4s ease, opacity 0.3s ease;
-}
+    /* Special Blue Fire (5th card) */
+    .blue-border-special {
+      position: absolute;
+      top: 51%;
+      left: 48%;
+      transform: translate(-50%, -50%) scale(1.25);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 25px deepskyblue) brightness(1.2);
+      transition: transform 0.4s ease, opacity 0.3s ease;
+    }
 
-/* Green Fire */
-.green-border {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1.25);
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  z-index: 3;
-  opacity: 0.85;
-  filter: drop-shadow(0 0 15px rgba(0, 255, 150, 0.9));
-  transition: transform 0.4s ease, opacity 0.3s ease;
-}
+    /* Green Fire */
+    .green-border {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.25);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 15px rgba(0, 255, 150, 0.9));
+      transition: transform 0.4s ease, opacity 0.3s ease;
+    }
 
-/* Yellow Fire */
-.yellow-border {
-  position: absolute;
-  top: 52%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1.25);
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  z-index: 3;
-  opacity: 0.85;
-  filter: drop-shadow(0 0 15px rgba(255, 220, 100, 0.9));
-  transition: transform 0.4s ease, opacity 0.3s ease;
-}
+    /* Yellow Fire */
+    .yellow-border {
+      position: absolute;
+      top: 52%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.25);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 15px rgba(255, 220, 100, 0.9));
+      transition: transform 0.4s ease, opacity 0.3s ease;
+    }
 
-/* Red Fire */
-.red-border {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1.25);
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  z-index: 3;
-  opacity: 0.85;
-  filter: drop-shadow(0 0 15px rgba(255, 60, 60, 0.9));
-  transition: transform 0.4s ease, opacity 0.3s ease;
-}
+    /* Red Fire */
+    .red-border {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.25);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 15px rgba(255, 60, 60, 0.9));
+      transition: transform 0.4s ease, opacity 0.3s ease;
+    }
 
-/* Hover Effects for Each */
-.fantasy-card:hover .blue-border,
-.fantasy-card:hover .green-border,
-.fantasy-card:hover .yellow-border,
-.fantasy-card:hover .red-border,
-.fantasy-card:hover .blue-border-special {
-  transform: translate(-50%, -50%) scale(1.15);
-  opacity: 1;
-}
+    /* Hover Effects for Each */
+    .fantasy-card:hover .blue-border,
+    .fantasy-card:hover .green-border,
+    .fantasy-card:hover .yellow-border,
+    .fantasy-card:hover .red-border,
+    .fantasy-card:hover .blue-border-special {
+      transform: translate(-50%, -50%) scale(1.15);
+      opacity: 1;
+    }

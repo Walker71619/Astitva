@@ -68,7 +68,6 @@ export default function FantasyCard({
         {index === 4 && (
           <img src={BlueFire} alt="special blue fire" className="blue-border-special" />
         )}
-
         <img src={img} alt={title} loading="lazy" className="fc-ill-img" />
       </div>
 
