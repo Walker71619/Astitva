@@ -86,3 +86,62 @@
 .feature-card:not(.active):hover {
     box-shadow: 0 0 20px rgba(180, 160, 255, 0.3);
 }
+/* Container wraps wizard + feature wrapper */
+.feature-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+/* Wizard walking around feature-wrapper border */
+.border-wizard {
+    position: absolute;
+    width: 156px; 
+    height: 156px;
+    z-index: 99;
+    pointer-events: none;
+    top: -228px; 
+    left: 0;
+
+    animation: walkAroundBorder 30s linear infinite;
+}
+
+@keyframes walkAroundBorder {
+    0% {
+        top: -48px;
+        left: 0;
+        transform: scaleX(1);
+    }
+    20% {
+        top: -48px;
+        left: calc(100% - 96px); 
+        transform: scaleX(1);
+    }
+
+    /* Flip + slide down on right side */
+    25% {
+        top: calc(100% - 48px); 
+        left: calc(100% - 96px);
+        transform: scaleX(-1);
+    }
+
+    /* Bottom border walk (inside) */
+    50% {
+        top: calc(100% - 48px);
+        left: 0;
+        transform: scaleX(-1);
+    }
+
+    /* Flip + go back up on left side */
+    55% {
+        top: -48px;
+        left: 0;
+        transform: scaleX(1);
+    }
+
+    100% {
+        top: -48px;
+        left: 0;
+        transform: scaleX(1);
+    }
+}
