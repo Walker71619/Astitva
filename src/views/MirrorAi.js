@@ -1,26 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./MirrorAi.css";
 import Mirror from "../images/Mirror2.png";
 import Bg2 from "../images/Castle2.jpeg";
+import { database } from "../firebase";
+import { ref, push, onValue } from "firebase/database";
 
 const MirrorAI = () => {
   const [eventName, setEventName] = useState("");
   const [emotion, setEmotion] = useState(50);
   const [notes, setNotes] = useState("");
   const [aiReflection, setAiReflection] = useState("");
-  const [expanded, setExpanded] = useState(false); // controls form + reflection
+  const [expanded, setExpanded] = useState(false);
+  const [memories, setMemories] = useState([]);
 
+  // Fetch memories from Firebase on mount
+  useEffect(() => {
+    const memoriesRef = ref(database, "memories");
+    onValue(memoriesRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const formatted = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        setMemories(formatted);
+      } else {
+        setMemories([]);
+      }
+    });
+  }, []);
+
+  // Handle reflection + save to Firebase
   const handleReflect = () => {
+    if (!eventName || !notes) {
+      alert("Please fill all fields!");
+      return;
+    }
+
     const prophecy =
       "🌌 The mirror whispers: Even stardust carries memory. Your essence shines brighter with every storm you endure — you are a constellation in the making.";
     setAiReflection(prophecy);
     setExpanded(true);
-  };
 
-  const staticMemories = [
-    { id: 1, event: "Defeated the shadow of doubt", emotion: "🌑", notes: "The mirror hummed with courage." },
-    { id: 2, event: "Shared wisdom with a companion", emotion: "🌟", notes: "The runes glowed brighter." },
-  ];
+    const newMemory = {
+      event: eventName,
+      emotion: `⚡ ${emotion}`,
+      notes: notes,
+    };
+
+    // Optimistically add to local state for instant display
+    setMemories((prev) => [...prev, { ...newMemory, id: Date.now() }]);
+
+    // Push to Firebase
+    const memoriesRef = ref(database, "memories");
+    push(memoriesRef, newMemory);
+
+    // Reset form
+    setEventName("");
+    setNotes("");
+    setEmotion(50);
+  };
 
   return (
     <div className="mirror-page" style={{ backgroundImage: `url(${Bg2})` }}>
@@ -48,7 +87,6 @@ const MirrorAI = () => {
           onClick={() => setExpanded(!expanded)}
         />
 
-        {/* Mirror Form appears only when clicked */}
         {expanded && (
           <div className="mirror-form">
             <h2 className="title-glow">✨ Enchanted Mirror of Memories ✨</h2>
@@ -88,7 +126,7 @@ const MirrorAI = () => {
       <div className="memories-section">
         <h2>🪄 Archived Orbs of Memory</h2>
         <ul>
-          {staticMemories.map((m) => (
+          {memories.map((m) => (
             <li key={m.id} className="memory-orb">
               <strong>{m.event}</strong> {m.emotion}
               <p>{m.notes}</p>
