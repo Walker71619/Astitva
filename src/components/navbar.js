@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom"; 
 import "./navbar.css";
 import astitvaLogo from "../images/astitvaLogo.png";
 
@@ -18,9 +19,11 @@ export default function Navbar() {
         <li><a href="#healing-hustle">Healing & Hustle</a></li>
         <li><a href="#tribes">Tribes</a></li>
         <li><a href="#future-you">Future You</a></li>
+        <li><Link to="/dashboard">Dashboard</Link></li>
+        <li><Link to="/signup">Sign Up</Link></li>
+        <li><Link to="/signin">Sign In</Link></li>
       </ul>
 
-      {/* Fantasy Hamburger */}
       <div className={`hamburger ${menuOpen ? "open" : ""}`} onClick={toggleMenu}>
         <span></span>
         <span></span>

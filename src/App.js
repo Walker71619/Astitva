@@ -11,6 +11,9 @@ import HappyMemories from "./views/happymemories";
 import AchievementMemories from "./views/achievementmemories";
 import GoalsPage from "./views/GoalsPage"; 
 import MirrorAi from "./views/MirrorAi";
+import Dashboard from "./components/Dashboard";
+import SignUp from "./components/SignUp";
+import SignIn from "./components/SignIn";
 
 // Dragon cursor component
 import DragonCursor from "./components/DragonScroll"; 
@@ -45,6 +48,11 @@ function App() {
 
         {/* Goals Page */}
         <Route path="/goals" element={<GoalsPage />} />
+
+        <Route path="/dashboard" element={<Dashboard />} />
+
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
       </Routes>
     </Router>
   );

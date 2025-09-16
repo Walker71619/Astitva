@@ -1,0 +1,44 @@
+/* auth.css - shared for SignUp & SignIn */
+.auth-container {
+  max-width: 400px;
+  margin: 8rem auto;
+  padding: 2rem;
+  background: rgba(20,20,50,0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  text-align: center;
+  color: #e0e6ff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.auth-container input {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.7rem;
+  border-radius: 0.7rem;
+  border: none;
+  outline: none;
+}
+
+.auth-container button {
+  margin-top: 1rem;
+  padding: 0.8rem 2rem;
+  border-radius: 0.7rem;
+  border: none;
+  background: linear-gradient(90deg, #99ccff, #ff99ff);
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 10px rgba(150,200,255,0.7);
+}
+
+.auth-container button:hover {
+  background: linear-gradient(90deg, #77aadd, #ff77ff);
+}
+
+.error {
+  margin-top: 0.5rem;
+  color: #ff9999;
+}
