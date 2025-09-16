@@ -3,51 +3,62 @@ import React, { useState, useEffect } from "react";
 import "./happymemories.css";
 import HappyBg from "../images/happybg.jpg";
 
+// 🔹 Firebase imports
+import { getDatabase, ref, push, onValue } from "firebase/database";
+
 function HappyMemories() {
   const [memories, setMemories] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [input, setInput] = useState("");
 
-  // Load from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem("happyMemories");
-    if (saved) setMemories(JSON.parse(saved));
-  }, []);
+  const db = getDatabase();
 
-  // Save to localStorage
+  // 🔹 Load memories from Firebase
   useEffect(() => {
-    localStorage.setItem("happyMemories", JSON.stringify(memories));
-  }, [memories]);
+    const memoriesRef = ref(db, "happyMemories");
+    onValue(memoriesRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setMemories(Object.values(data));
+      } else {
+        setMemories([]);
+      }
+    });
+  }, [db]);
 
+  // 🔹 Add new memory to Firebase
   const addMemory = () => {
     if (input.trim() === "") return;
-    setMemories([...memories, input]);
+    const memoriesRef = ref(db, "happyMemories");
+    push(memoriesRef, input.trim());
     setInput("");
     setShowForm(false);
   };
 
   return (
-    <div className="happy-page"
-    style={{
-       backgroundImage: `url(${HappyBg})`,
-       backgroundSize: "cover",
-       backgroundPosition: "center"
-     }}>
-      <h1 className="happy-title"> Happy Memories</h1>
+    <div
+      className="happy-page"
+      style={{
+        backgroundImage: `url(${HappyBg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <h1 className="happy-title">Happy Memories</h1>
 
       {/* Button to open form */}
       <button className="open-form-btn" onClick={() => setShowForm(true)}>
         + Add Memory
       </button>
 
-      {/* Fantasy Diary Form */}
+      {/* Memory Form Modal */}
       {showForm && (
         <div className="modal-overlay" onClick={() => setShowForm(false)}>
           <div
             className="modal-form"
             onClick={(e) => e.stopPropagation()} // stop closing on inner click
           >
-            <h2>Write Your Happy Moment </h2>
+            <h2>Write Your Happy Moment</h2>
             <textarea
               placeholder="Dear Diary, today I felt so happy because..."
               value={input}
