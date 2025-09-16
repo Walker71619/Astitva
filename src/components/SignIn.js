@@ -1,44 +1,69 @@
 import React, { useState } from "react";
-import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/navbar";
-import Footer from "../components/footer";
-import "./auth.css";
-
+import { auth, database } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { ref, get, set } from "firebase/database";
 
 export default function SignIn() {
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
+
     try {
-      await signInWithEmailAndPassword(auth, form.email, form.password);
+      // 1️⃣ Sign in user with Firebase Auth
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // 2️⃣ Check if database node exists
+      const userRef = ref(database, `users/${user.uid}`);
+      const snapshot = await get(userRef);
+
+      if (!snapshot.exists()) {
+        // 3️⃣ Create default personal + public profile if not exist
+        await set(userRef, {
+          personal: {
+            name: user.displayName || "",
+            email: user.email,
+            bio: "",
+            avatar: ""
+          },
+          public: {
+            displayName: user.displayName || "",
+            bio: "",
+            avatar: ""
+          }
+        });
+      }
+
       navigate("/dashboard");
     } catch (err) {
-      setError(err.message);
+      alert("Error signing in: " + err.message);
     }
   };
 
   return (
-    <div>
-      <Navbar />
-      <div className="auth-container">
-        <h2>Sign In</h2>
-        <form onSubmit={handleSubmit}>
-          <input type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-          <input type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} required />
-          <button type="submit">Sign In</button>
-        </form>
-        {error && <p className="error">{error}</p>}
-      </div>
-      <Footer />
+    <div className="auth-container">
+      <h2>Sign In</h2>
+      <form onSubmit={handleSignIn}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Sign In</button>
+      </form>
     </div>
   );
 }
