@@ -1,11 +1,10 @@
 // src/views/KarmicAI.js
 import React, { useState, useEffect } from "react";
-import { ref, set, get, child } from "firebase/database";
+import { ref, set, get, child, push, onValue } from "firebase/database";
 import { database } from "../firebase";
 import "./karmic.css";
 
-// Dummy logged-in user (replace later with auth)
-const currentUserId = "user123";
+const currentUserId = "user123"; // replace with auth later
 
 const Tribes = () => {
   const [profiles, setProfiles] = useState([]);
@@ -21,8 +20,10 @@ const Tribes = () => {
   });
   const [hasProfile, setHasProfile] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
 
-  // Load profiles from Firebase
+  // 🔹 Load profiles
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
@@ -32,8 +33,7 @@ const Tribes = () => {
           const data = snapshot.val();
           const allProfiles = Object.keys(data).map((key) => ({
             id: key,
-            ...data[key].profile,
-            image: data[key].image,
+            ...data[key],
           }));
           setProfiles(allProfiles);
 
@@ -51,7 +51,7 @@ const Tribes = () => {
     fetchProfiles();
   }, []);
 
-  // Handle input
+  // 🔹 Handle input change
   const handleChange = (e, fieldName) => {
     const { value, type, files } = e.target;
     if (type === "file" && files.length > 0) {
@@ -71,7 +71,7 @@ const Tribes = () => {
     }
   };
 
-  // Handle visibility toggle
+  // 🔹 Toggle visibility
   const toggleVisibility = (fieldName) => {
     setFormData({
       ...formData,
@@ -83,7 +83,7 @@ const Tribes = () => {
     });
   };
 
-  // Save profile
+  // 🔹 Save profile
   const handleSaveProfile = async () => {
     if (!formData.name.value || !formData.tribe.value) {
       alert("Please fill in Name and Tribe at minimum");
@@ -98,34 +98,80 @@ const Tribes = () => {
     }
   };
 
+  // 🔹 Join tribe
+  const joinTribe = async (tribeName) => {
+    try {
+      await set(ref(database, `tribes/${tribeName}/members/${currentUserId}`), {
+        name: formData.name.value,
+      });
+      // subscribe to chat messages
+      onValue(ref(database, `tribes/${tribeName}/chat`), (snapshot) => {
+        if (snapshot.exists()) {
+          setChatMessages(Object.values(snapshot.val()));
+        }
+      });
+      alert(`You joined the ${tribeName} tribe!`);
+    } catch (error) {
+      console.error("Error joining tribe:", error);
+    }
+  };
+
+  // 🔹 Send chat message
+  const sendMessage = async () => {
+    if (!newMessage.trim()) return;
+    const tribeName = formData.tribe.value;
+    try {
+      await push(ref(database, `tribes/${tribeName}/chat`), {
+        user: formData.name.value,
+        message: newMessage,
+        timestamp: Date.now(),
+      });
+      setNewMessage("");
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
+  // 🔹 AI-like matching (simple overlap)
+  const suggestMatches = () => {
+    if (!formData.interests.value) return [];
+    const myInterests = formData.interests.value.toLowerCase().split(",");
+    return profiles.filter(
+      (p) =>
+        p.id !== currentUserId &&
+        p.interests &&
+        myInterests.some((i) =>
+          p.interests.value.toLowerCase().includes(i.trim())
+        )
+    );
+  };
+
   if (loading) return <p>Loading profiles...</p>;
 
   return (
     <div className="karmic-page">
       {!hasProfile ? (
+        // 🔹 Form
         <div className="form-container">
           <h2>Create Your Tribe Profile</h2>
-
           {Object.keys(formData).map((field) => (
             <div key={field} className="form-field">
               {field !== "image" ? (
                 <>
                   <label>
                     {field.charAt(0).toUpperCase() + field.slice(1)} -{" "}
-                    {formData[field].visibility === "public"
-                      ? "Public"
-                      : "Private"}
+                    {formData[field].visibility}
                   </label>
                   {field === "notes" || field === "goals" ? (
                     <textarea
-                      placeholder={`Enter your ${field} here`}
+                      placeholder={`Enter your ${field}`}
                       value={formData[field].value}
                       onChange={(e) => handleChange(e, field)}
                     />
                   ) : (
                     <input
                       type="text"
-                      placeholder={`Enter your ${field} here`}
+                      placeholder={`Enter your ${field}`}
                       value={formData[field].value}
                       onChange={(e) => handleChange(e, field)}
                     />
@@ -164,38 +210,84 @@ const Tribes = () => {
               )}
             </div>
           ))}
-
           <button className="save-btn" onClick={handleSaveProfile}>
             Save Profile
           </button>
         </div>
       ) : (
-        <div className="tribe-container">
-          {profiles.map((profile, index) => (
-            <div
-              className="tribe-card"
-              key={index}
-              style={{ backgroundImage: `url(${profile.image?.value || ""})` }}
-            >
-              <div className="tribe-content">
-                {Object.keys(profile).map((key) => {
-                  if (key === "image") return null; // skip image
-                  if (profile[key].visibility === "public" || profile.id === currentUserId)
-                    return (
-                      <p key={key}>
-                        <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong>{" "}
-                        {profile[key].value}
-                      </p>
-                    );
-                  return null;
-                })}
+        // 🔹 Profiles + Chat
+        <>
+          <h2>Explore Tribes</h2>
+          <div className="tribe-container">
+            {profiles.map((profile, index) => (
+              <div
+                className="tribe-card"
+                key={index}
+                style={{
+                  backgroundImage: `url(${profile.image?.value || ""})`,
+                }}
+              >
+                <div className="tribe-content">
+                  {Object.keys(profile).map((key) => {
+                    if (key === "image") return null;
+                    if (
+                      profile[key].visibility === "public" ||
+                      profile.id === currentUserId
+                    )
+                      return (
+                        <p key={key}>
+                          <strong>
+                            {key.charAt(0).toUpperCase() + key.slice(1)}:
+                          </strong>{" "}
+                          {profile[key].value}
+                        </p>
+                      );
+                    return null;
+                  })}
+                  {profile.id !== currentUserId && (
+                    <button
+                      className="join-btn"
+                      onClick={() => joinTribe(profile.tribe.value)}
+                    >
+                      Join {profile.tribe.value} Tribe
+                    </button>
+                  )}
+                </div>
               </div>
+            ))}
+          </div>
+
+          {/* 🔹 Suggested Matches */}
+          <h3>Suggested Matches</h3>
+          <div className="match-container">
+            {suggestMatches().map((match) => (
+              <div key={match.id} className="match-card">
+                <p>{match.name.value} (common interest)</p>
+              </div>
+            ))}
+          </div>
+
+          {/* 🔹 Tribe Chat */}
+          <h3>Tribe Chat ({formData.tribe.value})</h3>
+          <div className="chat-box">
+            <div className="messages">
+              {chatMessages.map((msg, i) => (
+                <p key={i}>
+                  <strong>{msg.user}:</strong> {msg.message}
+                </p>
+              ))}
             </div>
-          ))}
-          <button className="edit-btn" onClick={() => setHasProfile(false)}>
-            Edit My Profile
-          </button>
-        </div>
+            <div className="chat-input">
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Type a message..."
+              />
+              <button onClick={sendMessage}>Send</button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

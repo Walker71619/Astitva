@@ -192,3 +192,59 @@
   background: #3af;
   color: #000;
 }
+
+.join-btn {
+  background: #3af;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  margin-top: 0.5rem;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
+.join-btn:hover {
+  background: #00c3ff;
+}
+
+.match-container {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.match-card {
+  padding: 0.8rem 1rem;
+  background: rgba(0, 200, 255, 0.15);
+  border: 1px solid #3af;
+  border-radius: 10px;
+}
+
+.chat-box {
+  border: 1px solid #3af;
+  border-radius: 15px;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  margin-top: 1rem;
+}
+.messages {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+.chat-input {
+  display: flex;
+  gap: 0.5rem;
+}
+.chat-input input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: none;
+}
+.chat-input button {
+  background: #3af;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
