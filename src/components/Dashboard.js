@@ -9,49 +9,44 @@ import { onAuthStateChanged } from "firebase/auth";
 import "./Dashboard.css";
 
 export default function Dashboard() {
-  const [personal, setPersonal] = useState({ name: "", email: "", bio: "", avatar: "" });
-  const [publicProfile, setPublicProfile] = useState({ displayName: "", bio: "", avatar: "" });
+  const [personal, setPersonal] = useState({
+    name: "", email: "", bio: "", avatar: "", skills: "", hobbies: "", goals: "", socialLinks: ""
+  });
+
+  const [publicProfile, setPublicProfile] = useState({
+    displayName: "", bio: "", avatar: "", interests: "", favoriteQuote: "", socialLinks: ""
+  });
+
   const [activeTab, setActiveTab] = useState("personal");
   const navigate = useNavigate();
 
   // Load profile data
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
-      if (!user) return navigate("/signin");
+      if (!user) return navigate("/auth");
 
       const userId = user.uid;
       const userRef = dbRef(database, `users/${userId}`);
 
       const snapshot = await get(userRef);
       if (!snapshot.exists()) {
-        // Create default profile if missing
         await set(userRef, {
-          personal: {
-            name: user.displayName || "",
-            email: user.email,
-            bio: "",
-            avatar: ""
-          },
-          public: {
-            displayName: user.displayName || "",
-            bio: "",
-            avatar: ""
-          }
+          personal: { name: user.displayName || "", email: user.email, bio: "", avatar: "", skills: "", hobbies: "", goals: "", socialLinks: "" },
+          public: { displayName: user.displayName || "", bio: "", avatar: "", interests: "", favoriteQuote: "", socialLinks: "" }
         });
       }
 
-      // Listen for realtime updates
       onValue(userRef, (snap) => {
         const data = snap.val();
-        setPersonal(data.personal || { name: "", email: "", bio: "", avatar: "" });
-        setPublicProfile(data.public || { displayName: data.personal?.name || "", bio: "", avatar: data.personal?.avatar || "" });
+        setPersonal(data.personal || {});
+        setPublicProfile(data.public || {});
       });
     });
 
     return () => unsubscribeAuth();
   }, [navigate]);
 
-  // Update profile handlers
+  // Update handlers
   const handleUpdatePersonal = () => {
     update(dbRef(database, `users/${auth.currentUser.uid}/personal`), personal)
       .then(() => alert("Personal profile updated!"))
@@ -86,6 +81,7 @@ export default function Dashboard() {
       <Navbar />
 
       <section className="dashboard-hero">
+        {/* Tabs */}
         <div className="tabs">
           <button className={activeTab === "personal" ? "active" : ""} onClick={() => setActiveTab("personal")}>
             Personal Profile
@@ -95,31 +91,32 @@ export default function Dashboard() {
           </button>
         </div>
 
+        {/* Personal Profile */}
         {activeTab === "personal" && (
           <div className="profile-card">
             <img src={personal.avatar || "https://via.placeholder.com/150"} alt="Avatar" className="avatar" />
             <input type="file" accept="image/*" onChange={(e) => handleAvatarUpload(e, "personal")} />
-            <h2>{personal.name}</h2>
+            <input type="text" value={personal.name} placeholder="Name" onChange={(e) => setPersonal({ ...personal, name: e.target.value })} />
             <p>{personal.email}</p>
-            <textarea
-              placeholder="Your bio..."
-              value={personal.bio}
-              onChange={(e) => setPersonal({ ...personal, bio: e.target.value })}
-            />
+            <textarea placeholder="Bio" value={personal.bio} onChange={(e) => setPersonal({ ...personal, bio: e.target.value })} />
+            <input type="text" placeholder="Skills" value={personal.skills} onChange={(e) => setPersonal({ ...personal, skills: e.target.value })} />
+            <input type="text" placeholder="Hobbies" value={personal.hobbies} onChange={(e) => setPersonal({ ...personal, hobbies: e.target.value })} />
+            <input type="text" placeholder="Goals" value={personal.goals} onChange={(e) => setPersonal({ ...personal, goals: e.target.value })} />
+            <input type="text" placeholder="Social Links" value={personal.socialLinks} onChange={(e) => setPersonal({ ...personal, socialLinks: e.target.value })} />
             <button onClick={handleUpdatePersonal}>Update Personal Profile</button>
           </div>
         )}
 
+        {/* Public Profile */}
         {activeTab === "public" && (
           <div className="profile-card">
             <img src={publicProfile.avatar || "https://via.placeholder.com/150"} alt="Avatar" className="avatar" />
             <input type="file" accept="image/*" onChange={(e) => handleAvatarUpload(e, "public")} />
-            <h2>{publicProfile.displayName}</h2>
-            <textarea
-              placeholder="Public bio..."
-              value={publicProfile.bio}
-              onChange={(e) => setPublicProfile({ ...publicProfile, bio: e.target.value })}
-            />
+            <input type="text" placeholder="Display Name" value={publicProfile.displayName} onChange={(e) => setPublicProfile({ ...publicProfile, displayName: e.target.value })} />
+            <textarea placeholder="Public Bio" value={publicProfile.bio} onChange={(e) => setPublicProfile({ ...publicProfile, bio: e.target.value })} />
+            <input type="text" placeholder="Interests" value={publicProfile.interests} onChange={(e) => setPublicProfile({ ...publicProfile, interests: e.target.value })} />
+            <input type="text" placeholder="Favorite Quote" value={publicProfile.favoriteQuote} onChange={(e) => setPublicProfile({ ...publicProfile, favoriteQuote: e.target.value })} />
+            <input type="text" placeholder="Social Links" value={publicProfile.socialLinks} onChange={(e) => setPublicProfile({ ...publicProfile, socialLinks: e.target.value })} />
             <button onClick={handleUpdatePublic}>Update Public Profile</button>
           </div>
         )}
