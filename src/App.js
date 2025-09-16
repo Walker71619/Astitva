@@ -12,8 +12,7 @@ import AchievementMemories from "./views/achievementmemories";
 import GoalsPage from "./views/GoalsPage"; 
 import MirrorAi from "./views/MirrorAi";
 import Dashboard from "./components/Dashboard";
-import SignUp from "./components/SignUp";
-import SignIn from "./components/SignIn";
+import Auth from "./components/Auth";
 
 // Dragon cursor component
 import DragonCursor from "./components/DragonScroll"; 
@@ -51,8 +50,7 @@ function App() {
 
         <Route path="/dashboard" element={<Dashboard />} />
 
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
+        <Route path="/auth" element={<Auth />} />
       </Routes>
     </Router>
   );

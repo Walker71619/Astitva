@@ -1,44 +1,79 @@
-/* auth.css - shared for SignUp & SignIn */
 .auth-container {
-  max-width: 400px;
-  margin: 8rem auto;
-  padding: 2rem;
-  background: rgba(20,20,50,0.7);
-  backdrop-filter: blur(12px);
-  border-radius: 1.5rem;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  text-align: center;
-  color: #e0e6ff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(10, 10, 30, 0.95);
   font-family: 'Montserrat', sans-serif;
+  color: #e0e6ff;
+  padding: 2rem;
+}
+
+.auth-container h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 8px rgba(150, 200, 255, 0.7);
+  color: #ffffff;
+}
+
+.auth-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+  max-width: 400px;
+  background: rgba(20, 20, 50, 0.7);
+  padding: 2rem;
+  border-radius: 2rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .auth-container input {
-  width: 100%;
-  margin: 0.5rem 0;
-  padding: 0.7rem;
-  border-radius: 0.7rem;
-  border: none;
-  outline: none;
+  padding: 0.8rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid #99ccff;
+  background: rgba(10, 10, 30, 0.8);
+  color: #e0e6ff;
+  font-size: 1rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.auth-container input::placeholder {
+  color: #d6dfff;
+  opacity: 0.7;
 }
 
 .auth-container button {
-  margin-top: 1rem;
-  padding: 0.8rem 2rem;
-  border-radius: 0.7rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 1rem;
   border: none;
   background: linear-gradient(90deg, #99ccff, #ff99ff);
-  color: #000;
-  font-weight: bold;
+  color: #ffffff;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 0 10px rgba(150,200,255,0.7);
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 .auth-container button:hover {
-  background: linear-gradient(90deg, #77aadd, #ff77ff);
+  box-shadow: 0 0 12px rgba(255, 150, 255, 0.7);
 }
 
-.error {
-  margin-top: 0.5rem;
-  color: #ff9999;
+.auth-container .toggle-auth {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #d6dfff;
+}
+
+.auth-container .toggle-auth span {
+  color: #99ccff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.auth-container .toggle-auth span:hover {
+  color: #ff99ff;
 }

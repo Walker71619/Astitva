@@ -145,3 +145,24 @@
   }
 }
 
+/* Logout button styling */
+.logout-btn {
+  background: linear-gradient(90deg, #ff99ff, #99ccff);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.logout-btn:hover {
+  box-shadow: 0 0 12px rgba(255, 150, 255, 0.7);
+}
+
+.nav-links li .logout-btn {
+  width: 100%;
+  text-align: center;
+}
