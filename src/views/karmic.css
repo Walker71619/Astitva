@@ -1,3 +1,4 @@
+/* ---------- PAGE BASE ---------- */
 .karmic-page {
   background-color: #000;
   color: #fff;
@@ -5,38 +6,100 @@
   min-height: 100vh;
   padding: 2rem;
   display: flex;
-  justify-content: center;
-  align-items: flex-start; /* aligns top */
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Tribe Container */
-.karmic-page .tribe-container {
+/* ---------- FORM STYLING ---------- */
+.form-container {
+  background: rgba(20, 20, 20, 0.9);
+  padding: 2rem;
+  border-radius: 20px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.4);
   display: flex;
-  gap: 2rem;
-  overflow-x: auto;
-  padding: 2rem 0;
-  scroll-snap-type: x mandatory;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-/* Scrollbar */
-.karmic-page .tribe-container::-webkit-scrollbar {
-  height: 8px;
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #3af;
 }
-.karmic-page .tribe-container::-webkit-scrollbar-thumb {
-  background: #3af;
+
+.form-container input,
+.form-container textarea {
+  padding: 0.8rem;
   border-radius: 10px;
+  border: 1px solid #3af;
+  background: #111;
+  color: #fff;
+  resize: none;
+  outline: none;
+  font-size: 0.95rem;
 }
 
-/* Tribe Card */
-.karmic-page .tribe-card {
+.form-container input:focus,
+.form-container textarea:focus {
+  border-color: #6cf;
+  box-shadow: 0 0 8px rgba(0, 200, 255, 0.5);
+}
+
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.preview-img {
+  margin-top: 0.5rem;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #3af;
+  align-self: center;
+}
+
+.save-btn {
+  background: #3af;
+  color: #000;
+  padding: 0.8rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.save-btn:hover {
+  background: #6cf;
+  transform: scale(1.05);
+}
+
+/* ---------- TRIBE CONTAINER ---------- */
+.tribe-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+/* ---------- TRIBE CARDS ---------- */
+.tribe-card {
   position: relative;
-  width: 90vw;      
-  max-width: 350px;  
-  aspect-ratio: 4/7; 
+  width: 90vw;
+  max-width: 350px;
+  aspect-ratio: 4/7;
   border-radius: 20px;
   overflow: hidden;
   flex-shrink: 0;
-  scroll-snap-align: start;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 0 15px rgba(0, 200, 255, 0.3);
   display: flex;
@@ -46,45 +109,62 @@
   background-position: center;
 }
 
-.karmic-page .tribe-card:hover {
+.tribe-card:hover {
   transform: translateY(-10px) scale(1.05);
   box-shadow: 0 0 25px rgba(0, 200, 255, 0.6);
 }
 
-/* Overlay for text */
-.karmic-page .tribe-content {
-  background: rgba(0, 0, 0, 0.5);
+/* ---------- TRIBE CONTENT ---------- */
+.tribe-content {
+  background: rgba(0, 0, 0, 0.6);
   padding: 1rem;
   border-radius: 15px;
   width: 100%;
   color: #fff;
 }
 
-/* Tribe Text */
-.karmic-page .tribe-card h3 {
+.tribe-card h3 {
   font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
   color: #3af;
 }
 
-.karmic-page .tribe-card p {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
+.tribe-card p {
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
   color: #ccc;
 }
 
-/* Tags */
-.karmic-page .tags {
+/* ---------- TAGS ---------- */
+.tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-.karmic-page .tag {
+.tag {
   border: 1px solid #3af;
   border-radius: 20px;
   padding: 0.3rem 0.8rem;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: #3af;
   background: rgba(0, 200, 255, 0.2);
+}
+
+/* ---------- EDIT BUTTON ---------- */
+.edit-btn {
+  margin-top: 1rem;
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
+  border: none;
+  background: #222;
+  color: #3af;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.edit-btn:hover {
+  background: #3af;
+  color: #000;
 }

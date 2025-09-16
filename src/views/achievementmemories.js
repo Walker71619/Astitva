@@ -1,52 +1,64 @@
+// AchievementMemories.js
 import React, { useState, useEffect } from "react";
 import "./achievementmemories.css";
 import AchievementBg from "../images/achievementbg.jpg";
+
+// 🔹 Firebase imports
+import { getDatabase, ref, push, onValue } from "firebase/database";
 
 function AchievementMemories() {
   const [memories, setMemories] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [input, setInput] = useState("");
 
-  // Load from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem("achievementMemories");
-    if (saved) setMemories(JSON.parse(saved));
-  }, []);
+  const db = getDatabase();
 
-  // Save to localStorage
+  // 🔹 Load achievements from Firebase
   useEffect(() => {
-    localStorage.setItem("achievementMemories", JSON.stringify(memories));
-  }, [memories]);
+    const achievementsRef = ref(db, "achievementMemories");
+    onValue(achievementsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setMemories(Object.values(data));
+      } else {
+        setMemories([]);
+      }
+    });
+  }, [db]);
 
+  // 🔹 Add new achievement to Firebase
   const addMemory = () => {
     if (input.trim() === "") return;
-    setMemories([...memories, input]);
+    const achievementsRef = ref(db, "achievementMemories");
+    push(achievementsRef, input.trim());
     setInput("");
     setShowForm(false);
   };
 
   return (
-    <div className="achievement-page"
-    style={{
-       backgroundImage: `url(${AchievementBg})`,
-       backgroundSize: "cover",
-       backgroundPosition: "center"
-     }}>
-      <h1 className="achievement-title"> Achievements</h1>
+    <div
+      className="achievement-page"
+      style={{
+        backgroundImage: `url(${AchievementBg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <h1 className="achievement-title">Achievements</h1>
 
       {/* Button to open form */}
       <button className="open-form-btn" onClick={() => setShowForm(true)}>
         + Add Achievement
       </button>
 
-      {/* Fantasy Diary Form */}
+      {/* Achievement Form Modal */}
       {showForm && (
         <div className="modal-overlay" onClick={() => setShowForm(false)}>
           <div
             className="modal-form achievement-form"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2>Celebrate Your Achievement </h2>
+            <h2>Celebrate Your Achievement</h2>
             <textarea
               placeholder="Today I achieved..."
               value={input}
