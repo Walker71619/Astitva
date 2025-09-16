@@ -4,38 +4,39 @@ import { ref, set, get, child } from "firebase/database";
 import { database } from "../firebase";
 import "./karmic.css";
 
-// Dummy logged-in user (replace later with auth user ID/email)
+// Dummy logged-in user (replace later with auth)
 const currentUserId = "user123";
 
 const Tribes = () => {
   const [profiles, setProfiles] = useState([]);
   const [formData, setFormData] = useState({
-    name: "",
-    tribe: "",
-    tags: "",
-    bio: "",
-    interests: "",
-    goals: "",
-    image: "",
+    name: { value: "", visibility: "public" },
+    tribe: { value: "", visibility: "public" },
+    tagline: { value: "", visibility: "public" },
+    interests: { value: "", visibility: "public" },
+    skills: { value: "", visibility: "public" },
+    goals: { value: "", visibility: "private" },
+    notes: { value: "", visibility: "private" },
+    image: { value: "", visibility: "public" },
   });
-  const [hasProfile, setHasProfile] = useState(false); // toggle for form vs profiles
+  const [hasProfile, setHasProfile] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Load all profiles from Firebase
+  // Load profiles from Firebase
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
         const dbRef = ref(database);
-        const snapshot = await get(child(dbRef, "tribes"));
+        const snapshot = await get(child(dbRef, "users"));
         if (snapshot.exists()) {
           const data = snapshot.val();
           const allProfiles = Object.keys(data).map((key) => ({
             id: key,
-            ...data[key],
+            ...data[key].profile,
+            image: data[key].image,
           }));
           setProfiles(allProfiles);
 
-          // Check if current user already has profile
           if (data[currentUserId]) {
             setFormData(data[currentUserId]);
             setHasProfile(true);
@@ -51,31 +52,46 @@ const Tribes = () => {
   }, []);
 
   // Handle input
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "image" && files.length > 0) {
+  const handleChange = (e, fieldName) => {
+    const { value, type, files } = e.target;
+    if (type === "file" && files.length > 0) {
       const reader = new FileReader();
       reader.onload = () => {
-        setFormData({ ...formData, image: reader.result });
+        setFormData({
+          ...formData,
+          [fieldName]: { ...formData[fieldName], value: reader.result },
+        });
       };
       reader.readAsDataURL(files[0]);
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData({
+        ...formData,
+        [fieldName]: { ...formData[fieldName], value },
+      });
     }
+  };
+
+  // Handle visibility toggle
+  const toggleVisibility = (fieldName) => {
+    setFormData({
+      ...formData,
+      [fieldName]: {
+        ...formData[fieldName],
+        visibility:
+          formData[fieldName].visibility === "public" ? "private" : "public",
+      },
+    });
   };
 
   // Save profile
   const handleSaveProfile = async () => {
-    if (!formData.name || !formData.tribe) {
+    if (!formData.name.value || !formData.tribe.value) {
       alert("Please fill in Name and Tribe at minimum");
       return;
     }
     try {
-      await set(ref(database, "tribes/" + currentUserId), {
-        ...formData,
-        tags: formData.tags.split(",").map((t) => t.trim()),
-      });
-      setHasProfile(true); // hide form after save
+      await set(ref(database, "users/" + currentUserId), formData);
+      setHasProfile(true);
       alert("Profile saved!");
     } catch (error) {
       console.error("Error saving profile:", error);
@@ -87,102 +103,96 @@ const Tribes = () => {
   return (
     <div className="karmic-page">
       {!hasProfile ? (
-        /* ---------- PROFILE CREATION FORM ---------- */
         <div className="form-container">
           <h2>Create Your Tribe Profile</h2>
-          <input
-            type="text"
-            name="name"
-            placeholder="Name (eg: Mahira)"
-            value={formData.name}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="tribe"
-            placeholder="Tribe (eg: Inner Peace)"
-            value={formData.tribe}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="tags"
-            placeholder="Tags (eg: Anxiety, Focus, Calm)"
-            value={formData.tags}
-            onChange={handleChange}
-          />
-          <textarea
-            name="bio"
-            placeholder="Short Bio (eg: I love meditation...)"
-            value={formData.bio}
-            onChange={handleChange}
-          />
-          <textarea
-            name="interests"
-            placeholder="Interests (eg: Art, Music, Yoga)"
-            value={formData.interests}
-            onChange={handleChange}
-          />
-          <textarea
-            name="goals"
-            placeholder="Goals (eg: Build focus, reduce stress)"
-            value={formData.goals}
-            onChange={handleChange}
-          />
-          <label className="file-upload">
-            Upload Profile Picture:
-            <input
-              type="file"
-              name="image"
-              accept="image/*"
-              onChange={handleChange}
-            />
-          </label>
-          {formData.image && (
-            <img src={formData.image} alt="preview" className="preview-img" />
-          )}
+
+          {Object.keys(formData).map((field) => (
+            <div key={field} className="form-field">
+              {field !== "image" ? (
+                <>
+                  <label>
+                    {field.charAt(0).toUpperCase() + field.slice(1)} -{" "}
+                    {formData[field].visibility === "public"
+                      ? "Public"
+                      : "Private"}
+                  </label>
+                  {field === "notes" || field === "goals" ? (
+                    <textarea
+                      placeholder={`Enter your ${field} here`}
+                      value={formData[field].value}
+                      onChange={(e) => handleChange(e, field)}
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      placeholder={`Enter your ${field} here`}
+                      value={formData[field].value}
+                      onChange={(e) => handleChange(e, field)}
+                    />
+                  )}
+                  <button
+                    type="button"
+                    className="visibility-btn"
+                    onClick={() => toggleVisibility(field)}
+                  >
+                    Toggle {formData[field].visibility}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <label>Profile Image - {formData.image.visibility}</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleChange(e, "image")}
+                  />
+                  {formData.image.value && (
+                    <img
+                      src={formData.image.value}
+                      alt="preview"
+                      className="preview-img"
+                    />
+                  )}
+                  <button
+                    type="button"
+                    className="visibility-btn"
+                    onClick={() => toggleVisibility("image")}
+                  >
+                    Toggle {formData.image.visibility}
+                  </button>
+                </>
+              )}
+            </div>
+          ))}
+
           <button className="save-btn" onClick={handleSaveProfile}>
             Save Profile
           </button>
         </div>
       ) : (
-        /* ---------- PROFILES VIEW ---------- */
         <div className="tribe-container">
           {profiles.map((profile, index) => (
             <div
               className="tribe-card"
               key={index}
-              style={{
-                backgroundImage: `url(${profile.image || ""})`,
-              }}
+              style={{ backgroundImage: `url(${profile.image?.value || ""})` }}
             >
               <div className="tribe-content">
-                <h3>{profile.name}</h3>
-                <p>
-                  <strong>Tribe:</strong> {profile.tribe}
-                </p>
-                {profile.bio && <p>{profile.bio}</p>}
-                <p>
-                  <strong>Interests:</strong> {profile.interests}
-                </p>
-                <p>
-                  <strong>Goals:</strong> {profile.goals}
-                </p>
-                <div className="tags">
-                  {profile.tags?.map((tag, idx) => (
-                    <span className="tag" key={idx}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                {Object.keys(profile).map((key) => {
+                  if (key === "image") return null; // skip image
+                  if (profile[key].visibility === "public" || profile.id === currentUserId)
+                    return (
+                      <p key={key}>
+                        <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong>{" "}
+                        {profile[key].value}
+                      </p>
+                    );
+                  return null;
+                })}
               </div>
             </div>
           ))}
-          {/* Edit button for current user */}
-          <button
-            className="edit-btn"
-            onClick={() => setHasProfile(false)}
-          >
+          <button className="edit-btn" onClick={() => setHasProfile(false)}>
             Edit My Profile
           </button>
         </div>
