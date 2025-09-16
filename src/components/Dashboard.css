@@ -1,19 +1,17 @@
-/* Hero section */
 .dashboard-hero {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 6rem 1rem 2rem; /* Increased top padding to shift profiles lower */
+  padding: 6rem 1rem 2rem; 
   gap: 2rem;
 }
 
-/* Profile Card */
 .profile-card {
-  margin-top: 2rem; /* Add margin to shift card lower relative to hero */
+  margin-top: 2rem; 
   background: rgba(20, 20, 50, 0.75);
   backdrop-filter: blur(12px);
   border-radius: 2rem;
-  padding: 2.5rem 2rem; /* extra padding so avatar and inputs have breathing room */
+  padding: 2.5rem 2rem; 
   text-align: center;
   max-width: 500px;
   width: 90%;
@@ -23,12 +21,12 @@
   gap: 1rem;
 }
 
-/* Avatar spacing */
+
 .profile-card .avatar {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  margin: 1rem auto; /* push avatar down slightly from top */
+  margin: 1rem auto; 
   border: 3px solid #99ccff;
   object-fit: cover;
 }
@@ -79,7 +77,6 @@
   box-shadow: 0 0 12px rgba(255, 150, 255, 0.7);
 }
 
-/* Tabs */
 .tabs {
   display: flex;
   gap: 2rem;
@@ -105,7 +102,7 @@
   box-shadow: 0 0 12px rgba(255, 150, 255, 0.6);
 }
 
-/* File input styling */
+
 .profile-card input[type="file"] {
   padding: 0.3rem;
   border: 1px dashed #99ccff;
@@ -116,7 +113,6 @@
   color: #e0e6ff;
 }
 
-/* Responsive layout */
 @media (max-width: 768px) {
   .dashboard-hero {
     padding: 2rem 1rem 1rem;
