@@ -12,7 +12,7 @@ export default function Navbar() {
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   useEffect(() => {
-    // Listen for auth state
+    
     const unsubscribe = auth.onAuthStateChanged((u) => {
       setUser(u);
     });
