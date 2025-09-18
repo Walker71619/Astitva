@@ -10,10 +10,11 @@ const MirrorAI = () => {
   const [emotion, setEmotion] = useState(50);
   const [notes, setNotes] = useState("");
   const [aiReflection, setAiReflection] = useState("");
+  const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [memories, setMemories] = useState([]);
 
-  // Fetch memories from Firebase on mount
+  // Fetch memories from Firebase
   useEffect(() => {
     const memoriesRef = ref(database, "memories");
     onValue(memoriesRef, (snapshot) => {
@@ -30,17 +31,32 @@ const MirrorAI = () => {
     });
   }, []);
 
-  // Handle reflection + save to Firebase
-  const handleReflect = () => {
+  // Call backend AI
+  const getAIReflection = async (userMemory) => {
+    try {
+      const response = await fetch("https://YOUR_RENDER_BACKEND_URL/api/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: `Here is the user's memory: ${JSON.stringify(
+            userMemory
+          )}. Give a motivational, reflective response.`,
+        }),
+      });
+      const data = await response.json();
+      return data.reply;
+    } catch (err) {
+      console.error(err);
+      return "The mirror is silent… try again later.";
+    }
+  };
+
+  // Handle reflection + save
+  const handleReflect = async () => {
     if (!eventName || !notes) {
       alert("Please fill all fields!");
       return;
     }
-
-    const prophecy =
-      "🌌 The mirror whispers: Even stardust carries memory. Your essence shines brighter with every storm you endure — you are a constellation in the making.";
-    setAiReflection(prophecy);
-    setExpanded(true);
 
     const newMemory = {
       event: eventName,
@@ -48,12 +64,19 @@ const MirrorAI = () => {
       notes: notes,
     };
 
-    // Optimistically add to local state for instant display
+    // Optimistic update
     setMemories((prev) => [...prev, { ...newMemory, id: Date.now() }]);
-
-    // Push to Firebase
     const memoriesRef = ref(database, "memories");
     push(memoriesRef, newMemory);
+
+    // Show loading while AI responds
+    setExpanded(true);
+    setLoading(true);
+    setAiReflection("");
+
+    const reflection = await getAIReflection(newMemory);
+    setAiReflection(reflection);
+    setLoading(false);
 
     // Reset form
     setEventName("");
@@ -109,16 +132,18 @@ const MirrorAI = () => {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
             />
-            <button onClick={handleReflect}>Summon Reflection 🌙</button>
+            <button onClick={handleReflect} disabled={loading}>
+              {loading ? "Summoning… 🌙" : "Summon Reflection 🌙"}
+            </button>
           </div>
         )}
       </div>
 
-      {/* Floating Prophecy */}
-      {expanded && aiReflection && (
+      {/* Floating Reflection */}
+      {expanded && (loading || aiReflection) && (
         <div className="floating-reflection" onClick={() => setAiReflection("")}>
           <h3>🌌 Astral Prophecy</h3>
-          <p>{aiReflection}</p>
+          <p>{loading ? "✨ Summoning your reflection… ✨" : aiReflection}</p>
         </div>
       )}
 
