@@ -69,7 +69,7 @@ function DharmaScheduler() {
     "Your effort today is your reward tomorrow.",
   ];
 
-  // Auto carousel effect
+  // 🟦 Auto carousel effect
   useEffect(() => {
     if (exploreMode) {
       const interval = setInterval(() => {
@@ -77,9 +77,9 @@ function DharmaScheduler() {
       }, 2000);
       return () => clearInterval(interval);
     }
-  }, [exploreMode, images.length]);
+  }, [exploreMode, images]); // ✅ fixed dependency
 
-  // Add goal
+  // 🟦 Add goal
   const addGoal = (e) => {
     e.preventDefault();
     if (goalInput.trim() !== "") {
@@ -91,14 +91,14 @@ function DharmaScheduler() {
     }
   };
 
-  // Toggle goal done
+  // 🟦 Toggle goal done
   const toggleGoal = (index) => {
     const updatedGoals = [...goals];
     updatedGoals[index].done = !updatedGoals[index].done;
     setGoals(updatedGoals);
   };
 
-  // Add progress (30 days limit)
+  // 🟦 Add progress (30 days limit)
   const addProgress = (e) => {
     e.preventDefault();
     if (progressTitle.trim() !== "" && progressSummary.trim() !== "") {
@@ -144,6 +144,7 @@ function DharmaScheduler() {
     );
   }
 
+  // 🟦 Main Page
   return (
     <div
       className="dharma-page"
@@ -231,7 +232,8 @@ function DharmaScheduler() {
                     style={{ flex: "0 0 100%", position: "relative" }}
                   >
                     <img src={img} alt={`bg-${i}`} />
-                    <div className="quote-text">{quotes[i]}</div>
+                    {/* ✅ Safe quote access */}
+                    <div className="quote-text">{quotes[i % quotes.length]}</div>
                   </div>
                 ))}
               </div>
