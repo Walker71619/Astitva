@@ -1,0 +1,593 @@
+/* GLOBAL RESET */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+}
+
+/* PAGE BASE */
+.dharma-page {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* HEADER */
+.dharma-header h1 {
+  font-size: 3rem;
+  margin: 1rem 0 0.5rem;
+  text-shadow: 0 0 20px rgba(0, 200, 255, 0.9);
+}
+.dharma-header p {
+  font-size: 1.2rem;
+  opacity: 0.85;
+  margin-bottom: 3rem;
+}
+
+/* SWORD CONTAINER */
+.sword-container {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8rem;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+/* SWORD BOX */
+.sword-box {
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.4s ease, filter 0.3s ease;
+}
+.sword-box:hover {
+  transform: scale(1.2) translateY(-10px);
+}
+.sword-img {
+  width: 260px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 30px rgba(0, 200, 255, 0.7));
+}
+.sword-box h2 {
+  margin-top: 1rem;
+  font-size: 1.3rem;
+  text-shadow: 0 0 15px rgba(0, 200, 255, 1);
+}
+
+/* ACTIVE AURA */
+.sword-box.active .sword-img {
+  filter: drop-shadow(0 0 40px rgba(0, 225, 255, 1))
+          drop-shadow(0 0 80px rgba(0, 225, 255, 0.9))
+          drop-shadow(0 0 120px rgba(0, 225, 255, 0.7));
+  animation: auraPulse 2s infinite ease-in-out;
+}
+@keyframes auraPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* CARD OVERLAY */
+.mode-card-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  animation: fadeInOverlay 0.4s ease;
+}
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* MODE CARD */
+.mode-card {
+  width: 450px;
+  max-width: 100%;
+  background: rgba(140, 202, 227, 0.95);
+  padding: 2rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(0,200,255,0.9), 0 0 80px rgba(0,200,255,0.6);
+  animation: fadeInCard 0.5s ease;
+}
+@keyframes fadeInCard {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.mode-card h3 {
+  margin: 0;
+  font-size: 2rem;
+}
+.mode-card p {
+  margin: 1rem 0;
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+.mode-img {
+  width: 90%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 0 25px rgba(0,200,255,0.8);
+}
+
+/* BUTTONS */
+.card-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1rem;
+}
+.card-buttons button {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+.explore-btn {
+  background: #00cfff;
+  color: #fff;
+  box-shadow: 0 0 20px #00cfff;
+}
+.back-btn {
+  background: #fff;
+  color: #003;
+  box-shadow: 0 0 15px #66c2ff;
+}
+.card-buttons button:hover {
+  transform: scale(1.05);
+}
+
+/* EXPLORE PAGE */
+.explore-page {
+  position: fixed;
+  top: 0; left: 0; right:0; bottom:0;
+  background: #000 url("../images/q1.png") center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 200;
+  overflow-y: auto;
+  padding: 2rem 0;
+}
+
+/* Content */
+.explore-content {
+  width: 90%;
+  max-width: 1000px;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Quotes carousel */
+.quotes-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
+  margin: 1rem 0 3rem;
+}
+.quote-slide {
+  position: relative;
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+}
+.quote-slide img {
+  width: 90%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 95px;
+  box-shadow: 0 0 25px rgba(0,255,255,0.6);
+}
+.quote-text {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 20px #a40a80;
+}
+
+/* GOAL FORM */
+.goal-form {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.goal-form input {
+  flex: 1;
+  padding: 0.8rem;
+  border: 2px solid #00f7ff;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.6);
+  color: #e9baba;
+  font-size: 1rem;
+  outline: none;
+  box-shadow: 0 0 15px #00f7ff;
+}
+.goal-form button {
+  padding: 0.8rem 2.5rem;
+  background: #95d3e1;
+  color: #08010e;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  box-shadow: 0 0 20px #00cfff;
+  transition: 0.3s;
+}
+.goal-form button:hover {
+  transform: scale(1.05);
+}
+
+/* GOALS CHECKLIST */
+.goals-list {
+  width: 400%;
+  max-width: 500px;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+.goal-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem;
+  background: rgba(0,0,0,0.6);
+  border-radius: 12px;
+  margin: 0.5rem 0;
+  box-shadow: 0 0 15px rgba(0,255,255,0.5);
+}
+.goal-item.done span {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+/* 
+FORM */
+.progress-form {
+  background: rgba(0,0,0,0.6);
+  border: 2px solid #00ccff;
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 150%;
+  max-width: 700px;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 0 25px #0026ff;
+}
+.progress-form h3 {
+  margin-bottom: 1rem;
+  text-shadow: 0 0 20px #001eff;
+}
+.progress-form input,
+.progress-form textarea {
+  width: 100%;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 1rem;
+  box-shadow: inset 0 0 10px #2f00ff;
+}
+.progress-form button {
+  margin-top: 2rem;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #4951e3;
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 0 25px #0091ff;
+  transition: 0.3s;
+}
+.progress-form button:hover {
+  transform: scale(1.05);
+}
+
+/* NEW PROGRESS PAGE */
+.progress-page {
+  position: fixed;
+  top: 0; left: 0; right:0; bottom:0;
+  background: #000 url("../images/q2.png") center/cover no-repeat;
+  color: #fff;
+  z-index: 500;
+  overflow-y: auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Back button */
+.progress-page .back-btn {
+  align-self: flex-start;
+  margin-bottom: 2rem;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  background: #00cfff;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 25px #00cfff;
+  transition: 0.3s;
+}
+.progress-page .back-btn:hover {
+  transform: scale(1.05);
+}
+
+.progress-big-cards {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.progress-big-card {
+  position: relative;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(60px) scale(0.95);
+  animation: cardPopIn 0.8s ease forwards;
+}
+
+/* Glow border animation */
+.progress-big-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 2px;
+  background: linear-gradient(135deg, #00eaff, #007bff, #00f7ff, #00cfff);
+  background-size: 300% 300%;
+  animation: glowingBorder 4s ease infinite;
+  -webkit-mask: 
+    linear-gradient(#000 0 0) content-box, 
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+
+/* Title + text better glow */
+.progress-big-card h2 {
+  font-size: 2rem;
+  margin: 1rem 0;
+  text-shadow: 0 0 15px #00f7ff, 0 0 30px #00eaff;
+}
+
+/* PROGRESS CARD ENHANCED */
+.progress-big-card {
+  position: relative;
+  background: rgba(0,0,0,0.85);
+  border-radius: 20px;
+  padding: 2.5rem;
+  width: 95%;
+  max-width: 800px;
+  box-shadow: 0 0 50px rgba(0, 255, 255, 0.7);
+  overflow: hidden;
+  transform: scale(1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Glow on hover or active */
+.progress-big-card:hover,
+.progress-big-card.active {
+  transform: scale(1.05) translateY(-10px);
+  box-shadow: 0 0 70px rgba(0, 255, 255, 0.9),
+              0 0 120px rgba(0, 200, 255, 0.7);
+}
+
+/* Badge for completed */
+.progress-big-card .completed-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: gold;
+  color: #000;
+  padding: 0.5rem 1.2rem;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 1rem;
+  text-shadow: 0 0 10px #fff;
+  box-shadow: 0 0 25px gold, 0 0 40px rgba(255,215,0,0.7);
+}
+
+/* Card title & text glow */
+.progress-big-card h2 {
+  font-size: 2.2rem;
+  margin: 1.5rem 0 1rem;
+  text-shadow: 0 0 25px #00f7ff, 0 0 40px #00eaff;
+}
+
+.progress-big-card p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  opacity: 0.95;
+  text-shadow: 0 0 10px rgba(0,255,255,0.3);
+}
+
+/* Star icon before title (optional) */
+.progress-big-card.completed h2::before {
+  content: "⭐ ";
+}
+
+/* Pop-in animation */
+@keyframes cardPopIn {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.95);
+    box-shadow: 0 0 0 rgba(0,255,255,0);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 0 60px rgba(0,255,255,0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 0 50px rgba(0,255,255,0.6);
+  }
+}
+
+
+
+
+/* Date badge */
+.progress-big-card .date-badge {
+  position: absolute;
+  top: -15px;
+  left: 20px;
+  background: #00cfff;
+  color: #000;
+  padding: 0.4rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  box-shadow: 0 0 15px #00cfff;
+}
+
+/* Title */
+.progress-big-card h2 {
+  font-size: 1.8rem;
+  margin: 1.5rem 0 1rem;
+  text-shadow: 0 0 15px #00f7ff;
+}
+
+/* Summary */
+.progress-big-card p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+/* Appreciation word */
+.progress-big-card .appreciation {
+  margin-top: 1rem;
+  text-align: right;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #00f7ff;
+  text-shadow: 0 0 10px #00f7ff;
+}
+
+
+/* Single Card */
+.progress-big-card {
+  position: relative;
+  background: rgba(0,0,0,0.7);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+  overflow: hidden;
+}
+
+/* Date badge (top small) */
+.progress-big-card .date-badge {
+  position: absolute;
+  top: -15px;
+  left: 20px;
+  background: #00cfff;
+  color: #000;
+  padding: 0.4rem 1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  box-shadow: 0 0 15px #00cfff;
+}
+
+/* Title */
+.progress-big-card h2 {
+  font-size: 2rem;
+  margin: 1.5rem 0 1rem;
+  text-shadow: 0 0 25px #00f7ff;
+}
+
+/* Summary */
+.progress-big-card p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* Animation */
+@keyframes fadeInCard {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Progress Quotes under summary */
+.progress-big-card .progress-quote {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  font-style: italic;
+  font-family: "Caveat", cursive;
+  color: #ffd700;
+  text-align: center;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+}
+
+/* Completed badge (top center) */
+.progress-big-card .completed-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, gold, orange);
+  color: #000;
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  font-weight: bold;
+  box-shadow: 0 0 25px gold;
+  text-shadow: 0 0 8px #fff;
+}
+
+/* BACK BUTTON */
+.explore-content .back-btn {
+  margin-top: 2rem;
+  background: #fff;
+  color: #000;
+  font-weight: bold;
+  padding: 0.8rem 2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.8s;
+}
+.explore-content .back-btn:hover {
+  background: #00cfff;
+  color: #fff;
+  box-shadow: 0 0 50px #00cfff;
+}
+

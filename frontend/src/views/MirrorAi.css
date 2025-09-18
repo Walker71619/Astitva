@@ -1,0 +1,250 @@
+.mirror-page {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  color: #fff;
+  font-family: "Cinzel Decorative", serif;
+  position: relative;
+}
+
+/* Magical floating particles */
+.mirror-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), transparent 60%),
+              radial-gradient(circle at 70% 70%, rgba(173, 132, 255,0.2), transparent 70%);
+  animation: shimmer 8s infinite alternate;
+}
+@keyframes shimmer {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.mirror-container {
+  flex: 2;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.mirror-image {
+  height: 100%;
+  width: auto;
+  z-index: 1;
+  cursor: pointer;
+  filter: drop-shadow(0 0 25px #a86cff);
+  transition: transform 0.6s ease, filter 0.6s ease;
+}
+.mirror-image:hover {
+  transform: scale(1.05) rotate(-1deg);
+  filter: drop-shadow(0 0 40px #ff9dff);
+}
+
+/* Mirror Form */
+.mirror-form {
+  position: absolute;
+  bottom: 20%;
+  width: 45%;
+  padding: 20px;
+  z-index: 2;
+  text-align: center;
+  color: #f8eaff;
+  background: rgba(40, 0, 60, 0.3);
+  border: 2px solid rgba(255, 200, 255, 0.4);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  text-shadow: 0 0 10px #fff, 0 0 20px #d08cff;
+  animation: pulseGlow 3s infinite;
+}
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 15px #b95cff; }
+  50% { box-shadow: 0 0 35px #ffbdfd; }
+  100% { box-shadow: 0 0 15px #b95cff; }
+}
+
+.mirror-form input,
+.mirror-form textarea {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  font-family: inherit;
+}
+.mirror-form input::placeholder,
+.mirror-form textarea::placeholder {
+  color: #f0dfff;
+}
+
+.mirror-form button {
+  background: linear-gradient(90deg, #7a00ff, #e03cff);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: 0.3s;
+}
+.mirror-form button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 20px #ff9dff, 0 0 40px #d06cff;
+}
+
+/* Mirror awakening animation */
+.mirror-form {
+  animation: mirrorAwaken 1s ease forwards;
+  transform-origin: center;
+}
+
+@keyframes mirrorAwaken {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(20px);
+    filter: blur(8px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-5px);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Extra shimmering aura while active */
+.mirror-form::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 20px;
+  background: radial-gradient(circle, rgba(255,200,255,0.4) 0%, transparent 70%);
+  opacity: 0.7;
+  animation: shimmerAura 4s infinite alternate;
+  z-index: -1;
+}
+
+@keyframes shimmerAura {
+  0% { opacity: 0.4; transform: scale(0.95); }
+  100% { opacity: 0.8; transform: scale(1.05); }
+}
+
+
+/* Astral Prophecy */
+.floating-reflection {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at top, #2a003a, #000);
+  padding: 25px 35px;
+  border-radius: 24px;
+  text-align: center;
+  color: #ffeaff;
+  box-shadow: 0 0 40px #e69fff, 0 0 80px #9b59ff;
+  animation: floatUp 0.8s ease, glowPulse 4s infinite;
+  cursor: pointer;
+  max-width: 500px;
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 40px #d08cff, 0 0 80px #9b59ff; }
+  50% { box-shadow: 0 0 60px #ffbdfd, 0 0 100px #ff66d4; }
+}
+@keyframes floatUp {
+  from { transform: translate(-50%, -40%) scale(0.8); opacity: 0; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+/* Memory Orbs */
+/* Memory Crystals */
+.memory-orb {
+  background: linear-gradient(135deg, rgba(120,0,180,0.7), rgba(40,0,60,0.9));
+  border: 2px solid rgba(200,150,255,0.6);
+  padding: 14px 18px;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  list-style: none;
+  text-align: left;
+  font-family: "Cinzel", serif;
+  color: #f7eaff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(200,150,255,0.4), inset 0 0 12px rgba(150,0,200,0.4);
+  animation: floatCrystal 6s ease-in-out infinite;
+}
+
+/* gentle floating like crystals levitating */
+@keyframes floatCrystal {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(1deg); }
+}
+
+/* shimmering rune streak */
+.memory-orb::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent 0%, rgba(255,255,255,0.2) 10%, transparent 20%);
+  animation: spinRunes 8s linear infinite;
+  pointer-events: none;
+}
+@keyframes spinRunes {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+/* === Fireflies === */
+.fireflies {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1; /* behind mirror and form */
+}
+
+.firefly {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #fff8b0 30%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: floaty linear infinite, flicker ease-in-out infinite;
+}
+
+@keyframes floaty {
+  0% {
+    transform: translateY(100vh) scale(0.6);
+    opacity: 0;
+  }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% {
+    transform: translateY(-20vh) translateX(40px) scale(1.1);
+    opacity: 0;
+  }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; filter: drop-shadow(0 0 6px #ffe066); }
+}
