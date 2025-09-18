@@ -34,7 +34,7 @@ const MirrorAI = () => {
   // Call backend AI
   const getAIReflection = async (userMemory) => {
     try {
-      const response = await fetch("https://YOUR_RENDER_BACKEND_URL/api/chatbot", {
+      const response = await fetch("https://astitva-backend.onrender.com/api/chatbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -164,3 +164,4 @@ const MirrorAI = () => {
 };
 
 export default MirrorAI;
+
