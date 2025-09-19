@@ -18,8 +18,8 @@
 .blueprint-title {
   font-size: 3.8rem;
   font-weight: bold;
-  color: #fff;
-  text-shadow: 0 0 20px #ffe066, 0 0 40px #ffeb99;
+  color: #031a20;
+  text-shadow: 0 0 20px #1b18a7, 0 0 40px #ffeb99;
   margin-bottom: 50px;
   letter-spacing: 2px;
   text-align: center;
@@ -27,11 +27,11 @@
 
 .blueprint-cards-vertical {
   position: absolute;
-  top: 50%;             
-  right: 2%;                
+  top: 46%;             
+  right: 7%;                
   display: flex;
   flex-direction: column;  
-  gap: 30px;           
+  gap: 10px;           
   transform: translateY(-50%); 
   z-index: 10;              
 }
@@ -41,8 +41,8 @@
 /* ===== Individual Card ===== */
 .memory-card {
   position: relative;
-  width: 280px;    
-  height: 400px;    
+  width: 480px;    
+  height: 300px;    
   border-radius: 22px;
   background: rgba(0, 0, 0, 0.55);
   overflow: hidden;
