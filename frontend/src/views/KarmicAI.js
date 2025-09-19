@@ -1,31 +1,50 @@
 import React, { useState, useEffect } from "react";
-import { ref, onValue } from "firebase/database";
-import { database } from "../firebase";
+import { doc, onSnapshot } from "firebase/firestore";
+import { firestore, auth } from "../firebase";
 
 const KarmicAI = ({ userId }) => {
   const [publicProfile, setPublicProfile] = useState(null);
-  const [privateProfile, setPrivateProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!userId) return;
+    // If no UID provided, fallback to currently logged-in user
+    const uid = userId || (auth.currentUser && auth.currentUser.uid);
+    if (!uid) {
+      console.warn("No UID available for fetching public profile");
+      setLoading(false);
+      return;
+    }
 
-    const publicRef = ref(database, `users/${userId}/publicProfile`);
-    const privateRef = ref(database, `users/${userId}/privateProfile`);
+    const userDocRef = doc(firestore, "users", uid);
 
-    // Fetch public profile
-    onValue(publicRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setPublicProfile(snapshot.val());
+    // Real-time listener for public profile
+    const unsubscribe = onSnapshot(
+      userDocRef,
+      (docSnap) => {
+        setLoading(false);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          console.log("Firestore doc data:", data); // debug
+          if (data.public) {
+            setPublicProfile(data.public);
+          } else {
+            setPublicProfile(null);
+          }
+        } else {
+          console.log("No document found for UID:", uid);
+          setPublicProfile(null);
+        }
+      },
+      (error) => {
+        setLoading(false);
+        console.error("Error fetching public profile:", error);
       }
-    });
+    );
 
-    // Fetch private profile
-    onValue(privateRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setPrivateProfile(snapshot.val());
-      }
-    });
-  }, [userId]); // only depends on userId
+    return () => unsubscribe();
+  }, [userId]);
+
+  if (loading) return <p>Loading public profile...</p>;
 
   return (
     <div className="karmic-ai">
@@ -36,27 +55,13 @@ const KarmicAI = ({ userId }) => {
         <h3>Public Reflections</h3>
         {publicProfile ? (
           <>
-            <p><strong>Fears:</strong> {publicProfile.fears}</p>
-            <p><strong>Goals:</strong> {publicProfile.goals}</p>
-            <p><strong>Thoughts:</strong> {publicProfile.thoughts}</p>
-            <p><strong>Issues:</strong> {publicProfile.issues}</p>
+            <p><strong>Fears:</strong> {publicProfile.fears || "—"}</p>
+            <p><strong>Goals:</strong> {publicProfile.goals || "—"}</p>
+            <p><strong>Thoughts:</strong> {publicProfile.thoughts || "—"}</p>
+            <p><strong>Issues:</strong> {publicProfile.issues || "—"}</p>
           </>
         ) : (
           <p>No public data yet.</p>
-        )}
-      </div>
-
-      {/* Private Data */}
-      <div className="ai-section private">
-        <h3>Private Memories</h3>
-        {privateProfile ? (
-          <>
-            <p><strong>Emotions:</strong> {privateProfile.emotions}</p>
-            <p><strong>Memories:</strong> {privateProfile.memories}</p>
-            <p><strong>Reflections:</strong> {privateProfile.reflections}</p>
-          </>
-        ) : (
-          <p>No private data yet.</p>
         )}
       </div>
     </div>
