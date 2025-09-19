@@ -23,7 +23,7 @@ const branchPositions = {
     { x: 450, y: 70 }, { x: 550, y: 90 }, { x: 250, y: 80 },
   ],
   achievement: [
-    { x: 300, y: 350 }, { x: 240, y: 70 },
+    { x: 370, y: 340 }, { x: 240, y: 70 },
   ],
 };
 
@@ -106,7 +106,7 @@ const LivingTree = () => {
             style={{
               position: "absolute",
               left: pos.x,
-              top: pos.y, // static top; will animate inside motion.img below
+              top: pos.y,
               rotate: 0,
               zIndex: 2 + i,
             }}
@@ -135,27 +135,49 @@ const LivingTree = () => {
                 className={cls}
                 style={{ width: size, height: size }}
               />
-            </div>
 
-            <img
-              src={pawIcon}
-              alt="paw"
-              onClick={() => handlePawClick(mem)}
-              style={{
-                position: "absolute",
-                width: 25,
-                height: 25,
-                cursor: "pointer",
-                pointerEvents: "auto",
-                ...(mem.type === "achievement"
-                  ? { bottom: 350, left: 280 }
-                  : { top: 0, right: 0 }),
-              }}
-            />
+              {/* Paw for leaf & flower only */}
+              {mem.type !== "achievement" && (
+                <img
+                  src={pawIcon}
+                  alt="paw"
+                  onClick={() => handlePawClick(mem)}
+                  style={{
+                    position: "absolute",
+                    width: 25,
+                    height: 25,
+                    cursor: "pointer",
+                    bottom: -10,
+                    right: -10,
+                  }}
+                />
+              )}
+            </div>
           </motion.div>
         );
       })}
 
+      {/* Separate paw for achievement (lantern) */}
+      {memories
+        .filter(mem => mem.type === "achievement")
+        .map((mem, i) => (
+          <img
+            key={`paw-${mem.id}`}
+            src={pawIcon}
+            alt="paw"
+            onClick={() => handlePawClick(mem)}
+            style={{
+              position: "absolute",
+              width: 30,
+              height: 30,
+              cursor: "pointer",
+              left: 680 + i * 100, 
+              top: 550,   
+            }}
+          />
+        ))}
+
+      {/* Popup */}
       {popup && popupData && (
         <div className="memory-popup">
           <div
@@ -165,10 +187,10 @@ const LivingTree = () => {
                 : popupData.type === "happy"
                   ? "popup-flower"
                   : "popup-leaf"
-              }`}
+            }`}
           >
-            <h2>{popupData.title}</h2>
-            <p>{popupData.description}</p>
+            <h2>{popupData.title || popupData.type.toUpperCase()}</h2>
+            <p>{popupData.text || popupData.description || "No details"}</p>
             <button onClick={() => setPopup(null)}>Close</button>
           </div>
         </div>

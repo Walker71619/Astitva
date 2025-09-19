@@ -14,6 +14,7 @@ html, body {
   text-align: center;
   font-family: "Poppins", sans-serif;
   position: relative;
+  margin-top: 30px;
   overflow-x: hidden;
   perspective: 1200px;
 }

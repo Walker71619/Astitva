@@ -3,11 +3,11 @@
   min-height: 100vh;
   color: white;
   text-align: center;
-  padding: 40px;
+  padding: 10%;
   overflow: hidden;
   position: relative;
   font-family: "Poppins", sans-serif;
-  background: #1a0f2e; /* subtle dark pastel background */
+  background: #1a0f2e; 
 }
 
 /* Page Title */

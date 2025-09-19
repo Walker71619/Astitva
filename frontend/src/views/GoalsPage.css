@@ -23,7 +23,7 @@ body{
 /* ---------- page wrapper ---------- */
 .goals-page{
   min-height:100vh;
-  padding:28px;
+  padding:10%;
   text-align:center;
   background-size:cover;
   background-position:center;

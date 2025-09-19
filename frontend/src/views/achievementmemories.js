@@ -1,79 +1,112 @@
-// AchievementMemories.js
 import React, { useState, useEffect } from "react";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 import "./achievementmemories.css";
 import AchievementBg from "../images/achievementbg.jpg";
-
-// 🔹 Firestore imports
-import { collection, addDoc, onSnapshot } from "firebase/firestore";
-import { database } from "../firebase"; // ✅ use database instead of db
+import { collection, addDoc, onSnapshot, query, where } from "firebase/firestore";
+import { database, auth } from "../firebase"; 
 
 function AchievementMemories() {
   const [memories, setMemories] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [input, setInput] = useState("");
+  const [user, setUser] = useState(null);
 
-  // 🔹 Load achievements from Firestore
+  // 🔹 Track logged-in user
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(database, "achievementMemories"), (snapshot) => {
-      setMemories(snapshot.docs.map((doc) => doc.data().text));
-    });
-
+    const unsubscribe = auth.onAuthStateChanged(u => setUser(u));
     return () => unsubscribe();
   }, []);
 
-  // 🔹 Add new achievement to Firestore
+  // 🔹 Load achievements for current user
+  useEffect(() => {
+    if (!user) return;
+
+    const q = query(
+      collection(database, "achievementMemories"),
+      where("uid", "==", user.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, snapshot => {
+      const loadedMemories = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setMemories(loadedMemories);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  // 🔹 Add new achievement
   const addMemory = async () => {
-    if (input.trim() === "") return;
-    await addDoc(collection(database, "achievementMemories"), { text: input.trim() });
+    if (!input.trim() || !user) return;
+
+    await addDoc(collection(database, "achievementMemories"), {
+      uid: user.uid,
+      text: input.trim(),
+      createdAt: new Date(),
+    });
+
     setInput("");
     setShowForm(false);
   };
 
   return (
-    <div
-      className="achievement-page"
-      style={{
-        backgroundImage: `url(${AchievementBg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <h1 className="achievement-title">Achievements</h1>
+    <>
+      {/* Navbar */}
+      <Navbar />
 
-      {/* Button to open form */}
-      <button className="open-form-btn" onClick={() => setShowForm(true)}>
-        + Add Achievement
-      </button>
+      {/* Main Achievement Page */}
+      <div
+        className="achievement-page"
+        style={{
+          backgroundImage: `url(${AchievementBg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <h1 className="achievement-title">Achievements</h1>
 
-      {/* Achievement Form Modal */}
-      {showForm && (
-        <div className="modal-overlay" onClick={() => setShowForm(false)}>
-          <div
-            className="modal-form achievement-form"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2>Celebrate Your Achievement</h2>
-            <textarea
-              placeholder="Today I achieved..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            />
-            <button className="add-btn" onClick={addMemory}>
-              Add Achievement
-            </button>
+        {/* Button to open form */}
+        <button className="open-form-btn" onClick={() => setShowForm(true)}>
+          + Add Achievement
+        </button>
+
+        {/* Achievement Form Modal */}
+        {showForm && (
+          <div className="modal-overlay" onClick={() => setShowForm(false)}>
+            <div
+              className="modal-form achievement-form"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2>Celebrate Your Achievement</h2>
+              <textarea
+                placeholder="Today I achieved..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+              />
+              <button className="add-btn" onClick={addMemory}>
+                Add Achievement
+              </button>
+            </div>
           </div>
+        )}
+
+        {/* Floating Memory Cards */}
+        <div className="memory-container">
+          {memories.map((mem) => (
+            <div key={mem.id} className="floating-card achievement-card">
+              <p>{mem.text}</p>
+            </div>
+          ))}
+          {memories.length === 0 && <p className="no-memories">No achievements yet...</p>}
         </div>
-      )}
-
-      {/* Floating Cards */}
-      <div className="memory-container">
-        {memories.map((mem, i) => (
-          <div key={i} className="floating-card achievement-card">
-            <p>{mem}</p>
-          </div>
-        ))}
       </div>
-    </div>
+
+      {/* Footer */}
+      <Footer />
+    </>
   );
 }
 

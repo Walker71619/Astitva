@@ -2,9 +2,14 @@ import React, { useState, useEffect } from "react";
 import "./MirrorAi.css";
 import Mirror from "../images/Mirror2.png";
 import Bg2 from "../images/Castle2.jpeg";
-import { database } from "../firebase"; // Firestore instance
+
+import { database } from "../firebase";
 import { collection, addDoc, onSnapshot, query, orderBy } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+
+// Import Navbar and Footer
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 
 const MirrorAI = () => {
   const [eventName, setEventName] = useState("");
@@ -141,81 +146,85 @@ const MirrorAI = () => {
   };
 
   return (
-    <div className="mirror-page" style={{ backgroundImage: `url(${Bg2})` }}>
-      {/* Fireflies */}
-      <div className="fireflies">
-        {Array.from({ length: 25 }).map((_, i) => (
-          <div
-            key={i}
-            className="firefly"
-            style={{
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 12}s`,
-              animationDuration: `${10 + Math.random() * 15}s`,
-            }}
-          ></div>
-        ))}
-      </div>
+    <>
+      <Navbar /> 
+      <div className="mirror-page" style={{ backgroundImage: `url(${Bg2})` }}>
+        {/* Fireflies */}
+        <div className="fireflies">
+          {Array.from({ length: 25 }).map((_, i) => (
+            <div
+              key={i}
+              className="firefly"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 12}s`,
+                animationDuration: `${10 + Math.random() * 15}s`,
+              }}
+            ></div>
+          ))}
+        </div>
 
-      {/* Enchanted Mirror */}
-      <div className="mirror-container">
-        <img
-          src={Mirror}
-          alt="Enchanted Mirror"
-          className="mirror-image"
-          onClick={() => setExpanded(!expanded)}
-        />
+        {/* Enchanted Mirror */}
+        <div className="mirror-container">
+          <img
+            src={Mirror}
+            alt="Enchanted Mirror"
+            className="mirror-image"
+            onClick={() => setExpanded(!expanded)}
+          />
 
-        {expanded && (
-          <div className="mirror-form">
-            <h2 className="title-glow">✨ Enchanted Mirror of Memories ✨</h2>
-            <input
-              type="text"
-              placeholder="Name your quest..."
-              value={eventName}
-              onChange={(e) => setEventName(e.target.value)}
-            />
-            <label>Energy: {emotion}⚡</label>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={emotion}
-              onChange={(e) => setEmotion(e.target.value)}
-            />
-            <textarea
-              placeholder="Whisper your thoughts into the mirror..."
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
-            <button onClick={handleReflect} disabled={loading}>
-              {loading ? "Summoning… 🌙" : "Summon Reflection 🌙"}
-            </button>
+          {expanded && (
+            <div className="mirror-form">
+              <h2 className="title-glow">✨ Enchanted Mirror of Memories ✨</h2>
+              <input
+                type="text"
+                placeholder="Name your quest..."
+                value={eventName}
+                onChange={(e) => setEventName(e.target.value)}
+              />
+              <label>Energy: {emotion}⚡</label>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={emotion}
+                onChange={(e) => setEmotion(e.target.value)}
+              />
+              <textarea
+                placeholder="Whisper your thoughts into the mirror..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+              />
+              <button onClick={handleReflect} disabled={loading}>
+                {loading ? "Summoning… 🌙" : "Summon Reflection 🌙"}
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Floating Reflection */}
+        {expanded && (loading || aiReflection) && (
+          <div className="floating-reflection" onClick={() => setAiReflection("")}>
+            <h3>🌌 Astral Prophecy</h3>
+            <p>{loading ? "✨ Summoning your reflection… ✨" : aiReflection}</p>
           </div>
         )}
-      </div>
 
-      {/* Floating Reflection */}
-      {expanded && (loading || aiReflection) && (
-        <div className="floating-reflection" onClick={() => setAiReflection("")}>
-          <h3>🌌 Astral Prophecy</h3>
-          <p>{loading ? "✨ Summoning your reflection… ✨" : aiReflection}</p>
+        {/* Memory Orbs */}
+        <div className="memories-section">
+          <h2>🪄 Archived Orbs of Memory</h2>
+          <ul>
+            {memories.map((m) => (
+              <li key={m.id} className="memory-orb">
+                <strong>{m.event}</strong> {m.emotion}
+                <p>{m.notes}</p>
+              </li>
+            ))}
+          </ul>
         </div>
-      )}
-
-      {/* Memory Orbs */}
-      <div className="memories-section">
-        <h2>🪄 Archived Orbs of Memory</h2>
-        <ul>
-          {memories.map((m) => (
-            <li key={m.id} className="memory-orb">
-              <strong>{m.event}</strong> {m.emotion}
-              <p>{m.notes}</p>
-            </li>
-          ))}
-        </ul>
       </div>
-    </div>
+      <Footer /> {/* Footer at the bottom */}
+    </>
   );
 };
 
