@@ -482,24 +482,24 @@ FORM */
 /* Title */
 .progress-big-card h2 {
   font-size: 1.8rem;
-  margin: 1.5rem 0 1rem;
+  margin: 1.2rem 0 2rem;
   text-shadow: 0 0 15px #00f7ff;
 }
 
 /* Summary */
 .progress-big-card p {
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 1.4rem;
+  line-height: 0.6;
   opacity: 0.9;
   margin-bottom: 1rem;
 }
 
 /* Appreciation word */
 .progress-big-card .appreciation {
-  margin-top: 1rem;
+  margin-top: 2rem;
   text-align: right;
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #00f7ff;
   text-shadow: 0 0 10px #00f7ff;
 }
@@ -509,8 +509,8 @@ FORM */
 .progress-big-card {
   position: relative;
   background: rgba(0,0,0,0.7);
-  border-radius: 16px;
-  padding: 2rem;
+  border-radius: 12px;
+  padding: 1rem;
   box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
   overflow: hidden;
 }
@@ -518,7 +518,7 @@ FORM */
 /* Date badge (top small) */
 .progress-big-card .date-badge {
   position: absolute;
-  top: -15px;
+  top: 12px;
   left: 20px;
   background: #00cfff;
   color: #000;
@@ -532,14 +532,14 @@ FORM */
 /* Title */
 .progress-big-card h2 {
   font-size: 2rem;
-  margin: 1.5rem 0 1rem;
+  margin: 1.8rem 0 2rem;
   text-shadow: 0 0 25px #00f7ff;
 }
 
 /* Summary */
 .progress-big-card p {
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 1.2rem;
+  line-height: 0.9;
   opacity: 0.9;
 }
 
@@ -551,7 +551,7 @@ FORM */
 /* Progress Quotes under summary */
 .progress-big-card .progress-quote {
   margin-top: 1rem;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-style: italic;
   font-family: "Caveat", cursive;
   color: #ffd700;
@@ -562,13 +562,13 @@ FORM */
 /* Completed badge (top center) */
 .progress-big-card .completed-badge {
   position: absolute;
-  top: -12px;
+  top: 5px;
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(90deg, gold, orange);
   color: #000;
   padding: 0.5rem 1.5rem;
-  border-radius: 20px;
+  border-radius: 50px;
   font-weight: bold;
   box-shadow: 0 0 25px gold;
   text-shadow: 0 0 8px #fff;
@@ -576,8 +576,8 @@ FORM */
 
 /* BACK BUTTON */
 .explore-content .back-btn {
-  margin-top: 2rem;
-  background: #fff;
+  margin-top: 3rem;
+  background: #357bc7;
   color: #000;
   font-weight: bold;
   padding: 0.8rem 2rem;
