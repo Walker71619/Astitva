@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./MirrorAi.css";
 import Mirror from "../images/Mirror2.png";
 import Bg2 from "../images/Castle2.jpeg";
-import { database } from "../firebase";
-import { ref, push, onValue } from "firebase/database";
+import { database } from "../firebase"; // Firestore instance
+import { collection, addDoc, onSnapshot, query, orderBy } from "firebase/firestore";
 
 const MirrorAI = () => {
   const [eventName, setEventName] = useState("");
@@ -14,44 +14,87 @@ const MirrorAI = () => {
   const [expanded, setExpanded] = useState(false);
   const [memories, setMemories] = useState([]);
 
-  // Fetch memories from Firebase
-  useEffect(() => {
-    const memoriesRef = ref(database, "memories");
-    onValue(memoriesRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const formatted = Object.keys(data).map((key) => ({
-          id: key,
-          ...data[key],
-        }));
-        setMemories(formatted);
-      } else {
-        setMemories([]);
-      }
-    });
-  }, []);
-
-  // Call backend AI
-  const getAIReflection = async (userMemory) => {
-    try {
-      const response = await fetch("https://astitva-backend.onrender.com/api/chatbot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: `Here is the user's memory: ${JSON.stringify(
-            userMemory
-          )}. Give a motivational, reflective response.`,
-        }),
-      });
-      const data = await response.json();
-      return data.reply;
-    } catch (err) {
-      console.error(err);
-      return "The mirror is silent… try again later.";
-    }
+  // 🔹 Emotion-based reflections mapping (more personal, longer)
+  const emotionReflections = {
+    happy: [
+      "🌟 Your happiness is contagious; the joy you radiate brightens everyone’s day around you. Keep shining! 🌟",
+      "🌈 Cherish this moment of happiness—it is a reflection of all your effort and love for life. 🌈",
+      "💫 Smiles like yours are rare and powerful. Let it guide you to even greater joy. 💫"
+    ],
+    sad: [
+      "🌧️ It’s okay to feel sadness; each tear waters the seeds of your future growth. 🌧️",
+      "🕊️ Let your heart feel what it needs, for embracing sadness leads to deeper strength. 🕊️",
+      "🌱 Even in sorrow, you are learning and evolving. Every storm clears the path ahead. 🌱"
+    ],
+    angry: [
+      "🔥 Channel your anger into something creative—it can become your fuel, not your cage. 🔥",
+      "⚡ Pause, breathe, and release what you cannot change. Anger need not control you. ⚡",
+      "🛤️ Your clarity is stronger than your frustration. Let calm guide your next step. 🛤️"
+    ],
+    jealous: [
+      "🌿 Comparison steals joy. Focus on your growth; your journey is uniquely yours. 🌿",
+      "💎 Admire, don’t envy. The world’s beauty doesn’t diminish your own. 💎",
+      "🌌 Celebrate others’ achievements—they can inspire rather than overshadow you. 🌌"
+    ],
+    possessive: [
+      "⚓ Trust deepens bonds. Let go of control and allow love to flow naturally. ⚓",
+      "🌊 Possessiveness blocks connection. Freedom strengthens both hearts. 🌊",
+      "🕊️ Release fear of losing and embrace the present moment with love. 🕊️"
+    ],
+    fearful: [
+      "🌞 Courage grows when you face fear, even in small steps. 🌞",
+      "🛤️ Each brave act, however small, diminishes fear and builds strength. 🛤️",
+      "💫 You are stronger than your fears. Trust yourself to navigate the unknown. 💫"
+    ],
+    anxious: [
+      "🌿 Breathe deeply; clarity comes when the mind is calm. 🌿",
+      "🕊️ Focus on what you can control; let the rest flow naturally. 🕊️",
+      "🌈 Patience and presence turn anxiety into wisdom. 🌈"
+    ],
+    neutral: [
+      "✨ Observe your surroundings and yourself—reflection reveals your next step. ✨",
+      "💫 Even in calm moments, growth is quietly happening. 💫",
+      "🌌 Balance is a journey, not a destination. Take your time to feel it. 🌌"
+    ]
   };
 
-  // Handle reflection + save
+  // 🔹 Detect emotion from event title
+  const detectEmotion = (title) => {
+    const t = title.toLowerCase();
+    if (t.includes("happy") || t.includes("joy") || t.includes("excited")) return "happy";
+    if (t.includes("sad") || t.includes("lonely") || t.includes("down")) return "sad";
+    if (t.includes("angry") || t.includes("frustrated") || t.includes("mad")) return "angry";
+    if (t.includes("jealous") || t.includes("envy") || t.includes("envious")) return "jealous";
+    if (t.includes("possessive") || t.includes("control") || t.includes("clingy")) return "possessive";
+    if (t.includes("fear") || t.includes("scared") || t.includes("afraid")) return "fearful";
+    if (t.includes("anxious") || t.includes("worried") || t.includes("nervous")) return "anxious";
+    return "neutral";
+  };
+
+  // 🔹 Get context-aware reflection
+  const getEmotionReflection = (title) => {
+    const emotionCategory = detectEmotion(title);
+    const reflections = emotionReflections[emotionCategory];
+    const index = Math.floor(Math.random() * reflections.length);
+    return reflections[index];
+  };
+
+  // Fetch memories from Firestore in real-time
+  useEffect(() => {
+    const memoriesCollection = collection(database, "memories");
+    const q = query(memoriesCollection, orderBy("timestamp", "asc"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const formatted = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setMemories(formatted);
+    });
+
+    return () => unsubscribe(); // cleanup listener
+  }, []);
+
+  // Handle reflection + save to Firestore
   const handleReflect = async () => {
     if (!eventName || !notes) {
       alert("Please fill all fields!");
@@ -61,22 +104,29 @@ const MirrorAI = () => {
     const newMemory = {
       event: eventName,
       emotion: `⚡ ${emotion}`,
-      notes: notes,
+      notes,
+      timestamp: Date.now(),
     };
 
     // Optimistic update
     setMemories((prev) => [...prev, { ...newMemory, id: Date.now() }]);
-    const memoriesRef = ref(database, "memories");
-    push(memoriesRef, newMemory);
 
-    // Show loading while AI responds
+    try {
+      await addDoc(collection(database, "memories"), newMemory);
+    } catch (err) {
+      console.error("Error adding memory:", err);
+    }
+
+    // Show loading while reflection "summons"
     setExpanded(true);
     setLoading(true);
     setAiReflection("");
 
-    const reflection = await getAIReflection(newMemory);
-    setAiReflection(reflection);
-    setLoading(false);
+    setTimeout(() => {
+      const reflection = getEmotionReflection(eventName);
+      setAiReflection(reflection);
+      setLoading(false);
+    }, 1000); // slightly longer delay for realism
 
     // Reset form
     setEventName("");
@@ -164,4 +214,3 @@ const MirrorAI = () => {
 };
 
 export default MirrorAI;
-

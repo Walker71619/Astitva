@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./sadmemories.css";
 import SadBg from "../images/sadbg.jpg";
 import { collection, addDoc, onSnapshot } from "firebase/firestore";
-import { database } from "../firebase"; // ✅ use database only
+import { database } from "../firebase"; 
 
 function SadMemories() {
   const [memories, setMemories] = useState([]);
