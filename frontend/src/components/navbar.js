@@ -43,25 +43,25 @@ export default function Navbar() {
       </div>
 
       <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
-  <li><Link to="/dharma-scheduler">DS</Link></li>
-  <li><Link to="/karmic-ai">Karmic</Link></li>
-  <li><Link to="/life-blueprint">Blueprint</Link></li>
-  <li><Link to="/life-mode">Life Mode</Link></li>
-  <li><Link to="/mirror-ai">Mirror AI</Link></li>
+        <li><Link to="/dharma-scheduler">DS</Link></li>
+        <li><Link to="/karmic-ai">Karmic</Link></li>
+        <li><Link to="/life-blueprint">Blueprint</Link></li>
+        <li><Link to="/life-mode">Life Mode</Link></li>
+        <li><Link to="/mirror-ai">Mirror AI</Link></li>
 
-  {user ? (
-    <>
-      <li><Link to="/dashboard">Dashboard</Link></li>
-      <li>
-        <button className="logout-btn" onClick={handleLogout}>
-          Logout
-        </button>
-      </li>
-    </>
-  ) : (
-    <li><Link to="/auth">Sign In / Sign Up</Link></li>
-  )}
-</ul>
+        {user ? (
+          <>
+            <li><Link to="/dashboard">Dashboard</Link></li>
+            <li>
+              <button className="logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </li>
+          </>
+        ) : (
+          <li><Link to="/auth">Sign In / Sign Up</Link></li>
+        )}
+      </ul>
 
 
       {/* Hamburger */}

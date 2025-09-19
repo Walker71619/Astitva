@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 import "./lifeblueprint.css";
 
 import Sad from "../images/sad.jpg";
@@ -19,39 +21,46 @@ function LifeBlueprint() {
     { id: "achievement", title: "ACHIEVEMENT MEMORY", img: Achievement, path: "/achievement-memories" },
   ];
 
-
   const memories = [
     { type: "achievement", id: "f2BYbdkb7BUua6kilZvK" },
     { type: "happy", id: "iXfZuf9UVneMUgsTuovw" },
     { type: "sad", id: "XQ0AwFUEbvg6MJp0kxQU" },
   ];
 
-
   return (
-    <div
-      className="blueprint-scene"
-      style={{ backgroundImage: `url(${BgMain})` }}
-    >
-      <h1 className="blueprint-title">LIFE BLUEPRINT</h1>
+    <>
+      {/* Navbar */}
+      <Navbar />
 
-      {/* Right-aligned vertical cards */}
-      <div className="blueprint-cards-vertical">
-        {cards.map((card) => (
-          <div
-            key={card.id}
-            className="memory-card"
-            onClick={() => navigate(card.path)}
-          >
-            <div className="glow-back"></div>
-            <img src={card.img} alt={card.title} />
-            <h2>{card.title}</h2>
-          </div>
-        ))}
+      {/* Main Blueprint Scene */}
+      <div
+        className="blueprint-scene"
+        style={{ backgroundImage: `url(${BgMain})` }}
+      >
+        <h1 className="blueprint-title">LIFE BLUEPRINT</h1>
+
+        {/* Right-aligned vertical cards */}
+        <div className="blueprint-cards-vertical">
+          {cards.map((card) => (
+            <div
+              key={card.id}
+              className="memory-card"
+              onClick={() => navigate(card.path)}
+            >
+              <div className="glow-back"></div>
+              <img src={card.img} alt={card.title} />
+              <h2>{card.title}</h2>
+            </div>
+          ))}
+        </div>
+
+        {/* ✅ Left animated living tree */}
+        <LivingTree memories={memories} />
       </div>
 
-      {/* ✅ Left animated living tree */}
-      <LivingTree memories={memories} />
-    </div>
+      {/* Footer */}
+      <Footer />
+    </>
   );
 }
 

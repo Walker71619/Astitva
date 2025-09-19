@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { collection, doc, onSnapshot, setDoc, getDoc } from "firebase/firestore";
 import { firestore, auth } from "../firebase";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer"; // make sure Footer exists
 import "./KarmicAI.css";
 
 const KarmicAI = () => {
@@ -140,86 +142,90 @@ const KarmicAI = () => {
   if (loading) return <p>Loading profiles...</p>;
 
   return (
-    <div className="karmic-container">
-      <h2>🌌 Karmic AI Insights</h2>
+    <>
+      <Navbar /> {/* Karmic-themed navbar */}
+      <div className="karmic-container">
+        <h2>🌌 Karmic AI Insights</h2>
 
-      <div className={`chat-toggle ${chatOpen ? "open" : ""}`} onClick={() => setChatOpen(!chatOpen)}>
-        {chatOpen ? "⮜" : "⮞"}
-      </div>
-
-      {chatOpen && (
-        <div className="chat-panel">
-          <div className="chat-tabs">
-            <button onClick={() => setChatMode("public")} className={chatMode === "public" ? "active" : ""}>Public</button>
-            <button onClick={() => setChatMode("private")} className={chatMode === "private" ? "active" : ""}>Private</button>
-          </div>
-
-          <div className="chat-messages">
-            {/* Public Chat */}
-            {chatMode === "public" && (
-              <>
-                {publicMessages.map((msg, idx) => (
-                  <p key={idx}><strong>{msg.sender === myUid ? "Me" : getFriendName(msg.sender)}:</strong> {msg.text}</p>
-                ))}
-                <div ref={publicChatEndRef} />
-                <input
-                  placeholder="Type message..."
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && sendPublicMessage()}
-                />
-              </>
-            )}
-
-            {/* Private Chat */}
-            {chatMode === "private" && friends.map(uid => (
-              <div key={uid} className="private-chat-block">
-                <h4>Chat with {getFriendName(uid)}</h4>
-                {(privateMessages[uid] || []).map((msg, idx) => (
-                  <p key={idx}><strong>{msg.sender === myUid ? "Me" : getFriendName(msg.sender)}:</strong> {msg.text}</p>
-                ))}
-                <div ref={el => privateChatEndRefs.current[uid] = el} />
-                <input
-                  placeholder="Type message..."
-                  value={newPrivateMessages[uid] || ""}
-                  onChange={e => setNewPrivateMessages(prev => ({ ...prev, [uid]: e.target.value }))}
-                  onKeyDown={e => e.key === "Enter" && sendPrivateMessage(uid)}
-                />
-              </div>
-            ))}
-          </div>
+        <div className={`chat-toggle ${chatOpen ? "open" : ""}`} onClick={() => setChatOpen(!chatOpen)}>
+          {chatOpen ? "⮜" : "⮞"}
         </div>
-      )}
 
-      {/* My Profile */}
-      {myProfile && (
-        <div className="profile-card highlight">
-          <h3>🌟 My Profile — {myProfile.displayName}</h3>
-          {myProfile.avatar && <img src={myProfile.avatar} alt="Avatar" />}
-          <p><strong>Fears:</strong> {myProfile.fears || "—"}</p>
-          <p><strong>Goals:</strong> {myProfile.goals || "—"}</p>
-          <p><strong>Thoughts:</strong> {myProfile.thoughts || "—"}</p>
-          <p><strong>Issues:</strong> {myProfile.issues || "—"}</p>
-        </div>
-      )}
+        {chatOpen && (
+          <div className="chat-panel">
+            <div className="chat-tabs">
+              <button onClick={() => setChatMode("public")} className={chatMode === "public" ? "active" : ""}>Public</button>
+              <button onClick={() => setChatMode("private")} className={chatMode === "private" ? "active" : ""}>Private</button>
+            </div>
 
-      {/* Other Users */}
-      <div className="carousel">
-        {publicProfiles.map(profile => (
-          <div className="profile-card" key={profile.uid}>
-            <h3>{profile.displayName}</h3>
-            {profile.avatar && <img src={profile.avatar} alt="Avatar" />}
-            <p><strong>Fears:</strong> {profile.fears || "—"}</p>
-            <p><strong>Goals:</strong> {profile.goals || "—"}</p>
-            <p><strong>Thoughts:</strong> {profile.thoughts || "—"}</p>
-            <p><strong>Issues:</strong> {profile.issues || "—"}</p>
-            <button onClick={() => addFriend(profile.uid)}>
-              {friends.includes(profile.uid) ? "Friend ✅" : "Add Friend"}
-            </button>
+            <div className="chat-messages">
+              {/* Public Chat */}
+              {chatMode === "public" && (
+                <>
+                  {publicMessages.map((msg, idx) => (
+                    <p key={idx}><strong>{msg.sender === myUid ? "Me" : getFriendName(msg.sender)}:</strong> {msg.text}</p>
+                  ))}
+                  <div ref={publicChatEndRef} />
+                  <input
+                    placeholder="Type message..."
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    onKeyDown={e => e.key === "Enter" && sendPublicMessage()}
+                  />
+                </>
+              )}
+
+              {/* Private Chat */}
+              {chatMode === "private" && friends.map(uid => (
+                <div key={uid} className="private-chat-block">
+                  <h4>Chat with {getFriendName(uid)}</h4>
+                  {(privateMessages[uid] || []).map((msg, idx) => (
+                    <p key={idx}><strong>{msg.sender === myUid ? "Me" : getFriendName(msg.sender)}:</strong> {msg.text}</p>
+                  ))}
+                  <div ref={el => privateChatEndRefs.current[uid] = el} />
+                  <input
+                    placeholder="Type message..."
+                    value={newPrivateMessages[uid] || ""}
+                    onChange={e => setNewPrivateMessages(prev => ({ ...prev, [uid]: e.target.value }))}
+                    onKeyDown={e => e.key === "Enter" && sendPrivateMessage(uid)}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
+        )}
+
+        {/* My Profile */}
+        {myProfile && (
+          <div className="profile-card highlight">
+            <h3>🌟 My Profile — {myProfile.displayName}</h3>
+            {myProfile.avatar && <img src={myProfile.avatar} alt="Avatar" />}
+            <p><strong>Fears:</strong> {myProfile.fears || "—"}</p>
+            <p><strong>Goals:</strong> {myProfile.goals || "—"}</p>
+            <p><strong>Thoughts:</strong> {myProfile.thoughts || "—"}</p>
+            <p><strong>Issues:</strong> {myProfile.issues || "—"}</p>
+          </div>
+        )}
+
+        {/* Other Users */}
+        <div className="carousel">
+          {publicProfiles.map(profile => (
+            <div className="profile-card" key={profile.uid}>
+              <h3>{profile.displayName}</h3>
+              {profile.avatar && <img src={profile.avatar} alt="Avatar" />}
+              <p><strong>Fears:</strong> {profile.fears || "—"}</p>
+              <p><strong>Goals:</strong> {profile.goals || "—"}</p>
+              <p><strong>Thoughts:</strong> {profile.thoughts || "—"}</p>
+              <p><strong>Issues:</strong> {profile.issues || "—"}</p>
+              <button onClick={() => addFriend(profile.uid)}>
+                {friends.includes(profile.uid) ? "Friend ✅" : "Add Friend"}
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+      <Footer /> {/* Footer component */}
+    </>
   );
 };
 

@@ -29,12 +29,15 @@
   color: #0a2342;
 }
 
-/* 🔥 Karmic AI */
+/* 🔥 Karmic AI Navbar */
 .navbar.navbar-karmic {
-  background: rgba(50, 0, 0, 0.7);
+  background: rgba(25, 0, 25, 0.85); 
   backdrop-filter: blur(14px) saturate(160%);
-  color: #ffdddd;
+  color: #ff79c6;
+  box-shadow: 0 4px 20px rgba(123, 44, 191, 0.5);
+  transition: background 0.3s, color 0.3s;
 }
+
 
 /* 📜 Life Blueprint */
 .navbar.navbar-blueprint {
