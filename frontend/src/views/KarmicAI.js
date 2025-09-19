@@ -13,6 +13,7 @@ const KarmicAI = () => {
   const [privateMessages, setPrivateMessages] = useState({});
   const [publicMessages, setPublicMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [newPrivateMessages, setNewPrivateMessages] = useState({}); // per-friend input
   const myUid = auth.currentUser?.uid;
 
   // Fetch public profiles
@@ -76,24 +77,13 @@ const KarmicAI = () => {
     return () => unsubscribe();
   }, [myUid]);
 
-  // Send message
-  const sendMessage = async (toUid = null) => {
+  // Send public message
+  const sendMessage = async () => {
     if (!newMessage.trim()) return;
-
-    if (chatMode === "public") {
-      await setDoc(
-        doc(firestore, "publicChat", Date.now().toString()),
-        { sender: myUid, text: newMessage, timestamp: Date.now() }
-      );
-    } else if (chatMode === "private" && toUid) {
-      const chatRef = doc(firestore, `privateChats/${myUid}/chats/${toUid}`);
-      const chatSnap = await getDoc(chatRef); // modular SDK
-      const messages = chatSnap.exists() ? chatSnap.data().messages : [];
-      await setDoc(chatRef, {
-        messages: [...messages, { sender: myUid, text: newMessage, timestamp: Date.now() }]
-      });
-    }
-
+    await setDoc(
+      doc(firestore, "publicChat", Date.now().toString()),
+      { sender: myUid, text: newMessage, timestamp: Date.now() }
+    );
     setNewMessage("");
   };
 
@@ -126,12 +116,22 @@ const KarmicAI = () => {
           </div>
 
           <div className="chat-messages">
+            {/* Public Chat */}
             {chatMode === "public" &&
-              publicMessages.map((msg, idx) => (
-                <p key={idx}><strong>{msg.sender === myUid ? "Me" : msg.sender}:</strong> {msg.text}</p>
-              ))
+              <>
+                {publicMessages.map((msg, idx) => (
+                  <p key={idx}><strong>{msg.sender === myUid ? "Me" : msg.sender}:</strong> {msg.text}</p>
+                ))}
+                <input
+                  placeholder="Type message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                />
+              </>
             }
 
+            {/* Private Chat */}
             {chatMode === "private" &&
               friends.map((fUid) => (
                 <div key={fUid} className="private-chat-block">
@@ -141,23 +141,26 @@ const KarmicAI = () => {
                   ))}
                   <input
                     placeholder="Type message..."
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && sendMessage(fUid)}
+                    value={newPrivateMessages[fUid] || ""}
+                    onChange={(e) =>
+                      setNewPrivateMessages(prev => ({ ...prev, [fUid]: e.target.value }))
+                    }
+                    onKeyDown={async (e) => {
+                      if (e.key === "Enter" && newPrivateMessages[fUid]?.trim()) {
+                        const chatRef = doc(firestore, `privateChats/${myUid}/chats/${fUid}`);
+                        const chatSnap = await getDoc(chatRef);
+                        const messages = chatSnap.exists() ? chatSnap.data().messages : [];
+                        await setDoc(chatRef, {
+                          messages: [...messages, { sender: myUid, text: newPrivateMessages[fUid], timestamp: Date.now() }]
+                        });
+                        setNewPrivateMessages(prev => ({ ...prev, [fUid]: "" }));
+                      }
+                    }}
                   />
                 </div>
               ))
             }
           </div>
-
-          {chatMode === "public" && (
-            <input
-              placeholder="Type message..."
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-            />
-          )}
         </div>
       )}
 
