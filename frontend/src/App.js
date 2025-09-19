@@ -14,15 +14,9 @@ import MirrorAi from "./views/MirrorAi";
 import Dashboard from "./components/Dashboard";
 import Auth from "./components/Auth";
 
-// Dragon cursor component
-import DragonCursor from "./components/DragonScroll"; 
-
 function App() {
   return (
     <Router>
-      {/* Dragon cursor is global */}
-      <DragonCursor />
-
       <Routes>
         {/* Home */}
         <Route path="/" element={<Home />} />

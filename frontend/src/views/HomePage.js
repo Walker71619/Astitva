@@ -24,7 +24,7 @@ import fiveIcon from "../images/number-5-svgrepo-com.svg";
 import FantasyCard from "../components/FantasyCard";
 import ExpandingFeatures from "../components/feature";
 import "./HomePage.css";
-import DragonScroll from "../components/DragonScroll";
+
 
 export default function HomePage() {
     const heroRef = useRef(null);
@@ -131,7 +131,6 @@ export default function HomePage() {
             {locked && <div style={{ height: "100vh" }} />}
              <section className="h-screen relative">
         {/* Hero content here */}
-        <DragonScroll />
       </section>
 
             {/* Main Content */}
