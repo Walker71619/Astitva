@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { auth, database } from "../firebase";
+import { auth, firestore } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { ref as dbRef, set } from "firebase/database";
+import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import "./Auth.css";
 
@@ -20,8 +20,8 @@ export default function Auth() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Save default profile in Realtime Database
-      await set(dbRef(database, `users/${user.uid}`), {
+      // Save default profile in Firestore
+      await setDoc(doc(firestore, "users", user.uid), {
         personal: { name, email: user.email, bio: "", avatar: "" },
         public: { displayName: name, bio: "", avatar: "" }
       });

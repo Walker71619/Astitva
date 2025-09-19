@@ -4,11 +4,12 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { getDatabase } from "firebase/database";
+import { getDatabase } from "firebase/database"; // Realtime DB import
 
 const firebaseConfig = {
   apiKey: "AIzaSyCK0OMqe0hcVFLUcNyc-gCp8jYnT6Am2AU",
   authDomain: "astitva-e85ad.firebaseapp.com",
+  databaseURL: "https://astitva-e85ad-default-rtdb.firebaseio.com", 
   projectId: "astitva-e85ad",
   storageBucket: "astitva-e85ad.firebasestorage.app",
   messagingSenderId: "979249435851",
@@ -20,8 +21,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
-const database = getFirestore(app);
+const firestore = getFirestore(app);
 const storage = getStorage(app);
-const realtimeDB = getDatabase(app);
-
-export { app, analytics, auth, database, storage, realtimeDB };
+const database = getDatabase(app); 
+export { app, analytics, auth, firestore, storage, database };
