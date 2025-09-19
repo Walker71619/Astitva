@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import "./sadmemories.css";
 import SadBg from "../images/sadbg.jpg";
-import { getDatabase, ref, push, onValue } from "firebase/database";
+import { collection, addDoc, onSnapshot } from "firebase/firestore";
+import { database } from "../firebase"; // ✅ use database only
 
 function SadMemories() {
   const [memories, setMemories] = useState([]);
@@ -10,30 +11,29 @@ function SadMemories() {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
-  const db = getDatabase();
-
-  // 🔹 Load memories from Firebase
+  // 🔹 Load memories from Firestore
   useEffect(() => {
-    const memoriesRef = ref(db, "sadMemories");
-    onValue(memoriesRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setMemories(Object.values(data));
-      } else {
-        setMemories([]);
-      }
+    const unsubscribe = onSnapshot(collection(database, "sadMemories"), (snapshot) => {
+      const loadedMemories = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setMemories(loadedMemories);
     });
-  }, [db]);
+
+    return () => unsubscribe();
+  }, []);
 
   // 🔹 Save Memory
-  const addMemory = () => {
-    console.log("Save clicked ✅"); // debug
+  const addMemory = async () => {
     if (!title.trim() || !text.trim()) return;
 
-    const memoriesRef = ref(db, "sadMemories");
-    push(memoriesRef, { title: title.trim(), text: text.trim() });
+    await addDoc(collection(database, "sadMemories"), {
+      title: title.trim(),
+      text: text.trim(),
+      createdAt: new Date(),
+    });
 
-    // Reset state
     setTitle("");
     setText("");
     setShowForm(false);
@@ -41,7 +41,6 @@ function SadMemories() {
 
   // 🔹 Cancel Memory
   const cancelMemory = () => {
-    console.log("Cancel clicked ❌"); // debug
     setTitle("");
     setText("");
     setShowForm(false);
@@ -66,50 +65,32 @@ function SadMemories() {
       {/* Healing Style Modal Form */}
       {showForm && (
         <div className="modal-overlay" onClick={cancelMemory}>
-          <div
-            className="modal-form"
-            onClick={(e) => e.stopPropagation()} // Stop overlay click
-          >
-            <div className="form-card">
-              <h2 className="form-header">Healing Journal</h2>
-              <p className="form-subtext">
-                Write down your thoughts and feelings.
-              </p>
+          <div className="modal-form" onClick={(e) => e.stopPropagation()}>
+            <h2>Healing Journal</h2>
+            <p>Write down your thoughts and feelings.</p>
 
-              {/* Title Input */}
-              <input
-                type="text"
-                placeholder="Enter Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="form-input"
-              />
+            <input
+              type="text"
+              placeholder="Enter Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="form-input"
+            />
 
-              {/* Text Area */}
-              <textarea
-                placeholder="Dear Diary, today I felt..."
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                className="form-textarea"
-              />
+            <textarea
+              placeholder="Dear Diary, today I felt..."
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              className="form-textarea"
+            />
 
-              {/* Buttons */}
-              <div className="button-group">
-                <button
-                  type="button"
-                  onClick={addMemory}
-                  className="save-btn"
-                >
-                  Save Memory
-                </button>
-                <button
-                  type="button"
-                  onClick={cancelMemory}
-                  className="cancel-btn"
-                >
-                  Cancel
-                </button>
-              </div>
+            <div className="button-group">
+              <button type="button" onClick={addMemory} className="save">
+                Save Memory
+              </button>
+              <button type="button" onClick={cancelMemory} className="cancel">
+                Cancel
+              </button>
             </div>
           </div>
         </div>
@@ -117,8 +98,8 @@ function SadMemories() {
 
       {/* Floating Memory Cards */}
       <div className="memory-container">
-        {memories.map((mem, i) => (
-          <div key={i} className="floating-card">
+        {memories.map((mem) => (
+          <div key={mem.id} className="floating-card">
             <h3>{mem.title}</h3>
             <p>{mem.text}</p>
           </div>

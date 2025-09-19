@@ -131,6 +131,7 @@ export default function HomePage() {
             {locked && <div style={{ height: "100vh" }} />}
              <section className="h-screen relative">
         {/* Hero content here */}
+
       </section>
 
             {/* Main Content */}

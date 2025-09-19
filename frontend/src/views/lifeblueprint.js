@@ -1,11 +1,14 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";   // 👈 navigate import
+import { useNavigate } from "react-router-dom";
 import "./lifeblueprint.css";
 
 import Sad from "../images/sad.jpg";
 import Happy from "../images/happy.jpg";
 import Achievement from "../images/achievement.jpg";
 import BgMain from "../images/bluebg.jpg";
+
+// ✅ LivingTree import
+import LivingTree from "../components/livingTree";
 
 function LifeBlueprint() {
   const navigate = useNavigate();
@@ -16,6 +19,14 @@ function LifeBlueprint() {
     { id: "achievement", title: "ACHIEVEMENT MEMORY", img: Achievement, path: "/achievement-memories" },
   ];
 
+
+  const memories = [
+    { type: "achievement", id: "f2BYbdkb7BUua6kilZvK" },
+    { type: "happy", id: "iXfZuf9UVneMUgsTuovw" },
+    { type: "sad", id: "XQ0AwFUEbvg6MJp0kxQU" },
+  ];
+
+
   return (
     <div
       className="blueprint-scene"
@@ -23,12 +34,13 @@ function LifeBlueprint() {
     >
       <h1 className="blueprint-title">LIFE BLUEPRINT</h1>
 
-      <div className="blueprint-cards">
+      {/* Right-aligned vertical cards */}
+      <div className="blueprint-cards-vertical">
         {cards.map((card) => (
           <div
             key={card.id}
             className="memory-card"
-            onClick={() => navigate(card.path)}   // 👈 navigate on click
+            onClick={() => navigate(card.path)}
           >
             <div className="glow-back"></div>
             <img src={card.img} alt={card.title} />
@@ -36,6 +48,9 @@ function LifeBlueprint() {
           </div>
         ))}
       </div>
+
+      {/* ✅ Left animated living tree */}
+      <LivingTree memories={memories} />
     </div>
   );
 }

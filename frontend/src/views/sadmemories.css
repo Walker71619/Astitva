@@ -35,25 +35,25 @@
 }
 
 /* ================== Modal Overlay ================== */
+/* ================== Modal Overlay ================== */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(57, 57, 235, 0.5); /* lighter, soft overlay */
+  background: rgba(57, 57, 235, 0.5); 
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  pointer-events: auto; /* ensure overlay allows interaction */
+  z-index: 999; /* Overlay stays behind modal */
 }
 
 /* ================== Diary Form ================== */
 .modal-form {
   position: relative;
-  z-index: 1001;
+  z-index: 1000; /* Form is always above overlay */
   background: linear-gradient(160deg, #2b1a47 0%, #1a0f2e 100%);
   padding: 35px 28px;
   border-radius: 22px;
@@ -64,7 +64,6 @@
               inset 0 0 25px rgba(255, 150, 200, 0.18);
   border: 2px solid rgba(255, 255, 255, 0.08);
   animation: fadeIn 0.45s ease;
-  pointer-events: auto; /* enable inputs/buttons */
 }
 
 /* Subtle glowing border effect */
@@ -84,6 +83,7 @@
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   animation: borderGlow 5s linear infinite;
+  pointer-events: none; /* prevent blocking clicks inside modal */
 }
 
 /* Form Title */
@@ -123,6 +123,7 @@
   resize: none;
   line-height: 1.5;
 }
+
 
 /* ================== Buttons ================== */
 .button-group {

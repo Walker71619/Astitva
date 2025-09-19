@@ -3,34 +3,28 @@ import React, { useState, useEffect } from "react";
 import "./achievementmemories.css";
 import AchievementBg from "../images/achievementbg.jpg";
 
-// 🔹 Firebase imports
-import { getDatabase, ref, push, onValue } from "firebase/database";
+// 🔹 Firestore imports
+import { collection, addDoc, onSnapshot } from "firebase/firestore";
+import { database } from "../firebase"; // ✅ use database instead of db
 
 function AchievementMemories() {
   const [memories, setMemories] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [input, setInput] = useState("");
 
-  const db = getDatabase();
-
-  // 🔹 Load achievements from Firebase
+  // 🔹 Load achievements from Firestore
   useEffect(() => {
-    const achievementsRef = ref(db, "achievementMemories");
-    onValue(achievementsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setMemories(Object.values(data));
-      } else {
-        setMemories([]);
-      }
+    const unsubscribe = onSnapshot(collection(database, "achievementMemories"), (snapshot) => {
+      setMemories(snapshot.docs.map((doc) => doc.data().text));
     });
-  }, [db]);
 
-  // 🔹 Add new achievement to Firebase
-  const addMemory = () => {
+    return () => unsubscribe();
+  }, []);
+
+  // 🔹 Add new achievement to Firestore
+  const addMemory = async () => {
     if (input.trim() === "") return;
-    const achievementsRef = ref(db, "achievementMemories");
-    push(achievementsRef, input.trim());
+    await addDoc(collection(database, "achievementMemories"), { text: input.trim() });
     setInput("");
     setShowForm(false);
   };

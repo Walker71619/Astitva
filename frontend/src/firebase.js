@@ -1,25 +1,27 @@
+// firebase.js
 import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth"; 
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCSXuiFUpO9a0aJkdP3OwikDlMUVNwMQXE",
-  authDomain: "astitva-bea40.firebaseapp.com",
-  databaseURL: "https://astitva-bea40-default-rtdb.firebaseio.com",
-  projectId: "astitva-bea40",
-  storageBucket: "astitva-bea40.appspot.com",
-  messagingSenderId: "34296155186",
-  appId: "1:34296155186:web:0fd4476415d8bd437c802b",
-  measurementId: "G-DE4FL7P9B6"
+  apiKey: "AIzaSyCK0OMqe0hcVFLUcNyc-gCp8jYnT6Am2AU",
+  authDomain: "astitva-e85ad.firebaseapp.com",
+  projectId: "astitva-e85ad",
+  storageBucket: "astitva-e85ad.firebasestorage.app",
+  messagingSenderId: "979249435851",
+  appId: "1:979249435851:web:70e0f7f9019fd59b27774e",
+  measurementId: "G-3T538FEZSP"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const database = getFirestore(app);
+const storage = getStorage(app);
+const realtimeDB = getDatabase(app);
 
-// Initialize services
-export const database = getDatabase(app);
-export const auth = getAuth(app);
-export const storage = getStorage(app); 
+export { app, analytics, auth, database, storage, realtimeDB };
