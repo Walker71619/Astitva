@@ -1,67 +1,85 @@
 import React, { useState, useEffect } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { firestore, auth } from "../firebase";
+import "./KarmicAI.css"; // make sure to update with the carousel CSS
 
-const KarmicAI = ({ userId }) => {
-  const [publicProfile, setPublicProfile] = useState(null);
+const KarmicAI = () => {
+  const [publicProfiles, setPublicProfiles] = useState([]);
+  const [myProfile, setMyProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const myUid = auth.currentUser?.uid;
 
   useEffect(() => {
-    // If no UID provided, fallback to currently logged-in user
-    const uid = userId || (auth.currentUser && auth.currentUser.uid);
-    if (!uid) {
-      console.warn("No UID available for fetching public profile");
-      setLoading(false);
-      return;
-    }
+    const usersColRef = collection(firestore, "users");
 
-    const userDocRef = doc(firestore, "users", uid);
-
-    // Real-time listener for public profile
     const unsubscribe = onSnapshot(
-      userDocRef,
-      (docSnap) => {
+      usersColRef,
+      (snapshot) => {
         setLoading(false);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          console.log("Firestore doc data:", data); // debug
+        const profiles = [];
+        let me = null;
+
+        snapshot.forEach((doc) => {
+          const data = doc.data();
           if (data.public) {
-            setPublicProfile(data.public);
-          } else {
-            setPublicProfile(null);
+            const profile = { uid: doc.id, ...data.public };
+            if (doc.id === myUid) {
+              me = profile;
+            } else {
+              profiles.push(profile);
+            }
           }
-        } else {
-          console.log("No document found for UID:", uid);
-          setPublicProfile(null);
-        }
+        });
+
+        setMyProfile(me);
+        setPublicProfiles(profiles);
       },
       (error) => {
         setLoading(false);
-        console.error("Error fetching public profile:", error);
+        console.error("Error fetching public profiles:", error);
       }
     );
 
     return () => unsubscribe();
-  }, [userId]);
+  }, [myUid]);
 
-  if (loading) return <p>Loading public profile...</p>;
+  if (loading) return <p>Loading public profiles...</p>;
 
   return (
-    <div className="karmic-ai">
+    <div className="karmic-container">
       <h2>🌌 Karmic AI Insights</h2>
 
-      {/* Public Data */}
-      <div className="ai-section">
-        <h3>Public Reflections</h3>
-        {publicProfile ? (
-          <>
-            <p><strong>Fears:</strong> {publicProfile.fears || "—"}</p>
-            <p><strong>Goals:</strong> {publicProfile.goals || "—"}</p>
-            <p><strong>Thoughts:</strong> {publicProfile.thoughts || "—"}</p>
-            <p><strong>Issues:</strong> {publicProfile.issues || "—"}</p>
-          </>
+      {/* My Profile */}
+      {myProfile && (
+        <div className="profile-card highlight">
+          <h3>🌟 My Profile</h3>
+          {myProfile.avatar && (
+            <img src={myProfile.avatar} alt="Avatar" />
+          )}
+          <p><strong>Fears:</strong> {myProfile.fears || "—"}</p>
+          <p><strong>Goals:</strong> {myProfile.goals || "—"}</p>
+          <p><strong>Thoughts:</strong> {myProfile.thoughts || "—"}</p>
+          <p><strong>Issues:</strong> {myProfile.issues || "—"}</p>
+        </div>
+      )}
+
+      {/* Other Users Carousel */}
+      <div className="carousel">
+        {publicProfiles.length > 0 ? (
+          publicProfiles.map((profile) => (
+            <div className="profile-card" key={profile.uid}>
+              <h3>User: {profile.uid}</h3>
+              {profile.avatar && (
+                <img src={profile.avatar} alt="Avatar" />
+              )}
+              <p><strong>Fears:</strong> {profile.fears || "—"}</p>
+              <p><strong>Goals:</strong> {profile.goals || "—"}</p>
+              <p><strong>Thoughts:</strong> {profile.thoughts || "—"}</p>
+              <p><strong>Issues:</strong> {profile.issues || "—"}</p>
+            </div>
+          ))
         ) : (
-          <p>No public data yet.</p>
+          <p>No other public profiles yet.</p>
         )}
       </div>
     </div>
