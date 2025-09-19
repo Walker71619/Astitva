@@ -3,7 +3,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import "./livingTree.css";
 
 import treeImg from "../images/livingTree.png";
-import leaf1 from "../images/leaf1.png";
 import leaf2 from "../images/leaf2.png";
 import leaf3 from "../images/leaf3.png";
 import flower from "../images/Flower.png";
@@ -15,16 +14,16 @@ import { collection, getDocs } from "firebase/firestore";
 
 const branchPositions = {
   sad: [
-    { x: 250, y: 250 }, { x: 90, y: 130 }, { x: 240, y: 180 },
-    { x: 80, y: 100 }, { x: 50, y: 80 }, { x: 100, y: 140 },
-    { x: 120, y: 120 }, { x: 110, y: 90 }, { x: 140, y: 130 },
-    { x: 160, y: 100 },
+    { x: 250, y: 250 }, { x: 680, y: 150 }, { x: 450, y: 50 },
+    { x: 380, y: 100 }, { x: 350, y: 180 }, { x: 650, y: 250 },
+    { x: 320, y: 200 }, { x: 650, y: 180 }, { x: 640, y: 300 },
+    { x: 750, y: 250 },
   ],
   happy: [
-    { x: 130, y: 70 }, { x: 550, y: 90 }, { x: 170, y: 60 },
+    { x: 450, y: 70 }, { x: 550, y: 90 }, { x: 250, y: 80 },
   ],
   achievement: [
-    { x: 400, y: 350 }, { x: 240, y: 70 },
+    { x: 300, y: 350 }, { x: 240, y: 70 },
   ],
 };
 
@@ -68,7 +67,7 @@ const LivingTree = () => {
 
   const handlePawClick = (mem) => {
     setPopup(mem.id);
-    setPopupData(mem); // show memory directly
+    setPopupData(mem);
   };
 
   return (
@@ -84,7 +83,7 @@ const LivingTree = () => {
       {memories.map((mem, i) => {
         let src, cls, size;
         if (mem.type === "sad") {
-          const leaves = [leaf1, leaf2, leaf3];
+          const leaves = [ leaf2, leaf3];
           src = leaves[i % leaves.length];
           cls = "floating-leaf";
           size = 68;
