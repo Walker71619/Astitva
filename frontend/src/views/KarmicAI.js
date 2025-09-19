@@ -16,16 +16,13 @@ const KarmicAI = () => {
   const [publicMessages, setPublicMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [newPrivateMessages, setNewPrivateMessages] = useState({});
-  
-  const publicChatEndRef = useRef(null);
-  const privateChatEndRefs = useRef({}); // store multiple friend refs
 
+  const publicChatEndRef = useRef(null);
+  const privateChatEndRefs = useRef({});
   const myUid = auth.currentUser?.uid;
 
   // --- Mount client ---
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => setMounted(true), []);
 
   // --- Track auth user ---
   useEffect(() => {
@@ -68,10 +65,9 @@ const KarmicAI = () => {
     const unsubscribe = onSnapshot(collection(firestore, "publicChat"), snapshot => {
       const msgs = [];
       snapshot.forEach(docSnap => msgs.push(docSnap.data()));
-      msgs.sort((a,b) => a.timestamp - b.timestamp);
+      msgs.sort((a, b) => a.timestamp - b.timestamp);
       setPublicMessages(msgs);
 
-      // Auto-scroll
       setTimeout(() => publicChatEndRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
     });
     return () => unsubscribe();
@@ -136,7 +132,7 @@ const KarmicAI = () => {
 
   const getFriendName = (uid) => {
     const friend = publicProfiles.find(p => p.uid === uid);
-    return friend ? friend.name : uid;
+    return friend ? friend.displayName || "Unknown" : uid;
   };
 
   if (!mounted) return null;
@@ -159,7 +155,7 @@ const KarmicAI = () => {
           </div>
 
           <div className="chat-messages">
-            {/* --- Public Chat --- */}
+            {/* Public Chat */}
             {chatMode === "public" && (
               <>
                 {publicMessages.map((msg, idx) => (
@@ -175,7 +171,7 @@ const KarmicAI = () => {
               </>
             )}
 
-            {/* --- Private Chat --- */}
+            {/* Private Chat */}
             {chatMode === "private" && friends.map(uid => (
               <div key={uid} className="private-chat-block">
                 <h4>Chat with {getFriendName(uid)}</h4>
@@ -198,7 +194,7 @@ const KarmicAI = () => {
       {/* My Profile */}
       {myProfile && (
         <div className="profile-card highlight">
-          <h3>🌟 My Profile — {myProfile.name}</h3>
+          <h3>🌟 My Profile — {myProfile.displayName}</h3>
           {myProfile.avatar && <img src={myProfile.avatar} alt="Avatar" />}
           <p><strong>Fears:</strong> {myProfile.fears || "—"}</p>
           <p><strong>Goals:</strong> {myProfile.goals || "—"}</p>
@@ -211,7 +207,7 @@ const KarmicAI = () => {
       <div className="carousel">
         {publicProfiles.map(profile => (
           <div className="profile-card" key={profile.uid}>
-            <h3>{profile.name}</h3>
+            <h3>{profile.displayName}</h3>
             {profile.avatar && <img src={profile.avatar} alt="Avatar" />}
             <p><strong>Fears:</strong> {profile.fears || "—"}</p>
             <p><strong>Goals:</strong> {profile.goals || "—"}</p>
