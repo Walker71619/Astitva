@@ -7,6 +7,7 @@ import "./LifeModeSelector.css";
 // Components
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
+import PlanetOrbit from "./planet";
 
 // Images
 import Gate1 from "../images/gate1.png";
@@ -60,6 +61,7 @@ function LifeModeSelector() {
   const [goals, setGoals] = useState([]);
   const [currentGoal, setCurrentGoal] = useState("");
   const [loadingGoals, setLoadingGoals] = useState(false);
+  const [showPlanet, setShowPlanet] = useState(false);
 
   const navigate = useNavigate();
   const uid = auth.currentUser?.uid;
@@ -138,7 +140,6 @@ function LifeModeSelector() {
     <>
       <Navbar className="navbar-life" />
 
-
       <div className="life-page" style={{ backgroundImage: `url(${CosmicBG})` }}>
         <header className="life-header">
           <h1>Life Mode Selector</h1>
@@ -188,6 +189,7 @@ function LifeModeSelector() {
                     className="modal-img"
                   />
                   <button onClick={() => setExploreClicked(true)}>Explore</button>
+                  <button onClick={() => setShowPlanet(true)}>Reminder</button>
                 </>
               ) : (
                 <>
@@ -219,12 +221,14 @@ function LifeModeSelector() {
                   </div>
                 </>
               )}
+
+              {showPlanet && <PlanetOrbit onClose={() => setShowPlanet(false)} />}
             </div>
           </div>
         )}
       </div>
 
-      <Footer /> {/* 🔥 Added Footer */}
+      <Footer />
     </>
   );
 }
