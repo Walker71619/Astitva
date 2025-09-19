@@ -20,7 +20,7 @@ html, body {
 /* HEADER */
 .dharma-header h1 {
   font-size: 3rem;
-  margin: 1rem 0 0.5rem;
+  margin: 8rem 0 0.5rem;
   text-shadow: 0 0 20px rgba(0, 200, 255, 0.9);
 }
 .dharma-header p {

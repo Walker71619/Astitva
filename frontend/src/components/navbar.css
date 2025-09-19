@@ -9,11 +9,52 @@
   justify-content: space-between;
   align-items: center;
   z-index: 20;
-  background: rgba(10, 10, 30, 0.65);
   backdrop-filter: blur(12px);
   box-shadow: 0 2px 15px rgba(0,0,0,0.5);
   color: #e0e6ff;
   font-family: 'Montserrat', sans-serif;
+}
+/* 🌌 Default (Homepage) */
+.navbar.navbar-home {
+  background: rgba(10, 10, 30, 0.65);
+  backdrop-filter: blur(12px);
+  color: #e0e6ff;
+}
+
+/* ❄️ DS Page */
+.navbar.navbar-ds {
+  background: rgba(220, 240, 255, 0.55);
+  backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #0a2342;
+}
+
+/* 🔥 Karmic AI */
+.navbar.navbar-karmic {
+  background: rgba(50, 0, 0, 0.7);
+  backdrop-filter: blur(14px) saturate(160%);
+  color: #ffdddd;
+}
+
+/* 📜 Life Blueprint */
+.navbar.navbar-blueprint {
+  background: rgba(20, 40, 70, 0.7);
+  backdrop-filter: blur(14px) saturate(170%);
+  color: #d0e6ff;
+}
+
+/* 🌱 Life Mode */
+.navbar.navbar-life {
+  background: rgba(0, 40, 20, 0.7);
+  backdrop-filter: blur(14px) saturate(170%);
+  color: #cfffec;
+}
+
+/* 🪞 Mirror AI */
+.navbar.navbar-mirror {
+  background: rgba(40, 0, 40, 0.7);
+  backdrop-filter: blur(14px) saturate(170%);
+  color: #f8dfff;
 }
 
 .logo {
@@ -160,4 +201,44 @@
 .nav-links li .logout-btn {
   width: 100%;
   text-align: center;
+}
+/* ❄️ DS Page Winter Light Frost Theme */
+.navbar.navbar-ds {
+  background: rgba(220, 240, 255, 0.55); /* light icy frost blue */
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #0a2342;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Links look icy */
+.navbar.navbar-ds .nav-links li a {
+  color: #0a2342; 
+  font-weight: 500;
+}
+
+.navbar.navbar-ds .nav-links li a:hover {
+  color: #004080;
+  text-shadow: 0 0 6px rgba(180, 220, 255, 0.8);
+}
+
+/* Logout button frost */
+.navbar.navbar-ds .logout-btn {
+  background: rgba(240, 248, 255, 0.6);
+  color: #0a2342;
+  border: 1px solid rgba(0, 64, 128, 0.3);
+  border-radius: 6px;
+  padding: 6px 12px;
+  transition: 0.2s;
+}
+
+.navbar.navbar-ds .logout-btn:hover {
+  background: rgba(220, 235, 255, 0.9);
+  color: #001f3f;
+}
+
+/* Frosty hamburger */
+.navbar.navbar-ds .hamburger span {
+  background: #0a2342;
 }
