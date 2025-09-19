@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { auth, firestore, storage } from "../firebase";
-import {
-  doc,
-  getDoc,
-  setDoc,
-} from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import "./Dashboard.css";
@@ -33,6 +29,7 @@ export default function Dashboard() {
     favoriteQuote: "",
     socialLinks: "",
     avatar: "",
+    published: {}, // which private entries are public
   });
 
   // ✅ Track login state
@@ -54,7 +51,11 @@ export default function Dashboard() {
       if (userSnap.exists()) {
         const data = userSnap.data();
         if (data.private) setPrivateData(data.private);
-        if (data.public) setPublicData(data.public);
+        if (data.public)
+          setPublicData({
+            ...data.public,
+            published: data.public.published || {},
+          });
       }
     } catch (err) {
       console.error("Error loading user data:", err);
@@ -101,12 +102,21 @@ export default function Dashboard() {
       const storageRef = ref(storage, `avatars/${userId}`);
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
-
       setPublicData((prev) => ({ ...prev, avatar: url }));
     } catch (err) {
       console.error("Error uploading avatar:", err);
     }
   };
+
+  // --- Safe objects to prevent undefined errors
+  const safePrivateData = privateData || {
+    memories: "",
+    emotions: "",
+    privateGoals: "",
+    reflections: "",
+  };
+
+  const safePublished = publicData?.published || {};
 
   return (
     <div className="dashboard-hero">
@@ -125,61 +135,45 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* PRIVATE JOURNAL */}
+      {/* ---------------- PRIVATE JOURNAL ---------------- */}
       {activeTab === "private" && (
         <div className="profile-card">
           <h2>My Private Journal</h2>
-          <textarea
-            placeholder="Memories"
-            value={privateData.memories}
-            onChange={(e) =>
-              setPrivateData({ ...privateData, memories: e.target.value })
-            }
-          />
-          <textarea
-            placeholder="Emotions"
-            value={privateData.emotions}
-            onChange={(e) =>
-              setPrivateData({ ...privateData, emotions: e.target.value })
-            }
-          />
-          <textarea
-            placeholder="Private Goals"
-            value={privateData.privateGoals}
-            onChange={(e) =>
-              setPrivateData({ ...privateData, privateGoals: e.target.value })
-            }
-          />
-          <textarea
-            placeholder="Reflections"
-            value={privateData.reflections}
-            onChange={(e) =>
-              setPrivateData({ ...privateData, reflections: e.target.value })
-            }
-          />
+          {Object.keys(safePrivateData).map((key) => (
+            <textarea
+              key={key}
+              placeholder={key}
+              value={safePrivateData[key]}
+              onChange={(e) =>
+                setPrivateData({ ...safePrivateData, [key]: e.target.value })
+              }
+            />
+          ))}
           <button onClick={handleSavePrivate}>Save Private Journal</button>
         </div>
       )}
 
-      {/* PUBLIC PROFILE */}
+      {/* ---------------- PUBLIC PROFILE ---------------- */}
       {activeTab === "public" && (
         <div className="profile-card">
           <h2>My Public Profile</h2>
+
           <input type="file" onChange={handleAvatarUpload} />
-          {publicData.avatar && (
+          {publicData?.avatar && (
             <img src={publicData.avatar} alt="Avatar" className="avatar" />
           )}
+
           <input
             type="text"
             placeholder="Display Name"
-            value={publicData.displayName}
+            value={publicData?.displayName || ""}
             onChange={(e) =>
               setPublicData({ ...publicData, displayName: e.target.value })
             }
           />
           <textarea
             placeholder="Public Bio"
-            value={publicData.bio}
+            value={publicData?.bio || ""}
             onChange={(e) =>
               setPublicData({ ...publicData, bio: e.target.value })
             }
@@ -187,7 +181,7 @@ export default function Dashboard() {
           <input
             type="text"
             placeholder="Interests"
-            value={publicData.interests}
+            value={publicData?.interests || ""}
             onChange={(e) =>
               setPublicData({ ...publicData, interests: e.target.value })
             }
@@ -195,7 +189,7 @@ export default function Dashboard() {
           <input
             type="text"
             placeholder="Fears"
-            value={publicData.fears}
+            value={publicData?.fears || ""}
             onChange={(e) =>
               setPublicData({ ...publicData, fears: e.target.value })
             }
@@ -203,7 +197,7 @@ export default function Dashboard() {
           <input
             type="text"
             placeholder="Issues"
-            value={publicData.issues}
+            value={publicData?.issues || ""}
             onChange={(e) =>
               setPublicData({ ...publicData, issues: e.target.value })
             }
@@ -211,7 +205,7 @@ export default function Dashboard() {
           <input
             type="text"
             placeholder="Goals"
-            value={publicData.goals}
+            value={publicData?.goals || ""}
             onChange={(e) =>
               setPublicData({ ...publicData, goals: e.target.value })
             }
@@ -219,7 +213,7 @@ export default function Dashboard() {
           <input
             type="text"
             placeholder="Thoughts"
-            value={publicData.thoughts}
+            value={publicData?.thoughts || ""}
             onChange={(e) =>
               setPublicData({ ...publicData, thoughts: e.target.value })
             }
@@ -227,7 +221,7 @@ export default function Dashboard() {
           <input
             type="text"
             placeholder="Favorite Quote"
-            value={publicData.favoriteQuote}
+            value={publicData?.favoriteQuote || ""}
             onChange={(e) =>
               setPublicData({ ...publicData, favoriteQuote: e.target.value })
             }
@@ -235,11 +229,34 @@ export default function Dashboard() {
           <input
             type="text"
             placeholder="Social Links"
-            value={publicData.socialLinks}
+            value={publicData?.socialLinks || ""}
             onChange={(e) =>
               setPublicData({ ...publicData, socialLinks: e.target.value })
             }
           />
+
+          <h3>Choose Private Entries to Publish:</h3>
+          {Object.keys(safePrivateData).map((key) => (
+            <div key={key} className="publish-option">
+              <input
+                type="checkbox"
+                checked={safePublished[key] || false}
+                onChange={() =>
+                  setPublicData((prev) => ({
+                    ...prev,
+                    published: {
+                      ...safePublished,
+                      [key]: !safePublished[key],
+                    },
+                  }))
+                }
+              />
+              <label>
+                <strong>{key}:</strong> {safePrivateData[key] || "—"}
+              </label>
+            </div>
+          ))}
+
           <button onClick={handleSavePublic}>Save Public Profile</button>
         </div>
       )}

@@ -1,44 +1,44 @@
-import React, { useState, useEffect } from "react";
-import { collection, onSnapshot, doc, setDoc, getDoc } from "firebase/firestore";
+import React, { useState, useEffect, useRef } from "react";
+import { collection, doc, onSnapshot, setDoc, getDoc } from "firebase/firestore";
 import { firestore, auth } from "../firebase";
 import "./KarmicAI.css";
 
 const KarmicAI = () => {
-  const [mounted, setMounted] = useState(false);        // ensure client-side render
-  const [user, setUser] = useState(null);               // auth user
+  const [mounted, setMounted] = useState(false);
+  const [user, setUser] = useState(null);
   const [publicProfiles, setPublicProfiles] = useState([]);
   const [myProfile, setMyProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMode, setChatMode] = useState("public");
   const [friends, setFriends] = useState([]);
-  const [friendProfiles, setFriendProfiles] = useState({});
   const [privateMessages, setPrivateMessages] = useState({});
   const [publicMessages, setPublicMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [newPrivateMessages, setNewPrivateMessages] = useState({});
+  
+  const publicChatEndRef = useRef(null);
+  const privateChatEndRefs = useRef({}); // store multiple friend refs
 
-  // Client-side only
-  useEffect(() => setMounted(true), []);
+  const myUid = auth.currentUser?.uid;
 
-  // Listen for auth changes
+  // --- Mount client ---
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // --- Track auth user ---
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(u => setUser(u));
     return () => unsubscribe();
   }, []);
 
-  const myUid = user?.uid;
-
-  // Fetch profiles and friend info
+  // --- Fetch public profiles ---
   useEffect(() => {
-    if (!myUid) return;
-    const usersColRef = collection(firestore, "users");
-
-    const unsubscribe = onSnapshot(usersColRef, snapshot => {
+    const unsubscribe = onSnapshot(collection(firestore, "users"), snapshot => {
       setLoading(false);
       const profiles = [];
       let me = null;
-      const friendsObj = {};
 
       snapshot.forEach(docSnap => {
         const data = docSnap.data();
@@ -46,82 +46,111 @@ const KarmicAI = () => {
           const profile = { uid: docSnap.id, ...data.public };
           if (docSnap.id === myUid) {
             me = profile;
-            (data.friends || []).forEach(fUid => friendsObj[fUid] = null); // placeholders
             setFriends(data.friends || []);
           } else {
             profiles.push(profile);
-            if (friendsObj[docSnap.id] !== undefined) friendsObj[docSnap.id] = profile; // friend profile
           }
         }
       });
 
       setMyProfile(me);
       setPublicProfiles(profiles);
-      setFriendProfiles(friendsObj);
-    }, error => console.error(error));
+    }, err => {
+      setLoading(false);
+      console.error("Error fetching public profiles:", err);
+    });
 
     return () => unsubscribe();
   }, [myUid]);
 
-  // Public chat
+  // --- Fetch public chat ---
   useEffect(() => {
-    const publicChatRef = collection(firestore, "publicChat");
-    const unsubscribe = onSnapshot(publicChatRef, snapshot => {
-      const messages = [];
-      snapshot.forEach(docSnap => messages.push(docSnap.data()));
-      setPublicMessages(messages);
+    const unsubscribe = onSnapshot(collection(firestore, "publicChat"), snapshot => {
+      const msgs = [];
+      snapshot.forEach(docSnap => msgs.push(docSnap.data()));
+      msgs.sort((a,b) => a.timestamp - b.timestamp);
+      setPublicMessages(msgs);
+
+      // Auto-scroll
+      setTimeout(() => publicChatEndRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
     });
     return () => unsubscribe();
   }, []);
 
-  // Private messages
+  // --- Fetch private chats ---
   useEffect(() => {
     if (!myUid) return;
-    const privateRef = collection(firestore, `privateChats/${myUid}/chats`);
-    const unsubscribe = onSnapshot(privateRef, snapshot => {
-      const messagesObj = {};
-      snapshot.forEach(docSnap => {
-        messagesObj[docSnap.id] = docSnap.data().messages || [];
+    const unsubscribe = onSnapshot(collection(firestore, `privateChats/${myUid}/chats`), snapshot => {
+      const msgsObj = {};
+      snapshot.forEach(docSnap => msgsObj[docSnap.id] = docSnap.data().messages || []);
+      setPrivateMessages(msgsObj);
+
+      Object.keys(msgsObj).forEach(uid => {
+        setTimeout(() => privateChatEndRefs.current[uid]?.scrollIntoView({ behavior: "smooth" }), 50);
       });
-      setPrivateMessages(messagesObj);
     });
     return () => unsubscribe();
   }, [myUid]);
 
-  // Send public message
-  const sendMessage = async () => {
-    if (!newMessage.trim() || !myUid) return;
-    await setDoc(
-      doc(firestore, "publicChat", Date.now().toString()),
-      { sender: myUid, text: newMessage, timestamp: Date.now() }
-    );
+  // --- Send public message ---
+  const sendPublicMessage = async () => {
+    if (!newMessage.trim()) return;
+    await setDoc(doc(firestore, "publicChat", Date.now().toString()), {
+      sender: myUid,
+      text: newMessage,
+      timestamp: Date.now()
+    });
     setNewMessage("");
   };
 
-  // Add friend
+  // --- Send private message ---
+  const sendPrivateMessage = async (friendUid) => {
+    const text = newPrivateMessages[friendUid]?.trim();
+    if (!text) return;
+
+    const chatRef1 = doc(firestore, `privateChats/${myUid}/chats/${friendUid}`);
+    const chatRef2 = doc(firestore, `privateChats/${friendUid}/chats/${myUid}`);
+
+    const chatSnap1 = await getDoc(chatRef1);
+    const chatSnap2 = await getDoc(chatRef2);
+
+    const messages1 = chatSnap1.exists() ? chatSnap1.data().messages : [];
+    const messages2 = chatSnap2.exists() ? chatSnap2.data().messages : [];
+
+    const newMsg = { sender: myUid, text, timestamp: Date.now() };
+
+    await setDoc(chatRef1, { messages: [...messages1, newMsg] });
+    await setDoc(chatRef2, { messages: [...messages2, newMsg] });
+
+    setNewPrivateMessages(prev => ({ ...prev, [friendUid]: "" }));
+  };
+
+  // --- Add friend ---
   const addFriend = async (friendUid) => {
     if (!friends.includes(friendUid) && myUid) {
       const newFriends = [...friends, friendUid];
       await setDoc(doc(firestore, "users", myUid), { friends: newFriends }, { merge: true });
       setFriends(newFriends);
-      setFriendProfiles(prev => ({ ...prev, [friendUid]: publicProfiles.find(p => p.uid === friendUid) }));
     }
   };
 
-  if (!mounted) return null;           // prevent SSR
-  if (!user) return <p>Please log in to use chat</p>;
-  if (loading) return <p>Loading public profiles...</p>;
+  const getFriendName = (uid) => {
+    const friend = publicProfiles.find(p => p.uid === uid);
+    return friend ? friend.name : uid;
+  };
+
+  if (!mounted) return null;
+  if (!user) return <p>Please log in to use Karmic AI</p>;
+  if (loading) return <p>Loading profiles...</p>;
 
   return (
     <div className="karmic-container">
       <h2>🌌 Karmic AI Insights</h2>
 
-      {/* Chat toggle */}
       <div className={`chat-toggle ${chatOpen ? "open" : ""}`} onClick={() => setChatOpen(!chatOpen)}>
         {chatOpen ? "⮜" : "⮞"}
       </div>
 
-      {/* Chat panel */}
       {chatOpen && (
         <div className="chat-panel">
           <div className="chat-tabs">
@@ -130,51 +159,38 @@ const KarmicAI = () => {
           </div>
 
           <div className="chat-messages">
-            {/* Public chat */}
-            {chatMode === "public" && <>
-              {publicMessages.map((msg, idx) => (
-                <p key={idx}><strong>{msg.sender === myUid ? "Me" : msg.sender}:</strong> {msg.text}</p>
-              ))}
-              <input
-                placeholder="Type message..."
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              />
-            </>}
+            {/* --- Public Chat --- */}
+            {chatMode === "public" && (
+              <>
+                {publicMessages.map((msg, idx) => (
+                  <p key={idx}><strong>{msg.sender === myUid ? "Me" : getFriendName(msg.sender)}:</strong> {msg.text}</p>
+                ))}
+                <div ref={publicChatEndRef} />
+                <input
+                  placeholder="Type message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && sendPublicMessage()}
+                />
+              </>
+            )}
 
-            {/* Private chat */}
-            {chatMode === "private" && Object.keys(friendProfiles).map(fUid => {
-              const friend = friendProfiles[fUid];
-              if (!friend) return null;
-              return (
-                <div key={fUid} className="private-chat-block">
-                  <div className="friend-header">
-                    {friend.avatar && <img src={friend.avatar} alt="Avatar" className="friend-avatar"/>}
-                    <h4>{friend.name || friend.uid}</h4>
-                  </div>
-                  {(privateMessages[fUid] || []).map((msg, idx) => (
-                    <p key={idx}><strong>{msg.sender === myUid ? "Me" : msg.sender}:</strong> {msg.text}</p>
-                  ))}
-                  <input
-                    placeholder="Type message..."
-                    value={newPrivateMessages[fUid] || ""}
-                    onChange={e => setNewPrivateMessages(prev => ({ ...prev, [fUid]: e.target.value }))}
-                    onKeyDown={async e => {
-                      if (e.key === "Enter" && newPrivateMessages[fUid]?.trim()) {
-                        const chatRef = doc(firestore, `privateChats/${myUid}/chats/${fUid}`);
-                        const chatSnap = await getDoc(chatRef);
-                        const messages = chatSnap.exists() ? chatSnap.data().messages : [];
-                        await setDoc(chatRef, {
-                          messages: [...messages, { sender: myUid, text: newPrivateMessages[fUid], timestamp: Date.now() }]
-                        });
-                        setNewPrivateMessages(prev => ({ ...prev, [fUid]: "" }));
-                      }
-                    }}
-                  />
-                </div>
-              );
-            })}
+            {/* --- Private Chat --- */}
+            {chatMode === "private" && friends.map(uid => (
+              <div key={uid} className="private-chat-block">
+                <h4>Chat with {getFriendName(uid)}</h4>
+                {(privateMessages[uid] || []).map((msg, idx) => (
+                  <p key={idx}><strong>{msg.sender === myUid ? "Me" : getFriendName(msg.sender)}:</strong> {msg.text}</p>
+                ))}
+                <div ref={el => privateChatEndRefs.current[uid] = el} />
+                <input
+                  placeholder="Type message..."
+                  value={newPrivateMessages[uid] || ""}
+                  onChange={e => setNewPrivateMessages(prev => ({ ...prev, [uid]: e.target.value }))}
+                  onKeyDown={e => e.key === "Enter" && sendPrivateMessage(uid)}
+                />
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -182,7 +198,7 @@ const KarmicAI = () => {
       {/* My Profile */}
       {myProfile && (
         <div className="profile-card highlight">
-          <h3>🌟 My Profile</h3>
+          <h3>🌟 My Profile — {myProfile.name}</h3>
           {myProfile.avatar && <img src={myProfile.avatar} alt="Avatar" />}
           <p><strong>Fears:</strong> {myProfile.fears || "—"}</p>
           <p><strong>Goals:</strong> {myProfile.goals || "—"}</p>
@@ -191,25 +207,21 @@ const KarmicAI = () => {
         </div>
       )}
 
-      {/* Other Users Carousel */}
+      {/* Other Users */}
       <div className="carousel">
-        {publicProfiles.length > 0 ? (
-          publicProfiles.map(profile => (
-            <div className="profile-card" key={profile.uid}>
-              <h3>User: {profile.uid}</h3>
-              {profile.avatar && <img src={profile.avatar} alt="Avatar" />}
-              <p><strong>Fears:</strong> {profile.fears || "—"}</p>
-              <p><strong>Goals:</strong> {profile.goals || "—"}</p>
-              <p><strong>Thoughts:</strong> {profile.thoughts || "—"}</p>
-              <p><strong>Issues:</strong> {profile.issues || "—"}</p>
-              <button onClick={() => addFriend(profile.uid)}>
-                {friends.includes(profile.uid) ? "Friend ✅" : "Add Friend"}
-              </button>
-            </div>
-          ))
-        ) : (
-          <p>No other public profiles yet.</p>
-        )}
+        {publicProfiles.map(profile => (
+          <div className="profile-card" key={profile.uid}>
+            <h3>{profile.name}</h3>
+            {profile.avatar && <img src={profile.avatar} alt="Avatar" />}
+            <p><strong>Fears:</strong> {profile.fears || "—"}</p>
+            <p><strong>Goals:</strong> {profile.goals || "—"}</p>
+            <p><strong>Thoughts:</strong> {profile.thoughts || "—"}</p>
+            <p><strong>Issues:</strong> {profile.issues || "—"}</p>
+            <button onClick={() => addFriend(profile.uid)}>
+              {friends.includes(profile.uid) ? "Friend ✅" : "Add Friend"}
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
