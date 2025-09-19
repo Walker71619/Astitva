@@ -1,0 +1,40 @@
+.karmic-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 20px 0;
+  scrollbar-width: thin;
+}
+
+.profile-card {
+  flex: 0 0 auto;
+  width: 200px;
+  min-height: 250px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.profile-card:hover {
+  transform: translateY(-5px);
+}
+
+.profile-card img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.highlight {
+  border: 2px solid #7b2cbf;
+  background: #f3e9ff;
+}
