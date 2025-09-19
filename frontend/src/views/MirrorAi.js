@@ -4,6 +4,7 @@ import Mirror from "../images/Mirror2.png";
 import Bg2 from "../images/Castle2.jpeg";
 import { database } from "../firebase"; // Firestore instance
 import { collection, addDoc, onSnapshot, query, orderBy } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const MirrorAI = () => {
   const [eventName, setEventName] = useState("");
@@ -14,7 +15,9 @@ const MirrorAI = () => {
   const [expanded, setExpanded] = useState(false);
   const [memories, setMemories] = useState([]);
 
-  // 🔹 Emotion-based reflections mapping (more personal, longer)
+  const auth = getAuth();
+  const user = auth.currentUser;
+
   const emotionReflections = {
     happy: [
       "🌟 Your happiness is contagious; the joy you radiate brightens everyone’s day around you. Keep shining! 🌟",
@@ -58,7 +61,6 @@ const MirrorAI = () => {
     ]
   };
 
-  // 🔹 Detect emotion from event title
   const detectEmotion = (title) => {
     const t = title.toLowerCase();
     if (t.includes("happy") || t.includes("joy") || t.includes("excited")) return "happy";
@@ -71,7 +73,6 @@ const MirrorAI = () => {
     return "neutral";
   };
 
-  // 🔹 Get context-aware reflection
   const getEmotionReflection = (title) => {
     const emotionCategory = detectEmotion(title);
     const reflections = emotionReflections[emotionCategory];
@@ -79,25 +80,30 @@ const MirrorAI = () => {
     return reflections[index];
   };
 
-  // Fetch memories from Firestore in real-time
+  // Fetch only current user's memories
   useEffect(() => {
+    if (!user) return;
+
     const memoriesCollection = collection(database, "memories");
     const q = query(memoriesCollection, orderBy("timestamp", "asc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const formatted = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const formatted = snapshot.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((m) => m.uid === user.uid);
       setMemories(formatted);
     });
 
-    return () => unsubscribe(); // cleanup listener
-  }, []);
+    return () => unsubscribe();
+  }, [user]);
 
-  // Handle reflection + save to Firestore
   const handleReflect = async () => {
     if (!eventName || !notes) {
       alert("Please fill all fields!");
+      return;
+    }
+
+    if (!user) {
+      alert("You must be logged in to use the mirror.");
       return;
     }
 
@@ -106,6 +112,7 @@ const MirrorAI = () => {
       emotion: `⚡ ${emotion}`,
       notes,
       timestamp: Date.now(),
+      uid: user.uid
     };
 
     // Optimistic update
@@ -117,7 +124,7 @@ const MirrorAI = () => {
       console.error("Error adding memory:", err);
     }
 
-    // Show loading while reflection "summons"
+    // Loading + reflection
     setExpanded(true);
     setLoading(true);
     setAiReflection("");
@@ -126,9 +133,8 @@ const MirrorAI = () => {
       const reflection = getEmotionReflection(eventName);
       setAiReflection(reflection);
       setLoading(false);
-    }, 1000); // slightly longer delay for realism
+    }, 1000);
 
-    // Reset form
     setEventName("");
     setNotes("");
     setEmotion(50);
