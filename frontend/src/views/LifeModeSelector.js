@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, firestore } from "../firebase";
 import { doc, getDoc, setDoc, arrayUnion } from "firebase/firestore";
+import PlanetOrbit from "./planet"; 
 import "./LifeModeSelector.css";
 
 import Gate1 from "../images/gate1.png";
@@ -25,7 +26,7 @@ const gates = [
     modalImg: HealImg,
     title: "Phoenix Path",
     arc: "Emotional healing arc",
-    desc: "Step into the Phoenix Path and embrace the power of transformation. This journey nurtures your inner self and helps you release past wounds. Each challenge becomes an opportunity to grow and find balance."
+    desc: "Step into the Phoenix Path and embrace the power of transformation."
   },
   {
     id: "disci",
@@ -34,7 +35,7 @@ const gates = [
     modalImg: DisciImg,
     title: "Titan’s March",
     arc: "Warrior/discipline arc",
-    desc: "The Titan’s March is a path forged in strength and discipline. It challenges you to confront obstacles with unwavering courage. Each step sharpens your focus and tests your determination. You will cultivate patience, perseverance, and inner power."
+    desc: "The Titan’s March is a path forged in strength and discipline."
   },
   {
     id: "disco",
@@ -43,7 +44,7 @@ const gates = [
     modalImg: DiscoImg,
     title: "Astral Voyage",
     arc: "Discovery/expansion arc",
-    desc: "Embark on the Astral Voyage and explore the mysteries beyond. This path encourages curiosity and broadens your perspective. You will encounter new ideas and experiences that expand your mind."
+    desc: "Embark on the Astral Voyage and explore the mysteries beyond."
   },
 ];
 
@@ -55,6 +56,8 @@ function LifeModeSelector() {
   const [goals, setGoals] = useState([]);
   const [currentGoal, setCurrentGoal] = useState("");
   const [loadingGoals, setLoadingGoals] = useState(false);
+  const [showPlanet, setShowPlanet] = useState(false);
+
 
   const navigate = useNavigate();
   const uid = auth.currentUser?.uid;
@@ -180,6 +183,7 @@ function LifeModeSelector() {
                   className="modal-img"
                 />
                 <button onClick={() => setExploreClicked(true)}>Explore</button>
+                <button onClick={() => setShowPlanet(true)}>Reminder</button>
               </>
             ) : (
               <>
@@ -211,6 +215,8 @@ function LifeModeSelector() {
                 </div>
               </>
             )}
+            {showPlanet && <PlanetOrbit onClose={() => setShowPlanet(false)} />}
+
           </div>
         </div>
       )}
