@@ -2,14 +2,13 @@
 import React, { useState, useEffect } from "react";
 import "./sadmemories.css";
 import SadBg from "../images/sadbg.jpg";
-
-// 🔹 Firebase imports
 import { getDatabase, ref, push, onValue } from "firebase/database";
 
 function SadMemories() {
   const [memories, setMemories] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [input, setInput] = useState("");
+  const [title, setTitle] = useState("");
+  const [text, setText] = useState("");
 
   const db = getDatabase();
 
@@ -26,12 +25,25 @@ function SadMemories() {
     });
   }, [db]);
 
-  // 🔹 Add new memory to Firebase
+  // 🔹 Save Memory
   const addMemory = () => {
-    if (input.trim() === "") return;
+    console.log("Save clicked ✅"); // debug
+    if (!title.trim() || !text.trim()) return;
+
     const memoriesRef = ref(db, "sadMemories");
-    push(memoriesRef, input.trim());
-    setInput("");
+    push(memoriesRef, { title: title.trim(), text: text.trim() });
+
+    // Reset state
+    setTitle("");
+    setText("");
+    setShowForm(false);
+  };
+
+  // 🔹 Cancel Memory
+  const cancelMemory = () => {
+    console.log("Cancel clicked ❌"); // debug
+    setTitle("");
+    setText("");
     setShowForm(false);
   };
 
@@ -46,36 +58,69 @@ function SadMemories() {
     >
       <h1 className="sad-title">Sad Memories</h1>
 
-      {/* Button to open form */}
+      {/* Open Form Button */}
       <button className="open-form-btn" onClick={() => setShowForm(true)}>
         + Add Memory
       </button>
 
-      {/* Memory Form Modal */}
+      {/* Healing Style Modal Form */}
       {showForm && (
-        <div className="modal-overlay" onClick={() => setShowForm(false)}>
+        <div className="modal-overlay" onClick={cancelMemory}>
           <div
             className="modal-form"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()} // Stop overlay click
           >
-            <h2>Write Your Memory</h2>
-            <textarea
-              placeholder="Dear Diary, today I felt..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            />
-            <button className="add-btn" onClick={addMemory}>
-              Add Memory
-            </button>
+            <div className="form-card">
+              <h2 className="form-header">Healing Journal</h2>
+              <p className="form-subtext">
+                Write down your thoughts and feelings.
+              </p>
+
+              {/* Title Input */}
+              <input
+                type="text"
+                placeholder="Enter Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="form-input"
+              />
+
+              {/* Text Area */}
+              <textarea
+                placeholder="Dear Diary, today I felt..."
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                className="form-textarea"
+              />
+
+              {/* Buttons */}
+              <div className="button-group">
+                <button
+                  type="button"
+                  onClick={addMemory}
+                  className="save-btn"
+                >
+                  Save Memory
+                </button>
+                <button
+                  type="button"
+                  onClick={cancelMemory}
+                  className="cancel-btn"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Floating Cards */}
+      {/* Floating Memory Cards */}
       <div className="memory-container">
         {memories.map((mem, i) => (
           <div key={i} className="floating-card">
-            <p>{mem}</p>
+            <h3>{mem.title}</h3>
+            <p>{mem.text}</p>
           </div>
         ))}
       </div>

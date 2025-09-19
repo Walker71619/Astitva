@@ -1,3 +1,4 @@
+/* ================== Main Page ================== */
 .sad-page {
   min-height: 100vh;
   color: white;
@@ -5,177 +6,215 @@
   padding: 40px;
   overflow: hidden;
   position: relative;
+  font-family: "Poppins", sans-serif;
+  background: #1a0f2e; /* subtle dark pastel background */
 }
 
+/* Page Title */
 .sad-title {
   font-size: 3rem;
   text-shadow: 0 0 20px #ff99cc, 0 0 40px #ff66aa;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
+/* ================== Open Form Button ================== */
 .open-form-btn {
-  background: #ff66aa;
+  background: linear-gradient(135deg, #ff66aa, #a855f7);
   color: white;
   font-size: 1.2rem;
-  padding: 12px 24px;
+  padding: 12px 28px;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
-  box-shadow: 0 0 20px #ff99cc;
-  transition: 0.3s;
+  box-shadow: 0 0 20px rgba(255, 102, 170, 0.7);
+  transition: all 0.3s ease;
 }
 .open-form-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px #ff66aa;
+  transform: scale(1.07);
+  box-shadow: 0 0 35px rgba(255, 102, 170, 0.9);
 }
 
-/* Modal Overlay */
+/* ================== Modal Overlay ================== */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(10, 10, 30, 0.9);
+  background: rgba(57, 57, 235, 0.5); /* lighter, soft overlay */
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000;
+  pointer-events: auto; /* ensure overlay allows interaction */
 }
 
-/* Fantasy Diary Form */
+/* ================== Diary Form ================== */
 .modal-form {
-  background: #1e1e4f;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 0 30px #ff99cc, inset 0 0 40px rgba(255, 150, 200, 0.3);
-  width: 400px;
+  position: relative;
+  z-index: 1001;
+  background: linear-gradient(160deg, #2b1a47 0%, #1a0f2e 100%);
+  padding: 35px 28px;
+  border-radius: 22px;
+  width: 420px;
   max-width: 90%;
   text-align: center;
-  animation: fadeIn 0.5s ease;
+  box-shadow: 0 0 45px rgba(168, 85, 247, 0.65),
+              inset 0 0 25px rgba(255, 150, 200, 0.18);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  animation: fadeIn 0.45s ease;
+  pointer-events: auto; /* enable inputs/buttons */
 }
 
+/* Subtle glowing border effect */
+.modal-form::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 24px;
+  padding: 2px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 102, 170, 0.8),
+    rgba(168, 85, 247, 0.6),
+    rgba(255, 102, 170, 0.8)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: borderGlow 5s linear infinite;
+}
+
+/* Form Title */
 .modal-form h2 {
-  margin-bottom: 15px;
-  font-size: 1.8rem;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  font-family: "Cursive", serif;
   color: #ffccdd;
-  text-shadow: 0 0 15px #ff99cc;
+  text-shadow: 0 0 14px #a855f7, 0 0 28px #ff99cc;
 }
 
-.modal-form textarea {
+/* ================== Inputs & Textarea ================== */
+.form-input,
+.form-textarea {
   width: 100%;
-  height: 120px;
-  padding: 15px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
   border-radius: 12px;
   border: none;
   outline: none;
   font-size: 1rem;
-  background: #2a2a60;
-  color: white;
-  box-shadow: inset 0 0 10px rgba(255, 100, 180, 0.5);
-  resize: none;
+  font-family: "Cursive", serif;
+  background: rgba(168, 188, 232, 0.1);
+  color: #ffe6f2;
+  box-shadow: inset 0 0 10px rgba(255, 150, 200, 0.3);
+  transition: all 0.3s ease;
 }
 
-.add-btn {
-  margin-top: 15px;
-  background: #ff66aa;
-  border: none;
-  padding: 10px 20px;
-  font-size: 1rem;
-  border-radius: 10px;
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 0 15px #ff99cc;
+.form-input:focus,
+.form-textarea:focus {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 15px rgba(255, 102, 170, 0.6);
 }
-.add-btn:hover {
-  background: #ff3385;
+
+.form-textarea {
+  height: 130px;
+  resize: none;
+  line-height: 1.5;
+}
+
+/* ================== Buttons ================== */
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 14px;
+}
+
+button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-family: 'Georgia', serif;
+}
+
+button.save {
+  background: #e8c6a7;
+  color: #3a2c1a;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+button.save:hover {
+  background: #d9b28e;
   transform: scale(1.05);
 }
 
-/* Floating Cards */
+button.cancel {
+  background: #d3d3d3;
+  color: #2f2f2f;
+}
+
+button.cancel:hover {
+  background: #bcbcbc;
+  transform: scale(1.05);
+}
+
+/* ================== Memory Cards ================== */
 .memory-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 30px;
-  gap: 20px;
+  margin-top: 40px;
+  gap: 24px;
 }
 
 .floating-card {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  padding: 15px;
-  width: 220px;
-  height: 150px;
+  width: 250px;
+  min-height: 170px;
+  background: rgba(50, 25, 80, 0.65);
+  border-radius: 18px;
+  padding: 18px;
   color: #ffccdd;
-  box-shadow: 0 0 25px rgba(255, 100, 150, 0.6);
+  box-shadow: 0 0 28px rgba(168, 85, 247, 0.6);
   animation: floaty 6s infinite ease-in-out;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px);
+  transition: transform 0.35s, box-shadow 0.35s;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.floating-card:hover {
+  transform: translateY(-12px) scale(1.05);
+  box-shadow: 0 0 42px rgba(255, 102, 170, 1);
 }
 
+.floating-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  color: #ff79c6;
+  text-shadow: 0 0 8px rgba(255, 102, 170, 0.6);
+}
+.floating-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #f5f5f5;
+}
+
+/* ================== Animations ================== */
 @keyframes floaty {
-  0% { transform: translateY(0px) rotate(-2deg); }
-  50% { transform: translateY(-15px) rotate(2deg); }
-  100% { transform: translateY(0px) rotate(-2deg); }
+  0% { transform: translateY(0px) rotate(-1deg); }
+  50% { transform: translateY(-14px) rotate(1deg); }
+  100% { transform: translateY(0px) rotate(-1deg); }
 }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
 }
-.sad-card {
-  width: 300px;
-  min-height: 200px;
-  background: rgba(30, 30, 60, 0.8); /* dark glass */
-  border-radius: 18px;
-  padding: 20px;
-  color: #fff;
-  font-family: "Poppins", sans-serif;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 0 25px rgba(255, 0, 150, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
 
-/* hover effect */
-.sad-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 0 40px rgba(255, 0, 150, 0.7);
-}
-
-/* title */
-.sad-card h3 {
-  font-size: 1.3rem;
-  margin-bottom: 12px;
-  color: #ff79c6;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* description */
-.sad-card p {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #ddd;
-  margin-bottom: 10px;
-}
-
-/* date tag */
-.sad-date {
-  font-size: 0.8rem;
-  color: #aaa;
-  position: absolute;
-  top: 12px;
-  right: 18px;
-}
-
-/* emoji/mood indicator */
-.sad-mood {
-  font-size: 1.5rem;
-  position: absolute;
-  bottom: 15px;
-  right: 20px;
+@keyframes borderGlow {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
 }
