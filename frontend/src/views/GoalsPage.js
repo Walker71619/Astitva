@@ -1,13 +1,17 @@
-import React, { useState } from "react";
-import Bg4 from "../images/bg-4.png"; // main page bg
-import patr from "../images/patr.jpg"; // parchment image for progress modal
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { auth, firestore } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import Bg4 from "../images/bg-4.png";
+import patr from "../images/patr.jpg";
 import "./GoalsPage.css";
 
 function GoalsPage() {
-  const [goals, setGoals] = useState([
-    { id: 1, title: "Learn React Basics" },
-    { id: 2, title: "Daily Meditation" },
-  ]);
+  const location = useLocation();
+  const { lifeModeId, lifeModeTitle } = location.state || {}; // passed from LifeModeSelector
+
+  const [goals, setGoals] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // form/modal states
   const [showModal, setShowModal] = useState(false); // roadmap form
@@ -23,27 +27,47 @@ function GoalsPage() {
     checklist: [],
   });
 
-  // open roadmap form for a particular goal (allow editing existing roadmap)
+  const uid = auth.currentUser?.uid;
+
+  // Fetch goals from Firestore for the specific LifeMode
+  useEffect(() => {
+    const fetchGoals = async () => {
+      if (!uid || !lifeModeId) return;
+      setLoading(true);
+      try {
+        const docRef = doc(firestore, "users", uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const lmGoals = data.lifeModes?.[lifeModeId]?.goals || [];
+          // convert string goals to objects with id
+          const formattedGoals = lmGoals.map((g, idx) => ({ id: idx + 1, title: g }));
+          setGoals(formattedGoals);
+        } else {
+          setGoals([]);
+        }
+      } catch (err) {
+        console.error("Error fetching goals:", err);
+        setGoals([]);
+      }
+      setLoading(false);
+    };
+    fetchGoals();
+  }, [uid, lifeModeId]);
+
+  // --- Modal & Roadmap Functions ---
   const handleOpenModal = (goal) => {
     setSelectedGoal(goal);
-    // if goal already has a roadmap saved, prefill the form
     if (goal.roadmap) {
       setRoadmap({
         title: goal.roadmap.title || "",
         startDate: goal.roadmap.startDate || "",
         endDate: goal.roadmap.endDate || "",
-        subgoals: Array.isArray(goal.roadmap.subgoals) && goal.roadmap.subgoals.length > 0 ? goal.roadmap.subgoals : [""],
-        checklist: Array.isArray(goal.roadmap.checklist) ? goal.roadmap.checklist : [],
+        subgoals: goal.roadmap.subgoals || [""],
+        checklist: goal.roadmap.checklist || Array.from({ length: (goal.roadmap.subgoals || []).length }, () => false),
       });
     } else {
-      // else clear
-      setRoadmap({
-        title: "",
-        startDate: "",
-        endDate: "",
-        subgoals: [""],
-        checklist: [],
-      });
+      setRoadmap({ title: "", startDate: "", endDate: "", subgoals: [""], checklist: [] });
     }
     setShowModal(true);
   };
@@ -51,33 +75,45 @@ function GoalsPage() {
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedGoal(null);
-    setRoadmap({
-      title: "",
-      startDate: "",
-      endDate: "",
-      subgoals: [""],
-      checklist: [],
-    });
+    setRoadmap({ title: "", startDate: "", endDate: "", subgoals: [""], checklist: [] });
   };
 
-  // Save roadmap into the selected goal
-  const handleSaveRoadmap = () => {
+  const handleSaveRoadmap = async () => {
     if (!selectedGoal) return;
     const updatedGoals = goals.map((g) =>
       g.id === selectedGoal.id ? { ...g, roadmap: { ...roadmap } } : g
     );
     setGoals(updatedGoals);
-    // update selectedGoal reference to saved roadmap
-    const updatedSelected = updatedGoals.find((g) => g.id === selectedGoal.id);
-    setSelectedGoal(updatedSelected);
+
+    // Save roadmap in Firestore under the same LifeMode
+    try {
+      const docRef = doc(firestore, "users", uid);
+      const roadmapKey = `lifeModes.${lifeModeId}.roadmaps.${selectedGoal.id}`;
+      await setDoc(
+        docRef,
+        {
+          lifeModes: {
+            [lifeModeId]: {
+              roadmaps: {
+                [selectedGoal.id]: roadmap
+              }
+            }
+          }
+        },
+        { merge: true }
+      );
+    } catch (err) {
+      console.error("Error saving roadmap:", err);
+    }
+
     setShowModal(false);
   };
 
   const handleAddSubgoal = () => {
-    setRoadmap({ ...roadmap, subgoals: [...roadmap.subgoals, ""] });
-    setRoadmap(prev => ({
+    setRoadmap((prev) => ({
       ...prev,
-      checklist: [...(prev.checklist || []), false]
+      subgoals: [...prev.subgoals, ""],
+      checklist: [...(prev.checklist || []), false],
     }));
   };
 
@@ -93,31 +129,16 @@ function GoalsPage() {
     setRoadmap({ ...roadmap, checklist: newChecklist });
   };
 
-  // Open progress parchment for a goal (reads roadmap from goal if exists)
   const handleOpenProgress = (goal) => {
     setSelectedGoal(goal);
     setShowProgress(true);
-    // If goal has roadmap, set local roadmap as that so checklist toggles reflect same array
     if (goal.roadmap) {
-      setRoadmap({
-        title: goal.roadmap.title || "",
-        startDate: goal.roadmap.startDate || "",
-        endDate: goal.roadmap.endDate || "",
-        subgoals: goal.roadmap.subgoals || [""],
-        checklist: goal.roadmap.checklist || Array.from({ length: (goal.roadmap.subgoals || []).length }, () => false),
-      });
+      setRoadmap(goal.roadmap);
     } else {
-      setRoadmap({
-        title: "",
-        startDate: "",
-        endDate: "",
-        subgoals: [""],
-        checklist: [],
-      });
+      setRoadmap({ title: "", startDate: "", endDate: "", subgoals: [""], checklist: [] });
     }
   };
 
-  // When toggling checklist inside progress modal — update both local roadmap and the goal's roadmap (if saved)
   const toggleProgressChecklist = (index) => {
     const newChecklist = [...(roadmap.checklist || [])];
     newChecklist[index] = !newChecklist[index];
@@ -130,24 +151,14 @@ function GoalsPage() {
           : g
       );
       setGoals(updatedGoals);
-      // refresh selectedGoal reference
-      setSelectedGoal(updatedGoals.find(g => g.id === selectedGoal.id));
+      setSelectedGoal(updatedGoals.find((g) => g.id === selectedGoal.id));
     }
   };
 
-  // small helpers for progress numbers
-  const computeCompleted = (rm) => {
-    if (!rm || !Array.isArray(rm.checklist)) return 0;
-    return rm.checklist.filter(Boolean).length;
-  };
-  const computeTotal = (rm) => {
-    if (!rm || !Array.isArray(rm.subgoals)) return 1;
-    return Math.max(rm.subgoals.length, 1);
-  };
+  const computeCompleted = (rm) => rm?.checklist?.filter(Boolean).length || 0;
+  const computeTotal = (rm) => Math.max(rm?.subgoals?.length || 1, 1);
 
-  // Save changes made in the progress modal back to the goal (when user closes progress)
   const handleCloseProgress = () => {
-    // if selectedGoal existed and had roadmap, update stored roadmap to current local roadmap
     if (selectedGoal) {
       const updatedGoals = goals.map((g) =>
         g.id === selectedGoal.id ? { ...g, roadmap: { ...roadmap } } : g
@@ -156,60 +167,51 @@ function GoalsPage() {
     }
     setShowProgress(false);
     setSelectedGoal(null);
-    setRoadmap({
-      title: "",
-      startDate: "",
-      endDate: "",
-      subgoals: [""],
-      checklist: [],
-    });
+    setRoadmap({ title: "", startDate: "", endDate: "", subgoals: [""], checklist: [] });
   };
 
-  // render
   return (
     <div className="goals-page" style={{ backgroundImage: `url(${Bg4})` }}>
-      <h1 className="page-title">MY GOALS</h1>
+      <h1 className="page-title">{lifeModeTitle || "My Goals"}</h1>
 
-      <div className="goals-container">
-        {goals.map((goal) => (
-          <div key={goal.id} className="goal-card">
-            <h2>{goal.title}</h2>
-
-            {/* show small summary if roadmap exists */}
-            {goal.roadmap ? (
-              <p className="goal-sub">
-                {computeCompleted(goal.roadmap)} / {computeTotal(goal.roadmap)} done
-              </p>
-            ) : (
-              <p className="goal-sub">No roadmap yet</p>
-            )}
-
-            <div className="card-actions">
-              <button className="add-roadmap-btn" onClick={() => handleOpenModal(goal)}>
-                Add / Edit Roadmap
-              </button>
-
-              <button className="progress-btn" onClick={() => handleOpenProgress(goal)}>
-                Progress
-              </button>
+      {loading ? (
+        <p>Loading goals...</p>
+      ) : (
+        <div className="goals-container">
+          {goals.map((goal) => (
+            <div key={goal.id} className="goal-card">
+              <h2>{goal.title}</h2>
+              {goal.roadmap ? (
+                <p className="goal-sub">
+                  {computeCompleted(goal.roadmap)} / {computeTotal(goal.roadmap)} done
+                </p>
+              ) : (
+                <p className="goal-sub">No roadmap yet</p>
+              )}
+              <div className="card-actions">
+                <button className="add-roadmap-btn" onClick={() => handleOpenModal(goal)}>
+                  Add / Edit Roadmap
+                </button>
+                <button className="progress-btn" onClick={() => handleOpenProgress(goal)}>
+                  Progress
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
-      {/* Roadmap Form Modal */}
+      {/* --- Roadmap Form Modal --- */}
       {showModal && selectedGoal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h2 className="modal-title">Roadmap for: {selectedGoal.title}</h2>
-
+            <h2>Roadmap for: {selectedGoal.title}</h2>
             <input
               type="text"
               placeholder="Roadmap Title"
               value={roadmap.title}
               onChange={(e) => setRoadmap({ ...roadmap, title: e.target.value })}
             />
-
             <div className="date-row">
               <input
                 type="date"
@@ -261,23 +263,17 @@ function GoalsPage() {
         </div>
       )}
 
-      {/* Progress Scroll Modal (parchment using patr.jpg) */}
+      {/* --- Progress Modal --- */}
       {showProgress && selectedGoal && (
         <div className="scroll-overlay">
-          <div
-            className="scroll-wrapper"
-            style={{ backgroundImage: `url(${patr})` }} // ensure patr.jpg exists in src/images
-          >
+          <div className="scroll-wrapper" style={{ backgroundImage: `url(${patr})` }}>
             <div className="scroll-rod top" aria-hidden="true"></div>
 
             <div className="scroll-content">
-              <h2 className="scroll-heading">📜 Progress — {selectedGoal.title}</h2>
-
-              {/* big percentage */}
+              <h2>📜 Progress — {selectedGoal.title}</h2>
               <div className="big-percent">
                 {Math.round((computeCompleted(roadmap) / computeTotal(roadmap)) * 100) || 0}%
               </div>
-
               <p className="progress-summary">
                 {computeCompleted(roadmap)} of {computeTotal(roadmap)} completed
               </p>
@@ -285,21 +281,18 @@ function GoalsPage() {
               <div className="ink-progress">
                 <div
                   className="ink-fill"
-                  style={{
-                    width: `${(computeCompleted(roadmap) / computeTotal(roadmap)) * 100}%`,
-                  }}
+                  style={{ width: `${(computeCompleted(roadmap) / computeTotal(roadmap)) * 100}%` }}
                 />
               </div>
 
               <div className="subgoals-list">
                 {roadmap.subgoals.map((sg, i) => {
-                  const done = (roadmap.checklist && roadmap.checklist[i]) || false;
+                  const done = roadmap.checklist[i] || false;
                   return (
                     <div key={i} className={`subgoal-row ${done ? "done" : ""}`}>
                       <button
                         className={`bullet ${done ? "bullet-done" : ""}`}
                         onClick={() => toggleProgressChecklist(i)}
-                        aria-label={done ? "mark undone" : "mark done"}
                       >
                         {done ? "✔" : i + 1}
                       </button>
@@ -314,7 +307,6 @@ function GoalsPage() {
                   <small>Start: {roadmap.startDate || "—"}</small>
                   <small>End: {roadmap.endDate || "—"}</small>
                 </div>
-
                 <button className="close-scroll" onClick={handleCloseProgress}>
                   Close Scroll
                 </button>
@@ -330,6 +322,3 @@ function GoalsPage() {
 }
 
 export default GoalsPage;
-
-
-
