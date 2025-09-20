@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { collection, doc, onSnapshot, setDoc, getDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firestore, auth } from "../firebase";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer"; // make sure Footer exists
 import "./KarmicAI.css";
+
+const storage = getStorage();
 
 const KarmicAI = () => {
   const [mounted, setMounted] = useState(false);
@@ -28,65 +31,87 @@ const KarmicAI = () => {
 
   // --- Track auth user ---
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(u => setUser(u));
+    const unsubscribe = auth.onAuthStateChanged((u) => setUser(u));
     return () => unsubscribe();
   }, []);
 
   // --- Fetch public profiles ---
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(firestore, "users"), snapshot => {
-      setLoading(false);
-      const profiles = [];
-      let me = null;
+    const unsubscribe = onSnapshot(
+      collection(firestore, "users"),
+      (snapshot) => {
+        setLoading(false);
+        const profiles = [];
+        let me = null;
 
-      snapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        if (data.public) {
-          const profile = { uid: docSnap.id, ...data.public };
-          if (docSnap.id === myUid) {
-            me = profile;
-            setFriends(data.friends || []);
-          } else {
-            profiles.push(profile);
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          if (data.public) {
+            const profile = { uid: docSnap.id, ...data.public };
+            if (docSnap.id === myUid) {
+              me = profile;
+              setFriends(data.friends || []);
+            } else {
+              profiles.push(profile);
+            }
           }
-        }
-      });
+        });
 
-      setMyProfile(me);
-      setPublicProfiles(profiles);
-    }, err => {
-      setLoading(false);
-      console.error("Error fetching public profiles:", err);
-    });
+        setMyProfile(me);
+        setPublicProfiles(profiles);
+      },
+      (err) => {
+        setLoading(false);
+        console.error("Error fetching public profiles:", err);
+      }
+    );
 
     return () => unsubscribe();
   }, [myUid]);
 
   // --- Fetch public chat ---
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(firestore, "publicChat"), snapshot => {
-      const msgs = [];
-      snapshot.forEach(docSnap => msgs.push(docSnap.data()));
-      msgs.sort((a, b) => a.timestamp - b.timestamp);
-      setPublicMessages(msgs);
+    const unsubscribe = onSnapshot(
+      collection(firestore, "publicChat"),
+      (snapshot) => {
+        const msgs = [];
+        snapshot.forEach((docSnap) => msgs.push(docSnap.data()));
+        msgs.sort((a, b) => a.timestamp - b.timestamp);
+        setPublicMessages(msgs);
 
-      setTimeout(() => publicChatEndRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
-    });
+        setTimeout(
+          () =>
+            publicChatEndRef.current?.scrollIntoView({ behavior: "smooth" }),
+          50
+        );
+      }
+    );
     return () => unsubscribe();
   }, []);
 
   // --- Fetch private chats ---
   useEffect(() => {
     if (!myUid) return;
-    const unsubscribe = onSnapshot(collection(firestore, `privateChats/${myUid}/chats`), snapshot => {
-      const msgsObj = {};
-      snapshot.forEach(docSnap => msgsObj[docSnap.id] = docSnap.data().messages || []);
-      setPrivateMessages(msgsObj);
+    const unsubscribe = onSnapshot(
+      collection(firestore, `privateChats/${myUid}/chats`),
+      (snapshot) => {
+        const msgsObj = {};
+        snapshot.forEach(
+          (docSnap) => (msgsObj[docSnap.id] = docSnap.data().messages || [])
+        );
+        setPrivateMessages(msgsObj);
 
-      Object.keys(msgsObj).forEach(uid => {
-        setTimeout(() => privateChatEndRefs.current[uid]?.scrollIntoView({ behavior: "smooth" }), 50);
-      });
-    });
+        Object.keys(msgsObj).forEach((uid) => {
+          setTimeout(
+            () =>
+              privateChatEndRefs.current[uid]?.scrollIntoView({
+                behavior: "smooth",
+              }),
+            50
+          );
+        });
+      }
+    );
     return () => unsubscribe();
   }, [myUid]);
 
@@ -96,7 +121,7 @@ const KarmicAI = () => {
     await setDoc(doc(firestore, "publicChat", Date.now().toString()), {
       sender: myUid,
       text: newMessage,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
     setNewMessage("");
   };
@@ -107,7 +132,10 @@ const KarmicAI = () => {
     if (!text) return;
 
     const chatRef1 = doc(firestore, `privateChats/${myUid}/chats/${friendUid}`);
-    const chatRef2 = doc(firestore, `privateChats/${friendUid}/chats/${myUid}`);
+    const chatRef2 = doc(
+      firestore,
+      `privateChats/${friendUid}/chats/${myUid}`
+    );
 
     const chatSnap1 = await getDoc(chatRef1);
     const chatSnap2 = await getDoc(chatRef2);
@@ -120,20 +148,44 @@ const KarmicAI = () => {
     await setDoc(chatRef1, { messages: [...messages1, newMsg] });
     await setDoc(chatRef2, { messages: [...messages2, newMsg] });
 
-    setNewPrivateMessages(prev => ({ ...prev, [friendUid]: "" }));
+    setNewPrivateMessages((prev) => ({ ...prev, [friendUid]: "" }));
   };
 
   // --- Add friend ---
   const addFriend = async (friendUid) => {
     if (!friends.includes(friendUid) && myUid) {
       const newFriends = [...friends, friendUid];
-      await setDoc(doc(firestore, "users", myUid), { friends: newFriends }, { merge: true });
+      await setDoc(
+        doc(firestore, "users", myUid),
+        { friends: newFriends },
+        { merge: true }
+      );
       setFriends(newFriends);
     }
   };
 
+  // --- Upload avatar ---
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file || !myUid) return;
+
+    try {
+      const storageRef = ref(storage, `avatars/${myUid}`);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+
+      await setDoc(
+        doc(firestore, "users", myUid),
+        { public: { ...myProfile, avatar: url } },
+        { merge: true }
+      );
+    } catch (err) {
+      console.error("Avatar upload failed:", err);
+    }
+  };
+
   const getFriendName = (uid) => {
-    const friend = publicProfiles.find(p => p.uid === uid);
+    const friend = publicProfiles.find((p) => p.uid === uid);
     return friend ? friend.displayName || "Unknown" : uid;
   };
 
@@ -143,63 +195,109 @@ const KarmicAI = () => {
 
   return (
     <>
-      <Navbar /> {/* Karmic-themed navbar */}
+      <Navbar />
       <div className="karmic-container">
         <h2>🌌 Karmic AI Insights</h2>
 
-        <div className={`chat-toggle ${chatOpen ? "open" : ""}`} onClick={() => setChatOpen(!chatOpen)}>
+        <div
+          className={`chat-toggle ${chatOpen ? "open" : ""}`}
+          onClick={() => setChatOpen(!chatOpen)}
+        >
           {chatOpen ? "⮜" : "⮞"}
         </div>
 
         {chatOpen && (
           <div className="chat-panel">
             <div className="chat-tabs">
-              <button onClick={() => setChatMode("public")} className={chatMode === "public" ? "active" : ""}>Public</button>
-              <button onClick={() => setChatMode("private")} className={chatMode === "private" ? "active" : ""}>Private</button>
+              <button
+                onClick={() => setChatMode("public")}
+                className={chatMode === "public" ? "active" : ""}
+              >
+                Public
+              </button>
+              <button
+                onClick={() => setChatMode("private")}
+                className={chatMode === "private" ? "active" : ""}
+              >
+                Private
+              </button>
             </div>
 
             <div className="chat-messages">
-              {/* Public Chat */}
               {chatMode === "public" && (
                 <>
                   {publicMessages.map((msg, idx) => (
-                    <p key={idx}><strong>{msg.sender === myUid ? "Me" : getFriendName(msg.sender)}:</strong> {msg.text}</p>
+                    <p key={idx}>
+                      <strong>
+                        {msg.sender === myUid
+                          ? "Me"
+                          : getFriendName(msg.sender)}
+                        :
+                      </strong>{" "}
+                      {msg.text}
+                    </p>
                   ))}
                   <div ref={publicChatEndRef} />
                   <input
                     placeholder="Type message..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyDown={e => e.key === "Enter" && sendPublicMessage()}
+                    onKeyDown={(e) => e.key === "Enter" && sendPublicMessage()}
                   />
                 </>
               )}
 
-              {/* Private Chat */}
-              {chatMode === "private" && friends.map(uid => (
-                <div key={uid} className="private-chat-block">
-                  <h4>Chat with {getFriendName(uid)}</h4>
-                  {(privateMessages[uid] || []).map((msg, idx) => (
-                    <p key={idx}><strong>{msg.sender === myUid ? "Me" : getFriendName(msg.sender)}:</strong> {msg.text}</p>
-                  ))}
-                  <div ref={el => privateChatEndRefs.current[uid] = el} />
-                  <input
-                    placeholder="Type message..."
-                    value={newPrivateMessages[uid] || ""}
-                    onChange={e => setNewPrivateMessages(prev => ({ ...prev, [uid]: e.target.value }))}
-                    onKeyDown={e => e.key === "Enter" && sendPrivateMessage(uid)}
-                  />
-                </div>
-              ))}
+              {chatMode === "private" &&
+                friends.map((uid) => (
+                  <div key={uid} className="private-chat-block">
+                    <h4>Chat with {getFriendName(uid)}</h4>
+                    {(privateMessages[uid] || []).map((msg, idx) => (
+                      <p key={idx}>
+                        <strong>
+                          {msg.sender === myUid ? "Me" : getFriendName(msg.sender)}:
+                        </strong>{" "}
+                        {msg.text}
+                      </p>
+                    ))}
+                    <div ref={(el) => (privateChatEndRefs.current[uid] = el)} />
+                    <input
+                      placeholder="Type message..."
+                      value={newPrivateMessages[uid] || ""}
+                      onChange={(e) =>
+                        setNewPrivateMessages((prev) => ({
+                          ...prev,
+                          [uid]: e.target.value,
+                        }))
+                      }
+                      onKeyDown={(e) =>
+                        e.key === "Enter" && sendPrivateMessage(uid)
+                      }
+                    />
+                  </div>
+                ))}
             </div>
           </div>
         )}
 
-        {/* My Profile */}
         {myProfile && (
           <div className="profile-card highlight">
             <h3>🌟 My Profile — {myProfile.displayName}</h3>
-            {myProfile.avatar && <img src={myProfile.avatar} alt="Avatar" />}
+            <div className="image-container">
+              <img
+                src={myProfile.avatar || "https://via.placeholder.com/120"}
+                alt="Avatar"
+              />
+              <label htmlFor="avatar-upload" className="upload-label">
+                +
+              </label>
+              <input
+                id="avatar-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarUpload}
+                style={{ display: "none" }}
+              />
+            </div>
             <p><strong>Fears:</strong> {myProfile.fears || "—"}</p>
             <p><strong>Goals:</strong> {myProfile.goals || "—"}</p>
             <p><strong>Thoughts:</strong> {myProfile.thoughts || "—"}</p>
@@ -207,12 +305,13 @@ const KarmicAI = () => {
           </div>
         )}
 
-        {/* Other Users */}
         <div className="carousel">
-          {publicProfiles.map(profile => (
+          {publicProfiles.map((profile) => (
             <div className="profile-card" key={profile.uid}>
               <h3>{profile.displayName}</h3>
-              {profile.avatar && <img src={profile.avatar} alt="Avatar" />}
+              {profile.avatar && (
+                <img src={profile.avatar} alt="Avatar" />
+              )}
               <p><strong>Fears:</strong> {profile.fears || "—"}</p>
               <p><strong>Goals:</strong> {profile.goals || "—"}</p>
               <p><strong>Thoughts:</strong> {profile.thoughts || "—"}</p>
@@ -224,7 +323,7 @@ const KarmicAI = () => {
           ))}
         </div>
       </div>
-      <Footer /> {/* Footer component */}
+      <Footer />
     </>
   );
 };
