@@ -7,6 +7,12 @@
   position: relative;
 }
 
+.cinzel-text {
+  font-family: "Cinzel Decorative", cursive;
+  font-weight: 700;
+}
+
+
 /* Carousel */
 .carousel {
   display: flex;
