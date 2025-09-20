@@ -139,7 +139,8 @@
 }
 
 .chat-tabs button.active {
-  background: #ff79c6;
+  background: linear-gradient(90deg, #99ccff, #ff99ff);
+  color: #fff;
 }
 
 .chat-tabs button:hover:not(.active) {
