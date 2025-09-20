@@ -215,3 +215,25 @@
   background: #9d4edd;
   transform: scale(1.05);
 }
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.upload-label {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #7b2cbf;
+  color: white;
+  font-size: 0.8rem;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #fff;
+  transition: background 0.3s;
+}
+
+.upload-label:hover {
+  background: #9d4edd;
+}
