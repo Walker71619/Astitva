@@ -1,85 +1,76 @@
 .karmic-container {
-  padding: 100px 40px;
+  padding: 20px;
   text-align: center;
-  background: linear-gradient(180deg, rgba(15,15,35,0.95), rgba(25,10,45,0.95));
+  background: linear-gradient(135deg, #0d0d1a, #1a1a2e);
   color: #f0f0f0;
   font-family: 'Poppins', sans-serif;
   position: relative;
-  min-height: 100vh;
 }
 
 /* Carousel */
 .carousel {
   display: flex;
   overflow-x: auto;
-  gap: 20px;
-  padding: 30px 0;
+  gap: 16px;
+  padding: 20px 0;
   scrollbar-width: thin;
   scroll-behavior: smooth;
 }
 
 .carousel::-webkit-scrollbar {
-  height: 10px;
+  height: 8px;
 }
 
 .carousel::-webkit-scrollbar-thumb {
   background: #7b2cbf;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 /* Profile cards */
 .profile-card {
   flex: 0 0 auto;
-  width: 240px;
-  min-height: 320px;
+  width: 220px;
+  min-height: 280px;
   border-radius: 20px;
-  background: linear-gradient(145deg, rgba(40,20,60,0.85), rgba(25,10,45,0.85));
-  backdrop-filter: blur(10px);
-  box-shadow: 0 12px 30px rgba(123, 44, 191, 0.4);
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 20px rgba(123, 44, 191, 0.3);
+  padding: 18px;
   text-align: center;
-  transition: transform 0.4s, box-shadow 0.4s;
+  transition: transform 0.3s, box-shadow 0.3s;
   color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .profile-card:hover {
-  transform: translateY(-10px) scale(1.03);
-  box-shadow: 0 20px 40px rgba(123, 44, 191, 0.6);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(123, 44, 191, 0.5);
 }
 
 .profile-card img {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #ff79c6;
-  margin-bottom: 12px;
+  border: 2px solid #7b2cbf;
+  margin-bottom: 10px;
 }
 
 .profile-card h3 {
-  margin: 8px 0 6px;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #ff79c6;
+  margin: 8px 0 4px;
+  font-size: 1.1rem;
+  color: #e0c3fc;
 }
 
 .profile-card p {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #dcd6f7;
-  margin: 4px 0;
-  line-height: 1.4;
-  text-align: left;
-  width: 100%;
+  margin: 2px 0;
 }
 
-/* Highlighted card (my profile) */
 .highlight {
   border: 2px solid #ff79c6;
-  background: rgba(255, 121, 198, 0.15);
-  box-shadow: 0 0 20px rgba(255, 121, 198, 0.5);
+  background: rgba(255, 121, 198, 0.1);
+  box-shadow: 0 0 15px rgba(255, 121, 198, 0.4);
 }
 
 /* Chat toggle arrow */
@@ -90,11 +81,11 @@
   transform: translateY(-50%);
   background: #7b2cbf;
   color: #fff;
-  padding: 12px;
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
+  padding: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
   cursor: pointer;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   z-index: 1000;
   transition: background 0.3s;
 }
@@ -108,11 +99,11 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 350px;
+  width: 320px;
   height: 100%;
   background: rgba(20, 20, 40, 0.95);
-  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.5);
-  padding: 20px;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+  padding: 15px;
   overflow-y: auto;
   z-index: 999;
   display: flex;
@@ -123,15 +114,15 @@
 .chat-tabs {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .chat-tabs button {
   flex: 1;
-  padding: 10px 14px;
+  padding: 8px 12px;
   margin: 0 5px;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #7b2cbf;
   color: #fff;
   cursor: pointer;
@@ -154,14 +145,14 @@
   padding: 5px 0;
   margin-bottom: 10px;
   color: #f0f0f0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .chat-messages p {
-  margin: 5px 0;
-  padding: 6px 10px;
-  border-radius: 10px;
-  background: rgba(123, 44, 191, 0.25);
+  margin: 4px 0;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: rgba(123, 44, 191, 0.2);
   word-break: break-word;
 }
 
@@ -171,26 +162,26 @@
 
 /* Private chat block */
 .private-chat-block {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   border-bottom: 1px solid rgba(255, 121, 198, 0.2);
-  padding-bottom: 12px;
+  padding-bottom: 10px;
 }
 
 .private-chat-block h4 {
-  margin: 6px 0 10px;
-  font-size: 1rem;
+  margin: 6px 0;
+  font-size: 0.95rem;
   color: #e0c3fc;
 }
 
 /* Chat input */
 .chat-panel input {
-  padding: 10px 12px;
-  border-radius: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
   border: none;
   outline: none;
   width: 100%;
-  margin-top: 8px;
-  background: rgba(255, 255, 255, 0.07);
+  margin-top: 5px;
+  background: rgba(255, 255, 255, 0.05);
   color: #fff;
 }
 
@@ -198,23 +189,20 @@
   color: #ccc;
 }
 
-/* Add Friend button */
-.profile-card button {
-  margin-top: 14px;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 10px;
-  background: #7b2cbf;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.3s, transform 0.3s;
+.profile-card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #7b2cbf;
+  margin-bottom: 10px;
 }
+
 
 .profile-card button:hover {
   background: #9d4edd;
-  transform: scale(1.05);
 }
+
 .image-container {
   position: relative;
   display: inline-block;
