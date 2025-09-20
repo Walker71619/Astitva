@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { collection, onSnapshot, doc, setDoc, getDoc } from "firebase/firestore";
 import { firestore, auth } from "../firebase";
+import Footer from "../components/footer";
+import Navbar from "../components/navbar";
 import "./KarmicAI.css";
 
 const KarmicAI = () => {
-  const [mounted, setMounted] = useState(false);        // ensure client-side render
-  const [user, setUser] = useState(null);               // auth user
+  const [mounted, setMounted] = useState(false);
+  const [user, setUser] = useState(null);
   const [publicProfiles, setPublicProfiles] = useState([]);
   const [myProfile, setMyProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,10 +20,8 @@ const KarmicAI = () => {
   const [newMessage, setNewMessage] = useState("");
   const [newPrivateMessages, setNewPrivateMessages] = useState({});
 
-  // Client-side only
   useEffect(() => setMounted(true), []);
 
-  // Listen for auth changes
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(u => setUser(u));
     return () => unsubscribe();
@@ -29,7 +29,6 @@ const KarmicAI = () => {
 
   const myUid = user?.uid;
 
-  // Fetch profiles and friend info
   useEffect(() => {
     if (!myUid) return;
     const usersColRef = collection(firestore, "users");
@@ -46,11 +45,11 @@ const KarmicAI = () => {
           const profile = { uid: docSnap.id, ...data.public };
           if (docSnap.id === myUid) {
             me = profile;
-            (data.friends || []).forEach(fUid => friendsObj[fUid] = null); // placeholders
+            (data.friends || []).forEach(fUid => friendsObj[fUid] = null);
             setFriends(data.friends || []);
           } else {
             profiles.push(profile);
-            if (friendsObj[docSnap.id] !== undefined) friendsObj[docSnap.id] = profile; // friend profile
+            if (friendsObj[docSnap.id] !== undefined) friendsObj[docSnap.id] = profile;
           }
         }
       });
@@ -63,7 +62,6 @@ const KarmicAI = () => {
     return () => unsubscribe();
   }, [myUid]);
 
-  // Public chat
   useEffect(() => {
     const publicChatRef = collection(firestore, "publicChat");
     const unsubscribe = onSnapshot(publicChatRef, snapshot => {
@@ -74,7 +72,6 @@ const KarmicAI = () => {
     return () => unsubscribe();
   }, []);
 
-  // Private messages
   useEffect(() => {
     if (!myUid) return;
     const privateRef = collection(firestore, `privateChats/${myUid}/chats`);
@@ -88,7 +85,6 @@ const KarmicAI = () => {
     return () => unsubscribe();
   }, [myUid]);
 
-  // Send public message
   const sendMessage = async () => {
     if (!newMessage.trim() || !myUid) return;
     await setDoc(
@@ -98,7 +94,6 @@ const KarmicAI = () => {
     setNewMessage("");
   };
 
-  // Add friend
   const addFriend = async (friendUid) => {
     if (!friends.includes(friendUid) && myUid) {
       const newFriends = [...friends, friendUid];
@@ -108,20 +103,30 @@ const KarmicAI = () => {
     }
   };
 
-  if (!mounted) return null;           // prevent SSR
+  const getDisplayName = (uid) => {
+    if (uid === myUid) return "Me";
+    return publicProfiles.find(p => p.uid === uid)?.displayName || uid;
+  }
+
+  const handleLogout = () => {
+    auth.signOut();
+    setUser(null);
+  };
+
+  if (!mounted) return null;
   if (!user) return <p>Please log in to use chat</p>;
   if (loading) return <p>Loading public profiles...</p>;
 
   return (
     <div className="karmic-container">
+      <Navbar user={myProfile || { displayName: user.displayName || user.email }} onLogout={handleLogout} />
+
       <h2 className="cinzel-text">Karmic AI Insights</h2>
 
-      {/* Chat toggle */}
       <div className={`chat-toggle ${chatOpen ? "open" : ""}`} onClick={() => setChatOpen(!chatOpen)}>
         {chatOpen ? "⮜" : "⮞"}
       </div>
 
-      {/* Chat panel */}
       {chatOpen && (
         <div className="chat-panel">
           <div className="chat-tabs">
@@ -130,10 +135,9 @@ const KarmicAI = () => {
           </div>
 
           <div className="chat-messages">
-            {/* Public chat */}
             {chatMode === "public" && <>
               {publicMessages.map((msg, idx) => (
-                <p key={idx}><strong>{msg.sender === myUid ? "Me" : msg.sender}:</strong> {msg.text}</p>
+                <p key={idx}><strong>{getDisplayName(msg.sender)}:</strong> {msg.text}</p>
               ))}
               <input
                 placeholder="Type message..."
@@ -143,18 +147,17 @@ const KarmicAI = () => {
               />
             </>}
 
-            {/* Private chat */}
             {chatMode === "private" && Object.keys(friendProfiles).map(fUid => {
               const friend = friendProfiles[fUid];
               if (!friend) return null;
               return (
                 <div key={fUid} className="private-chat-block">
                   <div className="friend-header">
-                    {friend.avatar && <img src={friend.avatar} alt="Avatar" className="friend-avatar"/>}
-                    <h4>{friend.name || friend.uid}</h4>
+                    {friend.avatar && <img src={friend.avatar} alt="Avatar" className="friend-avatar" />}
+                    <h4>{friend.displayName || friend.name || friend.uid}</h4>
                   </div>
                   {(privateMessages[fUid] || []).map((msg, idx) => (
-                    <p key={idx}><strong>{msg.sender === myUid ? "Me" : msg.sender}:</strong> {msg.text}</p>
+                    <p key={idx}><strong>{getDisplayName(msg.sender)}:</strong> {msg.text}</p>
                   ))}
                   <input
                     placeholder="Type message..."
@@ -179,10 +182,9 @@ const KarmicAI = () => {
         </div>
       )}
 
-      {/* My Profile */}
       {myProfile && (
         <div className="profile-card highlight">
-          <h3>🌟 My Profile</h3>
+          <h3>🌟 {myProfile.displayName || myProfile.name || "Me"}'s Profile</h3>
           {myProfile.avatar && <img src={myProfile.avatar} alt="Avatar" />}
           <p><strong>Fears:</strong> {myProfile.fears || "—"}</p>
           <p><strong>Goals:</strong> {myProfile.goals || "—"}</p>
@@ -191,12 +193,11 @@ const KarmicAI = () => {
         </div>
       )}
 
-      {/* Other Users Carousel */}
       <div className="carousel">
         {publicProfiles.length > 0 ? (
           publicProfiles.map(profile => (
             <div className="profile-card" key={profile.uid}>
-              <h3>User: {profile.uid}</h3>
+              <h3>{profile.displayName || profile.name || profile.uid}</h3>
               {profile.avatar && <img src={profile.avatar} alt="Avatar" />}
               <p><strong>Fears:</strong> {profile.fears || "—"}</p>
               <p><strong>Goals:</strong> {profile.goals || "—"}</p>
@@ -211,6 +212,8 @@ const KarmicAI = () => {
           <p>No other public profiles yet.</p>
         )}
       </div>
+
+      <Footer />
     </div>
   );
 };
