@@ -114,7 +114,7 @@ const KarmicAI = () => {
 
   return (
     <div className="karmic-container">
-      <h2>🌌 Karmic AI Insights</h2>
+      <h2 className="cinzel-text">Karmic AI Insights</h2>
 
       {/* Chat toggle */}
       <div className={`chat-toggle ${chatOpen ? "open" : ""}`} onClick={() => setChatOpen(!chatOpen)}>
